@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:58:44 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/19 17:09:12 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/19 17:26:17 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,12 @@
 void    ft_create_socket(int port)
 {
     int sockfd;
-
+    struct sockaddr_in adr;
+    //AF_INET = IPv4 Internet Protocol
+    //SOCK_STREAM = socket providing sequenced, reliable, two way communications
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd == -1)
+        perror("socket not created !");
     //  sockfd = socket(int socket_family, int socket_type, int protocol); //
         //  socket -> creates a socket
         //  connect -> connects a socket  to  a  remote socket  address
