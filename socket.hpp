@@ -1,24 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/16 08:39:14 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/19 16:00:58 by vpolojie         ###   ########.fr       */
+/*   Created: 2024/04/19 15:59:54 by vpolojie          #+#    #+#             */
+/*   Updated: 2024/04/19 16:00:33 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
-#include <string>
-#include "socket.hpp"
+#ifndef SOCKET_HPP
+#define SOCKET_HPP
 
-int main(int argc, char **argv)
-{
-    if (argc == 3)
-        ft_create_socket(atoi(argv[1]));
-    else
-        std::cout << "Error : incorrect number of arguments, "
-                    "impossible to connect to the server" << std::endl;
-}
+void    ft_create_socket(int port);
+
+#endif
