@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:58:44 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/22 15:42:54 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/22 16:14:40 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <cstring>
+#include <poll.h>
 
 void    ft_create_socket(int port)
 {
@@ -27,6 +28,7 @@ void    ft_create_socket(int port)
     int acc_sockfd;
     struct sockaddr_in addr;
     struct sockaddr_in acc_addr;
+    struct pollfd      *fds;
     socklen_t          acc_length;
 
     //AF_INET = IPv4 Internet Protocol
