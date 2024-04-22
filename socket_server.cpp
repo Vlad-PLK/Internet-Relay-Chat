@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:58:44 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/22 16:43:08 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/22 17:18:31 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,16 @@
 #include <stdio.h>
 #include <cstring>
 #include <poll.h>
+#include <unistd.h>
 
 void    ft_create_socket(int port)
 {
     int sockfd;
     int nb_fd;
     struct sockaddr_in addr;
-    //struct sockaddr_in acc_addr;
+    struct sockaddr_in acc_addr;
     struct pollfd      *fds;
-    //socklen_t          acc_length;
+    socklen_t          acc_length;
 
     //AF_INET = IPv4 Internet Protocol
     //SOCK_STREAM = socket providing sequenced, reliable, two way communications
@@ -46,7 +47,14 @@ void    ft_create_socket(int port)
     fds[0].events = POLLIN;
     nb_fd = poll(fds, 1, 10000);
     if (fds[0].revents == POLLIN)
-        printf("New Client\n");
+    {
+        acc_length = sizeof(acc_addr);
+        fds[1].fd = accept(fds[0].fd, (struct sockaddr *)&acc_addr, &acc_length);
+        send(fds[1].fd, "voici un message de co", 23, MSG_CONFIRM);
+    }
+    printf("New Client\n");
+    //
+    //
     //acc_length = sizeof(acc_addr);
     //acc_sockfd = accept(sockfd, (struct sockaddr *)&acc_addr, &acc_length);
     //printf("New client #%d from %s:%d\n", sockfd,
