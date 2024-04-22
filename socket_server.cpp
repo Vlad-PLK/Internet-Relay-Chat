@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:58:44 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/22 11:26:07 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/22 15:42:54 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,19 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
+#include "socket.hpp"
+#include <stdlib.h>
+#include <stdio.h>
+#include <cstring>
 
 void    ft_create_socket(int port)
 {
     int sockfd;
+    int acc_sockfd;
     struct sockaddr_in addr;
+    struct sockaddr_in acc_addr;
+    socklen_t          acc_length;
 
     //AF_INET = IPv4 Internet Protocol
     //SOCK_STREAM = socket providing sequenced, reliable, two way communications
@@ -31,6 +39,10 @@ void    ft_create_socket(int port)
     addr.sin_port = htons(port);
     bind(sockfd, (struct sockaddr *)&addr, sizeof(addr));
     listen(sockfd, 10);
+    acc_length = sizeof(acc_addr);
+    acc_sockfd = accept(sockfd, (struct sockaddr *)&acc_addr, &acc_length);
+    printf("New client #%d from %s:%d\n", sockfd,
+	 inet_ntoa(acc_addr.sin_addr), ntohs(acc_addr.sin_port));
     ///accept(sockfd, (struct sockaddr *)&addr, addr);
     //  sockfd = socket(int socket_family, int socket_type, int protocol); //
         //  socket -> creates a socket

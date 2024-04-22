@@ -1,6 +1,6 @@
 NAME = ircserv
 
-OBJS = main.cpp
+OBJS = main.cpp socket_server.cpp
 
 SRCS = ${subst .cpp,.o,$(OBJS)}
 
@@ -20,6 +20,12 @@ ${NAME}: ${OBJS}
 	@printf "1 : port - The port number on which your IRC server will be listening to for incoming IRC connections. \n"
 	@printf "2 : password - The connection password. It will be needed by any IRC client that tries to connect to your server. \n"
 	@printf "\n"
+
+main.o: main.cpp socket_server.hpp
+	${CXX} ${CFLAGS} -c main.cpp
+
+socket_server.o: socket_server.hpp
+
 clean:
 	rm -rf ${SRCS}
 
