@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:59:54 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/23 08:40:37 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:12:05 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,21 @@ typedef struct s_init_sock
 	struct sockaddr_in 	addr;
 }t_init_sock;
 
+typedef struct s_user
+{
+	std::string			username;
+	std::string			nickname;
+	int					admin;
+	std::vector<std::string> cmds;
+}t_user;
+
+
+class Message  {
+private:
+	std::string buffer;
+public:
+	int is_command_buffer(); // si \r\n dans buffer
+};
 
 void    ft_init_socket(int port);
 

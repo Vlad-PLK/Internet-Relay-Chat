@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:58:44 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/23 11:24:07 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:11:58 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,29 @@
 #include <cstring>
 #include <unistd.h>
 
+int     parse_buffer(std::string buf, t_user &user)
+{
+    std::string tmp;
+    for (size_t i=0; i != buf.size(); i++)
+    {
+        if (buf[i] != '\r')
+            tmp.append(&buf[i]);
+    }
+}
+
 void    ft_init_socket(int port)
 {
     t_init_sock        init_sock;
     struct sockaddr_in acc_addr;
-    socklen_t          acc_length;
+    socklen_t          acc_length = 0;
     std::vector<struct pollfd> tab_fd;
+    std::vector<t_user> user_tab;
+    t_user              tmp_user;
     std::vector<struct pollfd>::iterator it;
     struct pollfd       fd_in;
     struct pollfd       fd_tmp;
     char                buffer[512];
+    std::string str;
 
     //AF_INET = IPv4 Internet Protocol
     //SOCK_STREAM = socket providing sequenced, reliable, two way communications
@@ -48,45 +61,44 @@ void    ft_init_socket(int port)
     listen(init_sock.sockfd, 10);
     //////////server socket initialisation//////////
 
-
     //////////main loop//////////
     while (1)
     {
         tab_fd.push_back(fd_in);
         tab_fd[0].fd = init_sock.sockfd;
-        poll(tab_fd.data(), tab_fd.size(), 2000);
+        poll(tab_fd.data(), tab_fd.size(), 5000);
         if (tab_fd[0].revents == POLLIN)
         {
             fd_tmp.fd = accept(tab_fd[0].fd, (struct sockaddr *)&acc_addr, &acc_length);
+            fd_tmp.events = POLLIN;
             tab_fd.push_back(fd_tmp);
-            if (send(tab_fd[1].fd, ":irc.42.com 001 vladplk :Welcome to my Network vladplk\r\n", 56, MSG_CONFIRM) == -1)
-                std::cout << "big error" << std::endl;
-            std::cout << "New Client : " << tab_fd[1].fd << std::endl;
+            std::cout << "New Client" << std::endl;
+            // users.push_back(User(socket))
         }
-        else
+        for (it = tab_fd.begin()++; it != tab_fd.end(); it++)
         {
-            if (read(tab_fd[1].fd, buffer, 250) != -1)
+            if (it->revents == POLLIN)
             {
-                std::string str;
-                str.append(buffer);
-                std::cout << str << std::endl;
+                /*
+                user.recv()
+                if (user.has_buffer_command()) {
+                    std::vector<string> cmd = user.get_command();
+                    handle_commad(user, cmd)
+                }
+                */
+                if (read(it->fd, &buffer, 512) != -1)
+                {
+                    /*
+                    
+                    */
+                    str.append(buffer);
+                    if (parse_buffer(str, tmp_user) == 0)
+                        user_tab.push_back(tmp_user);
+                    send(it->fd, "001 vladplk :Welcome to my Network vladplk\r\n", 56, MSG_CONFIRM);
+                }
+                else
+                    std::cout << "";
             }
-            else
-                       std::cout << "NULL" << std::endl;
-            //for (it = tab_fd.begin() + 1; it != tab_fd.end(); it++)
-            //{
-            //    if (it->revents == POLLIN)
-            //    {
-            //        if (read(it->fd, &buffer, 10) != -1)
-            //        {
-            //            std::string str;
-            //            str.append(buffer);
-            //            std::cout << str << std::endl;
-            //        }
-            //        else
-            //            std::cout << "NULL" << std::endl;
-            //    }
-            //}
         }
     }
     //////////main loop//////////
