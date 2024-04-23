@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:58:44 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/23 09:08:12 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/23 11:14:11 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void    ft_init_socket(int port)
     std::vector<struct pollfd>::iterator it;
     struct pollfd       fd_in;
     struct pollfd       fd_tmp;
+    char                buffer[512];
 
     //AF_INET = IPv4 Internet Protocol
     //SOCK_STREAM = socket providing sequenced, reliable, two way communications
@@ -53,18 +54,42 @@ void    ft_init_socket(int port)
     {
         tab_fd.push_back(fd_in);
         tab_fd[0].fd = init_sock.sockfd;
-        poll(tab_fd.data(), tab_fd.size(), 10000);
+        poll(tab_fd.data(), tab_fd.size(), 2000);
         if (tab_fd[0].revents == POLLIN)
         {
             fd_tmp.fd = accept(tab_fd[0].fd, (struct sockaddr *)&acc_addr, &acc_length);
             tab_fd.push_back(fd_tmp);
-            send(tab_fd.end()->fd, "MSG !", 6, MSG_CONFIRM);
+            send(tab_fd[1].fd, "001 vladplk :Welcome to localhost Network vladplk", 42, 0);
+            std::cout << "New Client : " << tab_fd.end()->fd << std::endl;
         }
-        printf("New Client\n");
+        else
+        {
+            if (read(tab_fd[1].fd, buffer, 250) != -1)
+            {
+                std::string str;
+                str.append(buffer);
+                std::cout << str << std::endl;
+            }
+            else
+                       std::cout << "NULL" << std::endl;
+            //for (it = tab_fd.begin() + 1; it != tab_fd.end(); it++)
+            //{
+            //    if (it->revents == POLLIN)
+            //    {
+            //        if (read(it->fd, &buffer, 10) != -1)
+            //        {
+            //            std::string str;
+            //            str.append(buffer);
+            //            std::cout << str << std::endl;
+            //        }
+            //        else
+            //            std::cout << "NULL" << std::endl;
+            //    }
+            //}
+        }
     }
     //////////main loop//////////
-    //
-    //
+
     //acc_length = sizeof(acc_addr);
     //acc_sockfd = accept(sockfd, (struct sockaddr *)&acc_addr, &acc_length);
     //printf("New client #%d from %s:%d\n", sockfd,
