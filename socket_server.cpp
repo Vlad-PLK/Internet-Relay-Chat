@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:58:44 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/23 11:14:11 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/23 11:24:07 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,9 @@ void    ft_init_socket(int port)
         {
             fd_tmp.fd = accept(tab_fd[0].fd, (struct sockaddr *)&acc_addr, &acc_length);
             tab_fd.push_back(fd_tmp);
-            send(tab_fd[1].fd, "001 vladplk :Welcome to localhost Network vladplk", 42, 0);
-            std::cout << "New Client : " << tab_fd.end()->fd << std::endl;
+            if (send(tab_fd[1].fd, ":irc.42.com 001 vladplk :Welcome to my Network vladplk\r\n", 56, MSG_CONFIRM) == -1)
+                std::cout << "big error" << std::endl;
+            std::cout << "New Client : " << tab_fd[1].fd << std::endl;
         }
         else
         {
