@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 08:39:14 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/22 15:43:21 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/23 08:28:17 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 
 int main(int argc, char **argv)
 {
-    if (argc == 2)
-        ft_create_socket(atoi(argv[1]));
+    if (argc == 3)
+        ft_init_socket(atoi(argv[1]));
     else
         std::cout << "Error : incorrect number of arguments, "
                     "impossible to connect to the server" << std::endl;

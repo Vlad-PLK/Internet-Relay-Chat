@@ -6,53 +6,63 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:58:44 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/22 17:18:31 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/23 09:08:12 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <string>
 #include <iostream>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
 #include "socket.hpp"
+#include <vector>
 #include <stdlib.h>
 #include <stdio.h>
 #include <cstring>
-#include <poll.h>
 #include <unistd.h>
 
-void    ft_create_socket(int port)
+void    ft_init_socket(int port)
 {
-    int sockfd;
-    int nb_fd;
-    struct sockaddr_in addr;
+    t_init_sock        init_sock;
     struct sockaddr_in acc_addr;
-    struct pollfd      *fds;
     socklen_t          acc_length;
+    std::vector<struct pollfd> tab_fd;
+    std::vector<struct pollfd>::iterator it;
+    struct pollfd       fd_in;
+    struct pollfd       fd_tmp;
 
     //AF_INET = IPv4 Internet Protocol
     //SOCK_STREAM = socket providing sequenced, reliable, two way communications
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd == -1)
+    
+    //////////server socket initialisation//////////
+    init_sock.sock_opt = 1;
+    init_sock.sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    setsockopt(init_sock.sockfd, SOL_SOCKET, SO_REUSEADDR, &init_sock.sock_opt, sizeof(int));
+    if (init_sock.sockfd == -1)
         perror("socket not created !");
-    addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = INADDR_ANY;
-    addr.sin_port = htons(port);
-    bind(sockfd, (struct sockaddr *)&addr, sizeof(addr));
-    listen(sockfd, 10);
-    fds = (pollfd *)malloc(sizeof(pollfd) * 5);
-    fds[0].fd = sockfd;
-    fds[0].events = POLLIN;
-    nb_fd = poll(fds, 1, 10000);
-    if (fds[0].revents == POLLIN)
+    init_sock.addr.sin_family = AF_INET;
+    init_sock.addr.sin_addr.s_addr = INADDR_ANY;
+    init_sock.addr.sin_port = htons(port);
+    fd_in.fd = init_sock.sockfd;
+    fd_in.events = POLLIN;
+    bind(init_sock.sockfd, (struct sockaddr *)&init_sock.addr, sizeof(init_sock.addr));
+    listen(init_sock.sockfd, 10);
+    //////////server socket initialisation//////////
+
+
+    //////////main loop//////////
+    while (1)
     {
-        acc_length = sizeof(acc_addr);
-        fds[1].fd = accept(fds[0].fd, (struct sockaddr *)&acc_addr, &acc_length);
-        send(fds[1].fd, "voici un message de co", 23, MSG_CONFIRM);
+        tab_fd.push_back(fd_in);
+        tab_fd[0].fd = init_sock.sockfd;
+        poll(tab_fd.data(), tab_fd.size(), 10000);
+        if (tab_fd[0].revents == POLLIN)
+        {
+            fd_tmp.fd = accept(tab_fd[0].fd, (struct sockaddr *)&acc_addr, &acc_length);
+            tab_fd.push_back(fd_tmp);
+            send(tab_fd.end()->fd, "MSG !", 6, MSG_CONFIRM);
+        }
+        printf("New Client\n");
     }
-    printf("New Client\n");
+    //////////main loop//////////
     //
     //
     //acc_length = sizeof(acc_addr);
