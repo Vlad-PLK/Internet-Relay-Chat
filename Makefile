@@ -1,6 +1,6 @@
 NAME = ircserv
 
-OBJS = main.cpp socket_server.cpp
+OBJS = main.cpp main_loop.cpp User.cpp SocketServer.cpp 
 
 SRCS = ${subst .cpp,.o,$(OBJS)}
 
@@ -21,10 +21,12 @@ ${NAME}: ${OBJS}
 	@printf "2 : password - The connection password. It will be needed by any IRC client that tries to connect to your server. \n"
 	@printf "\n"
 
-main.o: main.cpp socket_server.hpp
+main.o: main.cpp SocketServer.hpp User.hpp
 	${CXX} ${CFLAGS} -c main.cpp
 
-socket_server.o: socket_server.hpp
+SocketServer.o: SocketServer.hpp
+
+User.o: User.hpp
 
 clean:
 	rm -rf ${SRCS}
