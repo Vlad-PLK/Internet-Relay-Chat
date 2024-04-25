@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/24 11:36:27 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/25 08:09:19 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,9 @@ void    main_loop(const SocketServer &main_socket)
                 if (recv(it->fd, &buffer, 512, MSG_DONTWAIT) != -1)
                 {
                     str.append(buffer);
-                    if (users.back().process_cmd(str) == ACCEPTED)
-                        send(it->fd, users.back().getAnswer().c_str(), users.back().getAnswer().size(), MSG_CONFIRM);
+                    users.back().process_cmd(str);
+                        //send(it->fd, users.back().getAnswer().c_str(), users.back().getAnswer().size(), MSG_CONFIRM);
+                    str.clear();
                 }
                 else
                     std::cout << "";

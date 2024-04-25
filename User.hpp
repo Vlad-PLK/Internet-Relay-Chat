@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/24 11:36:05 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/25 09:10:17 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ public:
     void               setAdminState(int state);
 
     int                process_cmd(std::string buffer);
+    void               parse_cmd(std::string buffer);
 };
 
 #endif

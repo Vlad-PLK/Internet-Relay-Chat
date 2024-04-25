@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/24 11:38:50 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/25 09:10:43 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,34 @@ void	User::setFD(int fd)
 	this->userfd = fd;
 }
 
+void User::parse_cmd(std::string buf)
+{
+	std::string tmp;
+	size_t		pos = 0;
+	for (size_t i=0; i != buf.size(); i++)
+	{
+		if (buf[i] == '\r')
+		{
+			tmp = buf.substr(pos, i - pos);
+			pos = i;
+			cmds.push_back(tmp);
+			tmp.clear();
+		}
+	}
+}
+
 int	User::process_cmd(std::string buf)
 {
-	if (buf.size() != 0)
-		return (ACCEPTED);
-	else
-		return (REJECTED);
+	///connection entrante///
+	///parser le buf en tableau de strings///
+	///etudier chaque commandes///
+	///stocker d'eventuelles variables///
+	///creer la reponse, clean le tableau de commandes et le buffer///
+	parse_cmd(buf);
+	if (cmds[0].compare(0, 7, "CAP LS") == 0)
+	{
+		std::cout << cmds[0];
+	}
+	return (ACCEPTED);
 }
 
