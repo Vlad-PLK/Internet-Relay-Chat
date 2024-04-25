@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/25 09:24:45 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/25 17:26:11 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void User::parse_cmd(std::string &buf)
 	size_t		pos = 0;
 	for (size_t i=0; i != buf.size(); i++)
 	{
-		if (buf[i] == '\r')
+		if (buf[i] == '\r' && buf[i + 1] == '\n')
 		{
 			tmp = buf.substr(pos, i - pos);
 			pos = i;
@@ -94,24 +94,38 @@ void User::parse_cmd(std::string &buf)
 			tmp.clear();
 		}
 	}
-	std::cout << cmds[0] << std::endl;
+	//std::cout << cmds[0] << std::endl;
+}
+
+void User::setPassword(const std::string &pass)
+{
+	this->server_password.assign(pass);
+}
+
+int User::connexion_try(void)
+{
+	std::vector<std::string>::iterator it;
+	for (it = cmds.begin(); it != cmds.end(); it++)
+	{
+		if (it->compare(0, 7, "CAP LS") == 0)
+			cmds.erase(it);
+		else if (it->compare(0, 5, "PASS") == 0 && it->compare(6, server_password.size(), server_password) == 0)
+			setCurrentState(ACCEPTED);
+		else if (current_state == ACCEPTED && it->compare(0, 5, "NICK") == 0)
+			setNickname(it->substr(6, std::string::npos));
+		else if (current_state == ACCEPTED && it->compare(0, 5, "USER") == 0)
+			setUsername(it->substr(6, it->find(" ", 6)));
+	}
+	std::cout << getNickname() << " " << getUsername() << std::endl;
+	return (ACCEPTED); 
 }
 
 int	User::process_cmd(std::string buf)
 {
-	///connection entrante///
-	///parser le buf en tableau de strings///
-	///etudier chaque commandes///
-	///stocker d'eventuelles variables///
-	///creer la reponse, clean le tableau de commandes et le buffer///
 	parse_cmd(buf);
-	for (size_t i=0; i != cmds.size(); i++)
-		std::cout << cmds[i];
-	//std::cout << cmds[0];
-	//if (cmds[0].compare(0, 7, "CAP LS") == 0)
-	//{
-	//	std::cout << cmds[0];
-	//}
-	return (ACCEPTED);
+	if (connexion_try() == ACCEPTED)
+		return (ACCEPTED);
+	else 
+		return (REJECTED);
 }
 

@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/25 09:20:08 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/25 17:10:31 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ class User
 private:
     std::string                 username;
     std::string                 nickname;
+    std::string                 server_password;
     int                         userfd;
     int                         admin_state;
     int                         current_state;
@@ -44,11 +45,13 @@ public:
     void               setFD(int fd);
     void               setUsername(const std::string &uname);
     void               setNickname(const std::string &nname);
+    void               setPassword(const std::string &pass);
     void               setCurrentState(int state);
     void               setAdminState(int state);
 
     int                process_cmd(std::string buffer);
     void               parse_cmd(std::string &buffer);
+    int                connexion_try(void);
 };
 
 #endif
