@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/25 09:10:43 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/25 09:24:45 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	User::setFD(int fd)
 	this->userfd = fd;
 }
 
-void User::parse_cmd(std::string buf)
+void User::parse_cmd(std::string &buf)
 {
 	std::string tmp;
 	size_t		pos = 0;
@@ -94,6 +94,7 @@ void User::parse_cmd(std::string buf)
 			tmp.clear();
 		}
 	}
+	std::cout << cmds[0] << std::endl;
 }
 
 int	User::process_cmd(std::string buf)
@@ -104,10 +105,13 @@ int	User::process_cmd(std::string buf)
 	///stocker d'eventuelles variables///
 	///creer la reponse, clean le tableau de commandes et le buffer///
 	parse_cmd(buf);
-	if (cmds[0].compare(0, 7, "CAP LS") == 0)
-	{
-		std::cout << cmds[0];
-	}
+	for (size_t i=0; i != cmds.size(); i++)
+		std::cout << cmds[i];
+	//std::cout << cmds[0];
+	//if (cmds[0].compare(0, 7, "CAP LS") == 0)
+	//{
+	//	std::cout << cmds[0];
+	//}
 	return (ACCEPTED);
 }
 
