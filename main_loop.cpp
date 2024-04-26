@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/25 08:09:19 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/26 08:41:28 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ void    main_loop(const SocketServer &main_socket)
                     handle_commad(user, cmd)
                 }
                 */
-                if (recv(it->fd, &buffer, 512, MSG_DONTWAIT) != -1)
+                memset(buffer, 0, 0);
+                if (recv(it->fd, buffer, 512, MSG_DONTWAIT) != -1)
                 {
                     str.append(buffer);
                     users.back().process_cmd(str);

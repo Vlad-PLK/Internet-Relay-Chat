@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/25 17:26:11 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/26 08:51:46 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,9 @@ void User::parse_cmd(std::string &buf)
 		if (buf[i] == '\r' && buf[i + 1] == '\n')
 		{
 			tmp = buf.substr(pos, i - pos);
-			pos = i;
+			pos = i + 2;
 			cmds.push_back(tmp);
+			std::cout << tmp << std::endl;
 			tmp.clear();
 		}
 	}
@@ -107,25 +108,33 @@ int User::connexion_try(void)
 	std::vector<std::string>::iterator it;
 	for (it = cmds.begin(); it != cmds.end(); it++)
 	{
+		//std::cout << it->data() << std::endl;
 		if (it->compare(0, 7, "CAP LS") == 0)
-			cmds.erase(it);
-		else if (it->compare(0, 5, "PASS") == 0 && it->compare(6, server_password.size(), server_password) == 0)
-			setCurrentState(ACCEPTED);
-		else if (current_state == ACCEPTED && it->compare(0, 5, "NICK") == 0)
-			setNickname(it->substr(6, std::string::npos));
-		else if (current_state == ACCEPTED && it->compare(0, 5, "USER") == 0)
-			setUsername(it->substr(6, it->find(" ", 6)));
+		{
+			std::cout << "CAP LS" << std::endl;
+			//cmds.erase(it);
+		}
+		else if (it->compare(0, 2, "PA") == 0)
+		{
+			//setCurrentState(ACCEPTED);
+			std::cout << it->substr(0, 5) << std::endl;
+		}
+		//else if (current_state == ACCEPTED && it->compare(0, 5, "NICK") == 0)
+		//	setNickname(it->substr(6, std::string::npos));
+		//else if (current_state == ACCEPTED && it->compare(0, 5, "USER") == 0)
+		//	setUsername(it->substr(6, it->find(" ", 6)));
 	}
-	std::cout << getNickname() << " " << getUsername() << std::endl;
+	//std::cout << getNickname() << " " << getUsername() << std::endl;
 	return (ACCEPTED); 
 }
 
 int	User::process_cmd(std::string buf)
 {
 	parse_cmd(buf);
-	if (connexion_try() == ACCEPTED)
-		return (ACCEPTED);
-	else 
-		return (REJECTED);
+	return (ACCEPTED);
+	//if (connexion_try() == ACCEPTED)
+	//	return (ACCEPTED);
+	//else 
+	//	return (REJECTED);
 }
 
