@@ -1,4 +1,4 @@
-NAME = ircserv
+NAME = ircserver
 
 OBJS = main.cpp main_loop.cpp User.cpp SocketServer.cpp 
 
