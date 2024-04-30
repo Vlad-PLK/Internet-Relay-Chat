@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/30 11:29:17 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/30 15:25:01 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,21 +108,21 @@ int User::connexion_try(void)
 	for (it = cmds.begin(); it != cmds.end(); it++)
 	{
 		if (it->compare(0, 6, "CAP LS") == 0)
-		{
-			std::cout << "CAP LS" << std::endl;
-			//cmds.erase(it);
-		}
-		else if (it->compare(0, 4, "PASS") == 0)
-		{
-			//setCurrentState(ACCEPTED);
-			std::cout << it->substr(5, std::string::npos) << std::endl;
-		}
-		//else if (current_state == ACCEPTED && it->compare(0, 5, "NICK") == 0)
-		//	setNickname(it->substr(6, std::string::npos));
-		//else if (current_state == ACCEPTED && it->compare(0, 5, "USER") == 0)
-		//	setUsername(it->substr(6, it->find(" ", 6)));
+			it->clear();
+		else if (it->compare(0, 4, "PASS") == 0 && it->compare(6, server_password.size(), server_password) == 0)
+			setCurrentState(ACCEPTED);
+		else if (current_state == ACCEPTED && it->compare(0, 4, "NICK") == 0)
+			setNickname(it->substr(5, std::string::npos));
+		else if (current_state == ACCEPTED && it->compare(0, 4, "USER") == 0)
+			setUsername(it->substr(5, it->find(" ", 6) - 5));
+		else
+			it->clear();
 	}
-	//std::cout << getNickname() << " " << getUsername() << std::endl;
+	answer.append("001 ");
+	answer.append(nickname);
+	answer.append(" :Welcome to the <networkname> Network ");
+	answer.append(nickname);
+	answer.append("\r\n");
 	return (ACCEPTED); 
 }
 
