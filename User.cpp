@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/30 15:25:01 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/30 16:44:16 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ int User::connexion_try(void)
 	answer.append(" :Welcome to the <networkname> Network ");
 	answer.append(nickname);
 	answer.append("\r\n");
+	std::cout << answer << std::endl;
 	return (ACCEPTED); 
 }
 
@@ -133,6 +134,5 @@ int	User::process_cmd(std::string buf)
 		return (ACCEPTED);
 	else 
 		return (REJECTED);
-	return (ACCEPTED);
 }
 

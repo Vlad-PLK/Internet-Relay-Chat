@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/30 15:14:02 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/30 16:12:38 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,29 +49,36 @@ void    main_loop(const SocketServer &main_socket)
             users.push_back(tmp_user);
             std::cout << "New Client" << std::endl;
         }
-        for (it = tab_fd.begin()++; it != tab_fd.end(); it++)
+        if (tab_fd[1].revents == POLLIN)
         {
-            if (it->revents == POLLIN)
+            memset(buffer, 0, 0);
+            if (recv(tab_fd[1].fd, buffer, 512, MSG_DONTWAIT) != -1)
             {
-                /*
-                user.recv()
-                if (user.has_buffer_command()) {
-                    std::vector<string> cmd = user.get_command();
-                    handle_commad(user, cmd)
-                }
-                */
-                memset(buffer, 0, 0);
-                if (recv(it->fd, buffer, 512, MSG_DONTWAIT) != -1)
-                {
-                    str.append(buffer);
-                    if (users.back().process_cmd(str) == ACCEPTED)
-                        send(it->fd, users.back().getAnswer().c_str(), users.back().getAnswer().size(), MSG_CONFIRM);
-                    str.clear();
-                }
-                else
-                    std::cout << "";
+                str.append(buffer);
+                users.back().process_cmd(str);
+                //if (users.back().process_cmd(str) == ACCEPTED)
+                    //send(tab_fd[1].fd, users.back().getAnswer().c_str(), users.back().getAnswer().size(), MSG_CONFIRM);
+                str.clear();
             }
+            else
+                std::cout << "";
         }
+        //for (it = tab_fd.begin()++; it != tab_fd.end(); it++)
+        //{
+        //    if (it->revents == POLLIN)
+        //    {
+        //        memset(buffer, 0, 0);
+        //        if (recv(it->fd, buffer, 512, MSG_DONTWAIT) != -1)
+        //        {
+        //            str.append(buffer);
+        //            if (users.back().process_cmd(str) == ACCEPTED)
+        //                send(it->fd, users.back().getAnswer().c_str(), users.back().getAnswer().size(), MSG_CONFIRM);
+        //            str.clear();
+        //        }
+        //        else
+        //            std::cout << "";
+        //    }
+        //}
     }
     //////////main loop//////////
 }
