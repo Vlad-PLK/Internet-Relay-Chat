@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/26 08:51:46 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/30 11:29:17 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ void User::parse_cmd(std::string &buf)
 			tmp = buf.substr(pos, i - pos);
 			pos = i + 2;
 			cmds.push_back(tmp);
-			std::cout << tmp << std::endl;
 			tmp.clear();
 		}
 	}
@@ -108,16 +107,15 @@ int User::connexion_try(void)
 	std::vector<std::string>::iterator it;
 	for (it = cmds.begin(); it != cmds.end(); it++)
 	{
-		//std::cout << it->data() << std::endl;
-		if (it->compare(0, 7, "CAP LS") == 0)
+		if (it->compare(0, 6, "CAP LS") == 0)
 		{
 			std::cout << "CAP LS" << std::endl;
 			//cmds.erase(it);
 		}
-		else if (it->compare(0, 2, "PA") == 0)
+		else if (it->compare(0, 4, "PASS") == 0)
 		{
 			//setCurrentState(ACCEPTED);
-			std::cout << it->substr(0, 5) << std::endl;
+			std::cout << it->substr(5, std::string::npos) << std::endl;
 		}
 		//else if (current_state == ACCEPTED && it->compare(0, 5, "NICK") == 0)
 		//	setNickname(it->substr(6, std::string::npos));
@@ -131,10 +129,10 @@ int User::connexion_try(void)
 int	User::process_cmd(std::string buf)
 {
 	parse_cmd(buf);
+	if (connexion_try() == ACCEPTED)
+		return (ACCEPTED);
+	else 
+		return (REJECTED);
 	return (ACCEPTED);
-	//if (connexion_try() == ACCEPTED)
-	//	return (ACCEPTED);
-	//else 
-	//	return (REJECTED);
 }
 
