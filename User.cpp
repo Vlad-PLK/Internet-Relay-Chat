@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/30 16:44:16 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/04/30 17:17:23 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ void User::parse_cmd(std::string &buf)
 			tmp.clear();
 		}
 	}
-	//std::cout << cmds[0] << std::endl;
 }
 
 void User::setPassword(const std::string &pass)
