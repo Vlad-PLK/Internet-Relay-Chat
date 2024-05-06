@@ -1,6 +1,6 @@
-NAME = ircserver
+NAME = ircserv
 
-OBJS = main.cpp main_loop.cpp User.cpp SocketServer.cpp 
+OBJS = main.cpp main_loop.cpp User.cpp SocketServer.cpp Quit.cpp
 
 SRCS = ${subst .cpp,.o,$(OBJS)}
 

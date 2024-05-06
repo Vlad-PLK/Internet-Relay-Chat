@@ -52,6 +52,11 @@ public:
     int                process_cmd(std::string buffer);
     void               parse_cmd(std::string &buffer);
     int                connexion_try(void);
+
+    typedef void        (User::*cmdPtr)(std::vector<std::string> cmd);
+    void                cmds_center(std::vector<std::string> cmd);
+    void                quit(std::vector<std::string> cmd);
+    void                hello(std::vector<std::string> cmd);
 };
 
 #endif

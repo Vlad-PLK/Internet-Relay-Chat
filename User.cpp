@@ -80,22 +80,48 @@ void	User::setFD(int fd)
 	this->userfd = fd;
 }
 
+void User::cmds_center(std::vector<std::string> cmd)
+{
+    std::cout << "cmd is: ";
+    for (size_t i = 0; i < cmd.size(); ++i)
+	{
+        std::cout << "(" << i << ") " << cmd[i];
+        if (i != cmd.size() - 1) {
+            std::cout << ", "; // Add a comma between elements
+        }
+    }
+    std::cout << std::endl;
+	// if (cmd[2] != "\0" && cmd[2] == "hello")
+	// 	this->hello(cmd);
+	std::string allcmdnames[2] = {"quit", "hello"};	
+	cmdPtr allcmds[2] = { &User::quit, &User::hello};
+	for (int index = 0; index < 2; index++)
+	{
+		if (cmd[0] == allcmdnames[index])
+		{
+			(this->*allcmds[index])(cmd);
+			return ;
+		}
+	}
+}
+
 void User::parse_cmd(std::string &buf)
 {
+	std::cout << "HERE cmd parse" << std::endl;
 	std::string tmp;
 	size_t		pos = 0;
-	for (size_t i=0; i != buf.size(); i++)
+	for (size_t i = 0; i != buf.size(); i++)
 	{
 		if (buf[i] == '\r' && buf[i + 1] == '\n')
 		{
 			tmp = buf.substr(pos, i - pos);
 			pos = i + 2;
 			cmds.push_back(tmp);
-			std::cout << tmp << std::endl;
+			this->cmds_center(cmds);
+			// std::cout << tmp << std::endl;
 			tmp.clear();
 		}
 	}
-	//std::cout << cmds[0] << std::endl;
 }
 
 void User::setPassword(const std::string &pass)
@@ -119,22 +145,23 @@ int User::connexion_try(void)
 			//setCurrentState(ACCEPTED);
 			std::cout << it->substr(0, 5) << std::endl;
 		}
-		//else if (current_state == ACCEPTED && it->compare(0, 5, "NICK") == 0)
-		//	setNickname(it->substr(6, std::string::npos));
-		//else if (current_state == ACCEPTED && it->compare(0, 5, "USER") == 0)
-		//	setUsername(it->substr(6, it->find(" ", 6)));
+		else if (current_state == ACCEPTED && it->compare(0, 5, "NICK") == 0)
+			setNickname(it->substr(6, std::string::npos));
+		else if (current_state == ACCEPTED && it->compare(0, 5, "USER") == 0)
+			setUsername(it->substr(6, it->find(" ", 6)));
 	}
-	//std::cout << getNickname() << " " << getUsername() << std::endl;
+	std::cout << getNickname() << " " << getUsername() << std::endl;
 	return (ACCEPTED); 
 }
 
 int	User::process_cmd(std::string buf)
 {
+	std::cout << "buffer_cmd :" << buf << std::endl;
 	parse_cmd(buf);
 	return (ACCEPTED);
-	//if (connexion_try() == ACCEPTED)
-	//	return (ACCEPTED);
-	//else 
-	//	return (REJECTED);
+	// if (connexion_try() == ACCEPTED)
+	// 	return (ACCEPTED);
+	// else 
+	// 	return (REJECTED);
 }
 

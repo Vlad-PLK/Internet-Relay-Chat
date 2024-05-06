@@ -10,15 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
-#include <string>
 #include "SocketServer.hpp"
 
 int main(int argc, char **argv)
 {
-    if (argc == 3)
-        ft_init_server_socket(atoi(argv[1]), argv[2]);
+    if (argc != 3)
+        std::cout << "Error : incorrect number of arguments" << std::endl;
     else
-        std::cout << "Error : incorrect number of arguments, "
-                    "impossible to connect to the server" << std::endl;
+    {
+        try
+        {
+            ft_init_server_socket(atoi(argv[1]), argv[2]);
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        
+    }
 }

@@ -12,12 +12,43 @@
 
 #include "SocketServer.hpp"
 
+User *SocketServer::getUser(std::string name)
+{
+    for (std::vector<User>::iterator it = allUsers.begin(); it != allUsers.end(); ++it)
+    {
+        if (it->getNickname() == name)
+            return const_cast<User*>(&(*it)); // return pointer to the User
+    }
+    return nullptr;
+}
+
+User *SocketServer::getUser(int fd)
+{
+    for (std::vector<User>::iterator it = allUsers.begin(); it != allUsers.end(); ++it)
+    {
+        if (it->getFD() == fd)
+            return const_cast<User*>(&(*it)); // return pointer to the User
+    }
+    return nullptr;
+}
+
+void    SocketServer::addUser(const User &user) const
+{
+    allUsers.push_back(user);
+}
+
+const std::vector<User> &SocketServer::getAllUsers() const
+{
+    return allUsers;
+}
+
 SocketServer::SocketServer(int _port, std::string _password)
 {
     sockfd = 0;
     sock_opt = 0;
     port = _port;
     password.assign(_password);
+    date = std::time(0);
 }
 
 SocketServer::~SocketServer(){

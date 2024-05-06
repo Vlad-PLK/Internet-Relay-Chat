@@ -20,11 +20,18 @@
 #include <poll.h>
 #include <string>
 #include <vector>
+#include <sys/select.h> // for select()
+#include <signal.h>     // for signal()
+#include <stdexcept>
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
 #include <cstring>
 #include <unistd.h>
+#include "User.hpp"
+#include "Channel.hpp"
+
+class User;
 
 class SocketServer
 {
@@ -34,6 +41,10 @@ private:
 	int							port;
 	std::string					password;
 	struct sockaddr_in 			addr;
+	std::time_t					date;
+	mutable std::vector<User> 	allUsers;
+ 	// std::vector<Channel> allChannels;
+
 public:
 	SocketServer(int _port, std::string _password);
 	~SocketServer();
@@ -42,6 +53,11 @@ public:
 	int					getPort(void) const;
 	const std::string 	&getPassword(void) const;
 	void				createSocket(void);
+
+	User					*getUser(std::string name); //const?
+	User 					*getUser(int fd); //const?
+	void 					addUser(const User& user) const;
+	const std::vector<User>	&getAllUsers() const;
 };
 
 class Message  {

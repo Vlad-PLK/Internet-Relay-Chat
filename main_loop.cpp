@@ -53,19 +53,17 @@ void    main_loop(const SocketServer &main_socket)
         {
             if (it->revents == POLLIN)
             {
-                /*
-                user.recv()
-                if (user.has_buffer_command()) {
-                    std::vector<string> cmd = user.get_command();
-                    handle_commad(user, cmd)
-                }
-                */
-                memset(buffer, 0, 0);
+                // users.recv();
+                // if (users.has_buffer_command()) {
+                //     std::vector<string> cmd = users.get_command();
+                //     handle_commad(user, cmd)
+                // }
+                memset(buffer, 0, sizeof(buffer));
                 if (recv(it->fd, buffer, 512, MSG_DONTWAIT) != -1)
                 {
                     str.append(buffer);
                     users.back().process_cmd(str);
-                        //send(it->fd, users.back().getAnswer().c_str(), users.back().getAnswer().size(), MSG_CONFIRM);
+                        send(it->fd, users.back().getAnswer().c_str(), users.back().getAnswer().size(), 0);
                     str.clear();
                 }
                 else
