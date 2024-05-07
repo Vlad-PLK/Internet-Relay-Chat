@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/30 17:17:23 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/07 11:07:30 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,24 @@ const std::string   &User::getUsername(void) const
 	return (this->username);
 }
 
-const std::string	User::getAnswer(void)
+std::string	&User::getAnswer(void)
 {
 	return (this->answer);
+}
+
+int			 User::getAnswerSize(void) const
+{
+	return (this->answer.size());
 }
 
 int	User::getFD(void) const
 {
 	return (this->userfd);
+}
+
+int User::getCurrentState(void) const
+{
+	return (this->current_state);
 }
 
 void	User::setNickname(const std::string &nname)
@@ -90,7 +100,7 @@ void User::parse_cmd(std::string &buf)
 		{
 			tmp = buf.substr(pos, i - pos);
 			pos = i + 2;
-			cmds.push_back(tmp);
+			this->cmds.push_back(tmp);
 			tmp.clear();
 		}
 	}
@@ -101,28 +111,29 @@ void User::setPassword(const std::string &pass)
 	this->server_password.assign(pass);
 }
 
+void User::setAnswer(void)
+{
+	this->answer.append("001 ").append(this->getNickname()).append(" :Welcome to my Network ").append(this->getNickname()).append("\r\n");
+	std::cout << this->getAnswer() << std::endl;
+}
+
 int User::connexion_try(void)
 {
 	std::vector<std::string>::iterator it;
-	for (it = cmds.begin(); it != cmds.end(); it++)
+	for (it = this->cmds.begin(); it != this->cmds.end(); it++)
 	{
-		if (it->compare(0, 6, "CAP LS") == 0)
-			it->clear();
-		else if (it->compare(0, 4, "PASS") == 0 && it->compare(6, server_password.size(), server_password) == 0)
+		if (it->compare(0, 4, "PASS") == 0 && it->compare(6, server_password.size(), server_password) == 0)
 			setCurrentState(ACCEPTED);
 		else if (current_state == ACCEPTED && it->compare(0, 4, "NICK") == 0)
 			setNickname(it->substr(5, std::string::npos));
 		else if (current_state == ACCEPTED && it->compare(0, 4, "USER") == 0)
 			setUsername(it->substr(5, it->find(" ", 6) - 5));
-		else
-			it->clear();
+		it->clear();
 	}
-	answer.append("001 ");
-	answer.append(nickname);
-	answer.append(" :Welcome to the <networkname> Network ");
-	answer.append(nickname);
-	answer.append("\r\n");
-	std::cout << answer << std::endl;
+	if (this->getNickname().size() == 0 || this->getUsername().size() == 0)
+		return (REJECTED);
+	this->answer.append("001 ").append(this->getNickname()).append(" :Welcome to my Network ").append(this->getNickname()).append("\r\n");
+	//std::cout << answer << std::endl;
 	return (ACCEPTED); 
 }
 

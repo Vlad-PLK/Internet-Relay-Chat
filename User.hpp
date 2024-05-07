@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/25 17:10:31 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/07 11:07:01 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,12 @@ public:
 
     const std::string &getUsername(void) const;
     const std::string &getNickname(void) const;
-    const std::string  getAnswer(void);
+    std::string &getAnswer(void);
+    int                getAnswerSize(void) const;
     int                getFD(void) const;
+    int                getCurrentState(void) const;
     void               setFD(int fd);
+    void               setAnswer(void);
     void               setUsername(const std::string &uname);
     void               setNickname(const std::string &nname);
     void               setPassword(const std::string &pass);
