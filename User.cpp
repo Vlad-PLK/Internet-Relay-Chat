@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/07 15:28:00 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/07 17:22:21 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,6 @@ int User::connexion_try(void)
 	if (this->getNickname().size() == 0 || this->getUsername().size() == 0)
 		return (REJECTED);
 	this->answer.append("001 ").append(this->getNickname()).append(" :Welcome to my Network ").append(this->getNickname()).append("\r\n");
-	//std::cout << answer << std::endl;
 	return (ACCEPTED); 
 }
 
