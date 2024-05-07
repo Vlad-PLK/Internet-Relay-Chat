@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/07 11:07:01 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/07 15:24:34 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define USER_HPP
 
 #include "SocketServer.hpp"
+#include <iostream>
 # define ACCEPTED 0
 # define REJECTED 1
 # define WAITING_FOR_APPROVAL 2
@@ -56,5 +57,7 @@ public:
     void               parse_cmd(std::string &buffer);
     int                connexion_try(void);
 };
+
+std::ostream&   operator<<(std::ostream& outstream, const User &user);
 
 #endif

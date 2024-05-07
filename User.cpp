@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/07 11:07:30 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/07 15:28:00 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,3 +146,8 @@ int	User::process_cmd(std::string buf)
 		return (REJECTED);
 }
 
+std::ostream &operator<<(std::ostream &output, const User &user)
+{
+	output << "nickname : " << user.getNickname() << " username : " << user.getUsername() << " fd : " << user.getFD() << " current status : " << user.getCurrentState() << std::endl;
+	return (output);
+}
