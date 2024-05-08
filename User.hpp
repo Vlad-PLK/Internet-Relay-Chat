@@ -53,6 +53,7 @@ public:
     void               parse_cmd(std::string &buffer);
     int                connexion_try(void);
 
+    void                sendAndPrint(std::string response, int length, int flag);
     typedef void        (User::*cmdPtr)(std::vector<std::string> cmd);
     void                cmds_center(std::vector<std::string> cmd);
     void                quit(std::vector<std::string> cmd);

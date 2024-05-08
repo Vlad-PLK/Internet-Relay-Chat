@@ -80,24 +80,39 @@ void	User::setFD(int fd)
 	this->userfd = fd;
 }
 
+void User::sendAndPrint(std::string response, int length, int flag)
+{
+    send(this->userfd, response.c_str(), length, flag);
+    std::cout << "--> Message sent to client " << this->userfd << " = " << response << std::endl;
+}
+
+
 void User::cmds_center(std::vector<std::string> cmd)
 {
-    std::cout << "cmd is: ";
+	for (size_t i = 0; i < cmd.back().length(); i++)
+	{
+		std::cout << "cmd.back()[" << i << "] :" << cmd.back()[i] << std::endl;
+		if (cmd.back()[i] == ' ')
+			break;
+		else
+			cmd.back()[i] = std::toupper(cmd.back()[i]);
+	}
+	std::cout << "cmd is: ";
     for (size_t i = 0; i < cmd.size(); ++i)
 	{
         std::cout << "(" << i << ") " << cmd[i];
         if (i != cmd.size() - 1) {
-            std::cout << ", "; // Add a comma between elements
+            std::cout << ", ";
         }
     }
     std::cout << std::endl;
 	// if (cmd[2] != "\0" && cmd[2] == "hello")
 	// 	this->hello(cmd);
-	std::string allcmdnames[2] = {"quit", "hello"};	
+	std::string allcmdnames[2] = {"QUIT", "HELLO"};	
 	cmdPtr allcmds[2] = { &User::quit, &User::hello};
 	for (int index = 0; index < 2; index++)
 	{
-		if (cmd[0] == allcmdnames[index])
+		if (cmd.back() == allcmdnames[index])
 		{
 			(this->*allcmds[index])(cmd);
 			return ;

@@ -2,13 +2,13 @@
 
 void User::quit(std::vector<std::string> cmd)
 {
-    std::cout << "HERE quit" << std::endl;
+    this->sendAndPrint("FUYEZ!!!", 13, 0);
 	(void)cmd;
 	close(this->userfd);
 }
 
 void User::hello(std::vector<std::string> cmd)
 {
-    std::cout << "HERE hello" << std::endl;
+    this->sendAndPrint("ICI C'EST IRC", 13, 0);
 	(void)cmd;
 }

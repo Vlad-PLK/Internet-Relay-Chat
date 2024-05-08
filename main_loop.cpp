@@ -54,16 +54,20 @@ void    main_loop(const SocketServer &main_socket)
             if (it->revents == POLLIN)
             {
                 // users.recv();
-                // if (users.has_buffer_command()) {
-                //     std::vector<string> cmd = users.get_command();
+                // if (users.has_buffer_command())
+                // {
+                //     std::cout << "IF 1" << std::endl;
+                //     std::vector<std::string> cmd = users.get_command();
                 //     handle_commad(user, cmd)
                 // }
                 memset(buffer, 0, sizeof(buffer));
                 if (recv(it->fd, buffer, 512, MSG_DONTWAIT) != -1)
                 {
+                    std::cout << "IF 2" << std::endl;
                     str.append(buffer);
                     users.back().process_cmd(str);
-                        send(it->fd, users.back().getAnswer().c_str(), users.back().getAnswer().size(), 0);
+                    send(it->fd, "001 tvinci :Welcome to my Network tvinci\r\n", 44, MSG_CONFIRM);
+                    // send(it->fd, users.back().getAnswer().c_str(), users.back().getAnswer().size(), 0);
                     str.clear();
                 }
                 else

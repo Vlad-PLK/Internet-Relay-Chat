@@ -12,25 +12,25 @@
 
 #include "SocketServer.hpp"
 
-User *SocketServer::getUser(std::string name)
-{
-    for (std::vector<User>::iterator it = allUsers.begin(); it != allUsers.end(); ++it)
-    {
-        if (it->getNickname() == name)
-            return const_cast<User*>(&(*it)); // return pointer to the User
-    }
-    return nullptr;
-}
+// User *SocketServer::getUser(std::string name)
+// {
+//     for (std::vector<User>::iterator it = allUsers.begin(); it != allUsers.end(); ++it)
+//     {
+//         if (it->getNickname() == name)
+//             return const_cast<User*>(&(*it)); // return pointer to the User
+//     }
+//     return nullptr;
+// }
 
-User *SocketServer::getUser(int fd)
-{
-    for (std::vector<User>::iterator it = allUsers.begin(); it != allUsers.end(); ++it)
-    {
-        if (it->getFD() == fd)
-            return const_cast<User*>(&(*it)); // return pointer to the User
-    }
-    return nullptr;
-}
+// User *SocketServer::getUser(int fd)
+// {
+//     for (std::vector<User>::iterator it = allUsers.begin(); it != allUsers.end(); ++it)
+//     {
+//         if (it->getFD() == fd)
+//             return const_cast<User*>(&(*it)); // return pointer to the User
+//     }
+//     return nullptr;
+// }
 
 void    SocketServer::addUser(const User &user) const
 {

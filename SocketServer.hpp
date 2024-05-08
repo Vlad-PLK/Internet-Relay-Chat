@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <cstring>
+#include <ctime>
 #include <unistd.h>
 #include "User.hpp"
 #include "Channel.hpp"
