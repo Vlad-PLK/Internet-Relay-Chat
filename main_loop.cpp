@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/07 17:23:42 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/08 09:55:54 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,40 +49,19 @@ void    main_loop(const SocketServer &main_socket)
             users.push_back(tmp_user);
             std::cout << "New Client" << std::endl;
         }
-        /*else if (tab_fd[1].revents == POLLIN)
-        {
-            memset(buffer, 0, sizeof(buffer));
-            if (recv(tab_fd[1].fd, buffer, 512, MSG_DONTWAIT) != -1)
-            {
-                str.append(buffer);
-                if (users[0].getCurrentState() != ACCEPTED && users[0].process_cmd(str) == ACCEPTED)
-                    send(tab_fd[1].fd, users[0].getAnswer().c_str(), users[0].getAnswerSize(), MSG_DONTWAIT | MSG_NOSIGNAL);
-                //if (users[0].process_cmd(str) == ACCEPTED)
-                   // send(tab_fd[1].fd, users[0].getAnswer().c_str(), users[0].getAnswerSize(), MSG_DONTWAIT | MSG_NOSIGNAL);
-                //valid answer for connexion with no parsing//
-                //send(tab_fd[1].fd, "001 vladplk :Welcome to my Network vladplk\r\n", 56, MSG_CONFIRM);
-                str.clear();
-                memset(buffer, 0, sizeof(buffer));
-                users[0].getAnswer().clear();
-            }
-        }*/
         else
         {
             for (it = tab_fd.begin() + 1; it != tab_fd.end(); it++)
             {
-                ///std::cout << "fd in tab with iterator : " << it->fd << "fd in tab without : " << tab_fd[1].fd << std::endl;
                 if (it->revents == POLLIN)
                 {
                     memset(buffer, 0, sizeof(buffer));
                     if (recv(it->fd, buffer, 512, MSG_DONTWAIT) != -1)
                     {
                         str.append(buffer);
-                        if (users[it->fd - 4].getCurrentState() != ACCEPTED && users[it->fd - 4].process_cmd(str) == ACCEPTED)
-                            send(it->fd, users[it->fd - 4].getAnswer().c_str(), users[it->fd - 4].getAnswerSize(), MSG_DONTWAIT | MSG_NOSIGNAL);
-                        //if (users[0].process_cmd(str) == ACCEPTED)
-                         //   send(tab_fd[1].fd, users[0].getAnswer().c_str(), users[0].getAnswerSize(), MSG_DONTWAIT | MSG_NOSIGNAL);
-                        //valid answer for connexion with no parsing//
-                        //send(tab_fd[1].fd, "001 vladplk :Welcome to my Network vladplk\r\n", 56, MSG_CONFIRM);
+                        users[it->fd - 4].process_cmd(str);
+                        std::cout << users[it->fd - 4];
+                        send(it->fd, users[it->fd - 4].getAnswer().c_str(), users[it->fd - 4].getAnswerSize(), MSG_DONTWAIT | MSG_NOSIGNAL);
                         str.clear();
                         memset(buffer, 0, sizeof(buffer));
                         users[it->fd - 4].getAnswer().clear();

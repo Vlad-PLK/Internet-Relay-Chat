@@ -1,0 +1,33 @@
+<< CAP LS
+<< PASS michel
+<< NICK vladplk
+<< USER vpolojie vpolojie localhost :Vladimir Polojienko
+<< CAP LS
+<< PASS password
+<< NICK michel
+<< USER vpolojie vpolojie localhost :Vladimir Polojienko
+>> 001 michel :Welcome to my Network michel
+<< MODE michel +i
+>> 001 michel :Welcome to my Network michel
+<< MODE michel +i
+>> 001 michel :Welcome to my Network michel
+<< MODE michel +i
+>> 001 michel :Welcome to my Network michel
+<< MODE michel +i
+>> 001 michel :Welcome to my Network michel
+<< MODE michel +i
+>> 001 michel :Welcome to my Network michel
+<< MODE michel +i
+>> 001 michel :Welcome to my Network michel
+<< MODE michel +i
+>> 001 michel :Welcome to my Network michel
+<< MODE michel +i
+>> 001 michel :Welcome to my Network michel
+<< MODE michel +i
+>> 001 michel :Welcome to my Network michel
+<< MODE michel +i
+>> 001 michel :Welcome to my Network michel
+<< MODE michel +i
+>> 001 michel :Welcome to my Network michel
+<< MODE michel +i
+>> 001 michel :Welcome to my Network michel
