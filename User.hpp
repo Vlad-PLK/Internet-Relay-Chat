@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/25 17:10:31 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/07 15:24:34 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define USER_HPP
 
 #include "SocketServer.hpp"
+#include <iostream>
 # define ACCEPTED 0
 # define REJECTED 1
 # define WAITING_FOR_APPROVAL 2
@@ -40,9 +41,12 @@ public:
 
     const std::string &getUsername(void) const;
     const std::string &getNickname(void) const;
-    const std::string  getAnswer(void);
+    std::string &getAnswer(void);
+    int                getAnswerSize(void) const;
     int                getFD(void) const;
+    int                getCurrentState(void) const;
     void               setFD(int fd);
+    void               setAnswer(void);
     void               setUsername(const std::string &uname);
     void               setNickname(const std::string &nname);
     void               setPassword(const std::string &pass);
@@ -53,11 +57,13 @@ public:
     void               parse_cmd(std::string &buffer);
     int                connexion_try(void);
 
-    void                sendAndPrint(std::string response, int length, int flag);
+    void                my_send(std::string response, int length, int flag);
     typedef void        (User::*cmdPtr)(std::vector<std::string> cmd);
     void                cmds_center(std::vector<std::string> cmd);
     void                quit(std::vector<std::string> cmd);
     void                hello(std::vector<std::string> cmd);
 };
+
+std::ostream&   operator<<(std::ostream& outstream, const User &user);
 
 #endif

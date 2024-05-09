@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/26 08:41:28 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/08 10:04:43 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void    main_loop(const SocketServer &main_socket)
     ///////////array of fds part///////////
 
     ///////////buffer for read///////////
-    char                buffer[512];
+    char                buffer[513];
     std::string str;
     ///////////buffer for read///////////
 
@@ -32,13 +32,18 @@ void    main_loop(const SocketServer &main_socket)
     User              tmp_user;
     ///////////users///////////
 
+    /* push of the main socket in the fds array */
     fd_tmp.fd = main_socket.getSockfd();
     fd_tmp.events = POLLIN;
     tab_fd.push_back(fd_tmp);
+
     //////////main loop//////////
     while (1)
     {
+        /* function to receive data from fds with I/O in non blocking mode */
         poll(tab_fd.data(), tab_fd.size(), 5000);
+
+        /* event if there is a new connexion on the main socket */
         if (tab_fd[0].revents == POLLIN)
         {
             fd_tmp.fd = accept(tab_fd[0].fd, NULL, NULL);
@@ -49,29 +54,34 @@ void    main_loop(const SocketServer &main_socket)
             users.push_back(tmp_user);
             std::cout << "New Client" << std::endl;
         }
-        for (it = tab_fd.begin()++; it != tab_fd.end(); it++)
+        /* other events received from all users of the server */
+        else
         {
-            if (it->revents == POLLIN)
+            /* for loop to check for all events in the fd arrays so for all existing users */
+            for (it = tab_fd.begin() + 1; it != tab_fd.end(); it++)
             {
-                // users.recv();
-                // if (users.has_buffer_command())
-                // {
-                //     std::cout << "IF 1" << std::endl;
-                //     std::vector<std::string> cmd = users.get_command();
-                //     handle_commad(user, cmd)
-                // }
-                memset(buffer, 0, sizeof(buffer));
-                if (recv(it->fd, buffer, 512, MSG_DONTWAIT) != -1)
+                if (it->revents == POLLIN)
                 {
-                    std::cout << "IF 2" << std::endl;
-                    str.append(buffer);
-                    users.back().process_cmd(str);
-                    send(it->fd, "001 tvinci :Welcome to my Network tvinci\r\n", 44, MSG_CONFIRM);
-                    // send(it->fd, users.back().getAnswer().c_str(), users.back().getAnswer().size(), 0);
-                    str.clear();
+                    memset(buffer, 0, sizeof(buffer));
+                    /* if there is a new message */
+                    if (recv(it->fd, buffer, 512, MSG_DONTWAIT) != -1)
+                    {
+                        str.append(buffer);
+                        /* parse the command */
+                        users[it->fd - 4].process_cmd(str);
+                        
+                        /* shows info about current user in the loop (optionnal, for debugging )*/
+                        std::cout << users[it->fd - 4];
+                        
+                        /* after parsing is done the answer should be appropriate to the initial received message */
+                        send(it->fd, users[it->fd - 4].getAnswer().c_str(), users[it->fd - 4].getAnswerSize(), MSG_DONTWAIT | MSG_NOSIGNAL);
+                        
+                        /* clear all buffers and strings from previous message */
+                        str.clear();
+                        memset(buffer, 0, sizeof(buffer));
+                        users[it->fd - 4].getAnswer().clear();
+                    }
                 }
-                else
-                    std::cout << "";
             }
         }
     }
