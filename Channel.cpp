@@ -1,3 +1,5 @@
+#include "Channel.hpp"
+
 Channel::Channel(void)
 {
 
@@ -28,6 +30,11 @@ std::string Channel::getMode() const
     return (this->_mode);
 }
 
+int Channel::getLimit() const
+{
+    return (this->_limit);
+}
+
 std::vector<User> &Channel::getChannelUsers()
 {
     return (this->_channelUsers);
@@ -38,33 +45,54 @@ std::vector<User> &Channel::getChannelOperators()
     return (this->_channelOperators);
 }
 
-void Channel::setTitle(std::string title)
+void Channel::setTitle(User &user, std::string title)
 {
-    this->_title = title;
+    if (user.isChannelOper(getChannelOperators()))
+        this->_title = title;
+    //ERROR MSG (user does not have the rights)
 }
 
-void Channel::setPassword(std::string pass)
+void Channel::setPassword(User &user, std::string pass)
 {
-    this->_password = pass;
+    if (user.isChannelOper(getChannelOperators()))
+        this->_password = pass;
+    //ERROR MSG (user does not have the rights)
 }
 
-void Channel::setTopic(std::string topic)
+void Channel::setTopic(User &user, std::string topic)
 {
-    this->_topic = topic;
+    if (user.isChannelOper(getChannelOperators()) || user.checkRights(this->_title, "t"))
+        this->_topic = topic;
+    //ERROR MSG (user does not have the rights)
 }
 
-// void Channel::setMode(char new_mode)
+// void Channel::setMode(User &user, char new_mode)
 // {
 //     this->_mode = new_mode;
 // }
 
-
-void Channel::addUser(User *user)
+void Channel::setLimit(User &user, int limit)
 {
-    if (this->_channelUsers.size() < this->_limit)
+    if (user.isChannelOper(getChannelOperators()))
+        this->_limit = limit;
+}
+
+void    Channel::addUser(const User &user)
+{
+    if ((int)this->_channelUsers.size() < this->_limit)
     {
-        if (this->_channelUsers.size() == 0)
-
+        if ((int)this->_channelUsers.size() == 0)
+        {
+            User userCopy = user;
+            userCopy.setNickname('@' + userCopy.getNickname());
+            this->_channelOperators.push_back(userCopy);
+        }
+        else
+        {
+            this->_channelUsers.push_back(user);
+            user.getChannelRights().insert(std::make_pair(this->_title, "blabla")); // (?) what are the basic rights for a normal user
+        }
     }
-
+    // else
+        // ERROR MSG (channel is full)
 }

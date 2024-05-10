@@ -20,6 +20,7 @@
 #include <poll.h>
 #include <string>
 #include <vector>
+#include <map>
 #include <sys/select.h> // for select()
 #include <signal.h>     // for signal()
 #include <stdexcept>

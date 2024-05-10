@@ -57,6 +57,11 @@ int User::getCurrentState(void) const
 	return (this->current_state);
 }
 
+std::map<std::string, std::string>  User::getChannelRights(void) const
+{
+	return (this->_channelRights);
+}
+
 void	User::setNickname(const std::string &nname)
 {
 	this->nickname.assign(nname);
@@ -90,6 +95,47 @@ void	User::setFD(int fd)
 	this->userfd = fd;
 }
 
+bool	User::parseRights(std::string userRights, std::string channelRights)
+{
+	int count = 0;
+	int i = -1;
+	while (++i < (int)channelRights.length())
+	{
+		int j = -1;
+		while (userRights[++j])
+		{
+			if (userRights[j] == channelRights[i])
+			{
+				count++;
+				break;
+			}
+		}
+	}
+	if (count == (int)channelRights.length())
+		return true;
+	return false;
+}
+
+bool	User::checkRights(const std::string channelTitle, const std::string channelRights)
+{
+	for (std::map<std::string, std::string>::iterator it = this->_channelRights.begin(); it != this->_channelRights.end(); ++it)
+	{
+		if (it->first == channelTitle)
+			return (parseRights(it->second, channelRights));
+	}
+	return false; //ERROR MSG ?(what to do if title not found?)
+}
+
+bool	User::isChannelOper(std::vector<User> &opVector)
+{
+	for (std::vector<User>::iterator it = opVector.begin(); it != opVector.end(); ++it)
+	{
+		if (it->username == this->username)
+			return true;
+	}
+	return false;
+}
+
 void User::my_send(std::string response, int length, int flag)
 {
     send(this->userfd, response.c_str(), length, flag);
@@ -115,12 +161,10 @@ void User::cmds_center(std::vector<std::string> cmd)
     //         std::cout << ", ";
     //     }
     // }
-    std::cout << std::endl;
-	// if (cmd[2] != "\0" && cmd[2] == "hello")
-	// 	this->hello(cmd);
+    // std::cout << std::endl;
 	std::string allcmdnames[2] = {"QUIT"};	
-	cmdPtr allcmds[2] = { &User::quit, &User::hello};
-	for (int index = 0; index < 2; index++)
+	cmdPtr allcmds[2] = { &User::quit};
+	for (int index = 0; index < 1; index++)
 	{
 		if (cmd.back() == allcmdnames[index])
 		{

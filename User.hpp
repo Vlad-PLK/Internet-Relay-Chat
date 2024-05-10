@@ -33,6 +33,7 @@ private:
     std::string                 buffer;
     std::vector<std::string>    cmds;
     std::string                 answer;
+    std::map<std::string, std::string>    _channelRights;
 
 public:
     User(/* args */);
@@ -45,6 +46,7 @@ public:
     int                getAnswerSize(void) const;
     int                getFD(void) const;
     int                getCurrentState(void) const;
+    std::map<std::string, std::string>  getChannelRights(void) const;
     void               setFD(int fd);
     void               setAnswer(void);
     void               setUsername(const std::string &uname);
@@ -61,7 +63,10 @@ public:
     typedef void        (User::*cmdPtr)(std::vector<std::string> cmd);
     void                cmds_center(std::vector<std::string> cmd);
     void                quit(std::vector<std::string> cmd);
-    void                hello(std::vector<std::string> cmd);
+
+    bool                isChannelOper(std::vector<User> &opVector);
+    bool                checkRights(std::string channelTitle, std::string channelRights); //string if multiple rihts to check at once
+    bool                parseRights(std::string userRights, std::string channelRights);
 };
 
 std::ostream&   operator<<(std::ostream& outstream, const User &user);
