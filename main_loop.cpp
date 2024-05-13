@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/08 10:04:43 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/13 10:36:25 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void    main_loop(const SocketServer &main_socket)
 
     ///////////buffer for read///////////
     char                buffer[513];
+    ssize_t             read_value;
     std::string str;
     ///////////buffer for read///////////
 
@@ -64,8 +65,10 @@ void    main_loop(const SocketServer &main_socket)
                 {
                     memset(buffer, 0, sizeof(buffer));
                     /* if there is a new message */
-                    if (recv(it->fd, buffer, 512, MSG_DONTWAIT) != -1)
+                    read_value = recv(it->fd, buffer, 512, MSG_DONTWAIT);
+                    if (read_value != -1)
                     {
+                        buffer[read_value] = 0;
                         str.append(buffer);
                         /* parse the command */
                         users[it->fd - 4].process_cmd(str);

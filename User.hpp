@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/07 15:24:34 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/13 11:16:41 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define USER_HPP
 
 #include "SocketServer.hpp"
+#include "Command.hpp"
 #include <iostream>
 # define ACCEPTED 0
 # define REJECTED 1
@@ -31,7 +32,7 @@ private:
     int                         admin_state;
     int                         current_state;
     std::string                 buffer;
-    std::vector<std::string>    cmds;
+    std::vector<Command>        cmds;
     std::string                 answer;
 
 public:
@@ -54,7 +55,8 @@ public:
     void               setAdminState(int state);
 
     int                process_cmd(std::string buffer);
-    void               parse_cmd(std::string &buffer);
+    void               parse_buffer(std::string &buffer);
+    void               parse_cmds();
     int                connexion_try(void);
 };
 

@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/08 09:44:34 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/13 11:22:46 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,21 +90,37 @@ void	User::setFD(int fd)
 	this->userfd = fd;
 }
 
-void User::parse_cmd(std::string &buf)
+void User::parse_buffer(std::string &buf)
 {
 	std::string tmp;
 	size_t		pos = 0;
-	for (size_t i=0; i != buf.size(); i++)
+	if (buf.size() != 0)
 	{
-		if (buf[i] == '\r' && buf[i + 1] == '\n')
+		for (size_t i=0; i != buf.size(); i++)
 		{
-			tmp = buf.substr(pos, i - pos);
-			pos = i + 2;
-			this->cmds.push_back(tmp);
-			tmp.clear();
+			if (buf[i] == '\r' && buf[i + 1] == '\n')
+			{
+				Command cmd;
+				tmp = buf.substr(pos, i - pos);
+				cmd.setRawCommand(tmp);
+				pos = i + 2;
+				this->cmds.push_back(cmd);
+			}
 		}
 	}
 }
+
+void User::parse_cmds()
+{
+	std::vector<Command>::iterator it;
+	for (it == this->cmds.begin(); it != this->cmds.end(); it++)
+	{
+		// first COMMAND
+		// then Params
+		// end Trailing
+	}
+}
+
 
 void User::setPassword(const std::string &pass)
 {
@@ -113,7 +129,7 @@ void User::setPassword(const std::string &pass)
 
 void User::setAnswer(void)
 {
-	this->answer.append("001 ").append(this->getNickname()).append(" :Welcome to my Network ").append(this->getNickname()).append("\r\n");
+	this->answer = "001 " + this->getNickname() + " :Welcome to my Network " + this->getNickname() + "\r\n";
 	std::cout << this->getAnswer() << std::endl;
 }
 
@@ -138,7 +154,17 @@ int User::connexion_try(void)
 
 int	User::process_cmd(std::string buf)
 {
-	parse_cmd(buf);
+	parse_buffer(buf);
+	parse_cmds();
+	/*
+		if (find_cmd() == true)
+		{
+			handle_cmd();
+			return (ACCEPTED);
+		}
+		else
+			return (REJECTED);
+	*/
 	if (connexion_try() == ACCEPTED)
 		return (ACCEPTED);
 	else 
