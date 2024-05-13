@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/13 11:16:41 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/13 16:17:22 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # define WAITING_FOR_APPROVAL 2
 # define IS_ADMIN 3
 # define NOT_ADMIN 4
+
+class Command;
 
 class User
 {
@@ -40,9 +42,10 @@ public:
     User(int fd, int logstate);
     ~User();
 
+    const std::vector<Command>    &getCmds(void) const;
     const std::string &getUsername(void) const;
     const std::string &getNickname(void) const;
-    std::string &getAnswer(void);
+    std::string       &getAnswer(void);
     int                getAnswerSize(void) const;
     int                getFD(void) const;
     int                getCurrentState(void) const;
@@ -57,7 +60,7 @@ public:
     int                process_cmd(std::string buffer);
     void               parse_buffer(std::string &buffer);
     void               parse_cmds();
-    int                connexion_try(void);
+    //int                connexion_try(void);
 };
 
 std::ostream&   operator<<(std::ostream& outstream, const User &user);

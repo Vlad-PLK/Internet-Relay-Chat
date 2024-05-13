@@ -6,12 +6,13 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/13 11:22:46 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/13 16:54:15 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "User.hpp"
 #include "SocketServer.hpp"
+#include "Command.hpp"
 
 User::User() : userfd(0), admin_state(0), current_state(0)
 {
@@ -55,6 +56,11 @@ int	User::getFD(void) const
 int User::getCurrentState(void) const
 {
 	return (this->current_state);
+}
+
+const std::vector<Command> &User::getCmds(void) const
+{
+	return (this->cmds);
 }
 
 void	User::setNickname(const std::string &nname)
@@ -113,8 +119,9 @@ void User::parse_buffer(std::string &buf)
 void User::parse_cmds()
 {
 	std::vector<Command>::iterator it;
-	for (it == this->cmds.begin(); it != this->cmds.end(); it++)
+	for (it = this->cmds.begin(); it != this->cmds.end(); it++)
 	{
+		it->setCmdParams();
 		// first COMMAND
 		// then Params
 		// end Trailing
@@ -133,7 +140,7 @@ void User::setAnswer(void)
 	std::cout << this->getAnswer() << std::endl;
 }
 
-int User::connexion_try(void)
+/*int User::connexion_try(void)
 {
 	std::vector<std::string>::iterator it;
 	for (it = this->cmds.begin(); it != this->cmds.end(); it++)
@@ -150,12 +157,13 @@ int User::connexion_try(void)
 		return (REJECTED);
 	this->answer.append("001 ").append(this->getNickname()).append(" :Welcome to my Network ").append(this->getNickname()).append("\r\n");
 	return (ACCEPTED); 
-}
+}*/
 
 int	User::process_cmd(std::string buf)
 {
 	parse_buffer(buf);
 	parse_cmds();
+	return (ACCEPTED);
 	/*
 		if (find_cmd() == true)
 		{
@@ -165,10 +173,10 @@ int	User::process_cmd(std::string buf)
 		else
 			return (REJECTED);
 	*/
-	if (connexion_try() == ACCEPTED)
-		return (ACCEPTED);
-	else 
-		return (REJECTED);
+	//if (connexion_try() == ACCEPTED)
+	//	return (ACCEPTED);
+	//else 
+	//	return (REJECTED);
 }
 
 std::ostream &operator<<(std::ostream &output, const User &user)
