@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/13 16:54:15 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/14 11:07:37 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,20 +100,21 @@ void User::parse_buffer(std::string &buf)
 {
 	std::string tmp;
 	size_t		pos = 0;
-	if (buf.size() != 0)
+
+	buffer.append(buf);
+	for (size_t i=0; i != buffer.size(); i++)
 	{
-		for (size_t i=0; i != buf.size(); i++)
+		if (buffer[i] == '\r' && buffer[i + 1] == '\n')
 		{
-			if (buf[i] == '\r' && buf[i + 1] == '\n')
-			{
-				Command cmd;
-				tmp = buf.substr(pos, i - pos);
-				cmd.setRawCommand(tmp);
-				pos = i + 2;
-				this->cmds.push_back(cmd);
-			}
+			Command cmd;
+			tmp = buffer.substr(pos, i - pos);
+			cmd.setRawCommand(tmp);
+			pos = i + 2;
+			this->cmds.push_back(cmd);
+			tmp.clear();
 		}
 	}
+	buffer.erase(0, pos);
 }
 
 void User::parse_cmds()
@@ -122,6 +123,8 @@ void User::parse_cmds()
 	for (it = this->cmds.begin(); it != this->cmds.end(); it++)
 	{
 		it->setCmdParams();
+		std::cout << "CMD NAME : " << it->getCmd() << " CMD FIRST PARAM : " << it->getParams().front() << std::endl;
+		//std::cout << "CMD NAME : " << it->getCmd() << "FIRST PARAM NAME : " << it->getParams().front() << std::endl;
 		// first COMMAND
 		// then Params
 		// end Trailing

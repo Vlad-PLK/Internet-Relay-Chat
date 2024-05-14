@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/13 16:55:27 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/14 10:10:32 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,6 @@ void    main_loop(const SocketServer &main_socket)
     fd_tmp.events = POLLIN;
     tab_fd.push_back(fd_tmp);
 
-    //std::vector<Command> cmds;
-    //std::vector<Command>::iterator it_cmds; 
-    //std::vector<std::string> strs;
-    //std::vector<std::string>::iterator it_strs;
     //////////main loop//////////
     while (1)
     {
@@ -76,15 +72,6 @@ void    main_loop(const SocketServer &main_socket)
                         str.append(buffer);
                         /* parse the command */
                         users[it->fd - 4].process_cmd(str);
-                        //cmds = users[it->fd - 4].getCmds();
-                        //for (it_cmds = cmds.begin(); it_cmds != cmds.end(); it_cmds++)
-                        //{
-                        //    std::cout << "CMD : " << it_cmds->getCmd() << std::endl;
-                        //    strs = it_cmds->getParams();
-                        //    for (it_strs = strs.begin(); it_strs != strs.end(); it_strs++)
-                        //        std::cout << "PARAM : " << it_strs->data();
-                        //    std::cout << "\n";
-                        //}
                         /* shows info about current user in the loop (optionnal, for debugging )*/
                         ///std::cout << users[it->fd - 4];
                         
@@ -93,7 +80,6 @@ void    main_loop(const SocketServer &main_socket)
                         
                         /* clear all buffers and strings from previous message */
                         str.clear();
-                        memset(buffer, 0, sizeof(buffer));
                         users[it->fd - 4].getAnswer().clear();
                     }
                 }

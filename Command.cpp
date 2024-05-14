@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:45:37 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/13 16:56:28 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/14 11:06:33 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,11 @@ void Command::setCmdParams()
 {
     size_t      index = 0;
 
-    /// if (this->raw_command[0] == ':')
-     ///   index = this->raw_command.find(' ', 0);
+    if (this->raw_command[0] == ':')
+       index = this->raw_command.find(' ', 0);
     this->cmd_name = this->raw_command.substr(index, this->raw_command.find(' ', index) - index);
-    std::cout << this->cmd_name << std::endl;
     index = this->raw_command.find(' ', index);
-    while (index != this->raw_command.size())
+    while (index <= this->raw_command.size())
     {
 		if (this->raw_command[index + 1] != ':')
         {
@@ -46,11 +45,10 @@ void Command::setCmdParams()
         else
         {
             index++;
-            this->params.push_back(this->raw_command.substr(index + 1, std::string::npos));
+            this->params.push_back(this->raw_command.substr(index + 2, std::string::npos));
             break ;
         }
 	}
-    std::cout << this->params[1] << std::endl;
 }
 
 std::string const &Command::getRawCommand(void)
