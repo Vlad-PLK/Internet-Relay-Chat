@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/07 15:24:34 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/13 16:17:22 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,15 @@
 #define USER_HPP
 
 #include "SocketServer.hpp"
+#include "Command.hpp"
 #include <iostream>
 # define ACCEPTED 0
 # define REJECTED 1
 # define WAITING_FOR_APPROVAL 2
 # define IS_ADMIN 3
 # define NOT_ADMIN 4
+
+class Command;
 
 class User
 {
@@ -31,7 +34,7 @@ private:
     int                         admin_state;
     int                         current_state;
     std::string                 buffer;
-    std::vector<std::string>    cmds;
+    std::vector<Command>        cmds;
     std::string                 answer;
     std::map<std::string, std::string>    _channelRights;
 
@@ -55,9 +58,9 @@ public:
     void                setCurrentState(int state);
     void                setAdminState(int state);
 
-    int                process_cmd(std::string buffer);
-    void               parse_cmd(std::string &buffer);
-    int                connexion_try(void);
+    // int                process_cmd(std::string buffer);
+    // void               parse_cmd(std::string &buffer);
+    // int                connexion_try(void);
 
     void                my_send(std::string response, int length, int flag);
     typedef void        (User::*cmdPtr)(std::vector<std::string> cmd);
@@ -66,6 +69,12 @@ public:
 
     bool                checkRights(std::string channelTitle, std::string channelRights); //string if multiple rihts to check at once
     bool                parseRights(std::string userRights, std::string channelRights);
+
+    const std::vector<Command>    &getCmds(void) const;
+    int                process_cmd(std::string buffer);
+    void               parse_buffer(std::string &buffer);
+    void               parse_cmds();
+    //int                connexion_try(void);
 };
 
 std::ostream&   operator<<(std::ostream& outstream, const User &user);

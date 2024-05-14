@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/08 10:04:43 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/14 10:10:32 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void    main_loop(const SocketServer &main_socket)
 
     ///////////buffer for read///////////
     char                buffer[513];
+    ssize_t             read_value;
     std::string str;
     ///////////buffer for read///////////
 
@@ -64,21 +65,21 @@ void    main_loop(const SocketServer &main_socket)
                 {
                     memset(buffer, 0, sizeof(buffer));
                     /* if there is a new message */
-                    if (recv(it->fd, buffer, 512, MSG_DONTWAIT) != -1)
+                    read_value = recv(it->fd, buffer, 512, MSG_DONTWAIT);
+                    if (read_value != -1)
                     {
+                        buffer[read_value] = 0;
                         str.append(buffer);
                         /* parse the command */
                         users[it->fd - 4].process_cmd(str);
-                        
                         /* shows info about current user in the loop (optionnal, for debugging )*/
-                        std::cout << users[it->fd - 4];
+                        ///std::cout << users[it->fd - 4];
                         
                         /* after parsing is done the answer should be appropriate to the initial received message */
-                        send(it->fd, users[it->fd - 4].getAnswer().c_str(), users[it->fd - 4].getAnswerSize(), MSG_DONTWAIT | MSG_NOSIGNAL);
+                        //send(it->fd, users[it->fd - 4].getAnswer().c_str(), users[it->fd - 4].getAnswerSize(), MSG_DONTWAIT | MSG_NOSIGNAL);
                         
                         /* clear all buffers and strings from previous message */
                         str.clear();
-                        memset(buffer, 0, sizeof(buffer));
                         users[it->fd - 4].getAnswer().clear();
                     }
                 }
