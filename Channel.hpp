@@ -15,28 +15,41 @@ class Channel
         std::string getTitle() const;
         std::string &getPassword();
         std::string getTopic() const;
-        std::string getMode() const;
+        std::string getModes() const;
         int         getLimit() const;
         std::vector<User> &getChannelUsers();
         std::vector<User> &getChannelOperators();
 
-        void setTitle(User &user, std::string title);
-        void setPassword(User &user, std::string pass);
-        void setTopic(User &user, std::string message);
-        // void setMode(User &user, char new_mode);
-        void setLimit(User &user, int limit);
+        void setTitle(std::string title);
+        void setPassword(std::string pass);
+        void setTopic(std::string message);
+        void setMode(std::string new_mode);
+        void setMode(std::string new_modes, int flag);
+        void setLimit(int limit);
+        void setOperators(User &user, int flag);
 
-        void addUser(const User &user);
+        void addUser(User &user);
+        void addOperator(User &user);
+        void deleteUser(std::string name);
+        void deleteOperator(std::string name);
+        std::string removeMode(std::string &str, char mode);
+
+        bool userIsMember(std::string name);
+        bool userIsOperator(std::string name);
+        bool userIsBanned(std::string name);
+
+        std::vector<User> &getChannelBanned();
 
     private:
         std::string _title;
         std::string _password;
         std::string _topic;
-        std::string _mode;
+        std::string _modes;
         int         _limit;
 
         std::vector<User> _channelUsers;
         std::vector<User> _channelOperators;
+        std::vector<User> _channelBanned;
 };
 
 #endif

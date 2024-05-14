@@ -126,16 +126,6 @@ bool	User::checkRights(const std::string channelTitle, const std::string channel
 	return false; //ERROR MSG ?(what to do if title not found?)
 }
 
-bool	User::isChannelOper(std::vector<User> &opVector)
-{
-	for (std::vector<User>::iterator it = opVector.begin(); it != opVector.end(); ++it)
-	{
-		if (it->username == this->username)
-			return true;
-	}
-	return false;
-}
-
 void User::my_send(std::string response, int length, int flag)
 {
     send(this->userfd, response.c_str(), length, flag);

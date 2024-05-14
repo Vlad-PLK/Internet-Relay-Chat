@@ -40,20 +40,20 @@ public:
     User(int fd, int logstate);
     ~User();
 
-    const std::string &getUsername(void) const;
-    const std::string &getNickname(void) const;
-    std::string &getAnswer(void);
-    int                getAnswerSize(void) const;
-    int                getFD(void) const;
-    int                getCurrentState(void) const;
+    const std::string   &getUsername(void) const;
+    const std::string   &getNickname(void) const;
+    std::string         &getAnswer(void);
+    int                 getAnswerSize(void) const;
+    int                 getFD(void) const;
+    int                 getCurrentState(void) const;
     std::map<std::string, std::string>  getChannelRights(void) const;
-    void               setFD(int fd);
-    void               setAnswer(void);
-    void               setUsername(const std::string &uname);
-    void               setNickname(const std::string &nname);
-    void               setPassword(const std::string &pass);
-    void               setCurrentState(int state);
-    void               setAdminState(int state);
+    void                setFD(int fd);
+    void                setAnswer(void);
+    void                setUsername(const std::string &uname);
+    void                setNickname(const std::string &nname);
+    void                setPassword(const std::string &pass);
+    void                setCurrentState(int state);
+    void                setAdminState(int state);
 
     int                process_cmd(std::string buffer);
     void               parse_cmd(std::string &buffer);
@@ -64,7 +64,6 @@ public:
     void                cmds_center(std::vector<std::string> cmd);
     void                quit(std::vector<std::string> cmd);
 
-    bool                isChannelOper(std::vector<User> &opVector);
     bool                checkRights(std::string channelTitle, std::string channelRights); //string if multiple rihts to check at once
     bool                parseRights(std::string userRights, std::string channelRights);
 };

@@ -32,8 +32,11 @@
 #include <unistd.h>
 #include "User.hpp"
 #include "Channel.hpp"
+#include "Server_comments.hpp"
 
 class User;
+
+class Channel;
 
 class SocketServer
 {
@@ -44,8 +47,8 @@ private:
 	std::string					password;
 	struct sockaddr_in 			addr;
 	std::time_t					date;
-	mutable std::vector<User> 	allUsers;
- 	// std::vector<Channel> allChannels;
+	mutable std::vector<User> 	_allUsers;
+ 	std::vector<Channel> 		_allChannels;
 
 public:
 	SocketServer(int _port, std::string _password);
@@ -57,9 +60,10 @@ public:
 	void				createSocket(void);
 
 	User					*getUser(std::string name); //const?
-	User 					*getUser(int fd); //const?
 	void 					addUser(const User& user) const;
 	const std::vector<User>	&getAllUsers() const;
+	Channel					*getChannel(std::string title);
+	void					addChannel(std::string title);
 };
 
 class Message  {

@@ -25,9 +25,9 @@ std::string Channel::getTopic() const
     return (this->_topic);
 }
 
-std::string Channel::getMode() const
+std::string Channel::getModes() const
 {
-    return (this->_mode);
+    return (this->_modes);
 }
 
 int Channel::getLimit() const
@@ -45,54 +45,179 @@ std::vector<User> &Channel::getChannelOperators()
     return (this->_channelOperators);
 }
 
-void Channel::setTitle(User &user, std::string title)
+std::vector<User> &Channel::getChannelBanned()
 {
-    if (user.isChannelOper(getChannelOperators()))
+    return (this->_channelBanned);
+}
+
+void Channel::setTitle(std::string title)
+{
+    // if (this->userIsOperator(user.getNickname()))
         this->_title = title;
     //ERROR MSG (user does not have the rights)
 }
 
-void Channel::setPassword(User &user, std::string pass)
+void Channel::setPassword(std::string pass)
 {
-    if (user.isChannelOper(getChannelOperators()))
+    // if (this->userIsOperator(user.getNickname()))
         this->_password = pass;
     //ERROR MSG (user does not have the rights)
 }
 
-void Channel::setTopic(User &user, std::string topic)
+void Channel::setTopic(std::string topic)
 {
-    if (user.isChannelOper(getChannelOperators()) || user.checkRights(this->_title, "t"))
+    // if (this->userIsOperator(user.getNickname()) || user.checkRights(this->_title, "t"))
         this->_topic = topic;
-    //ERROR MSG (user does not have the rights)
 }
 
-// void Channel::setMode(User &user, char new_mode)
-// {
-//     this->_mode = new_mode;
-// }
-
-void Channel::setLimit(User &user, int limit)
+void Channel::setMode(std::string modes)
 {
-    if (user.isChannelOper(getChannelOperators()))
-        this->_limit = limit;
+    this->_modes = modes;
 }
 
-void    Channel::addUser(const User &user)
+std::string Channel::removeMode(std::string &str, char mode)
 {
-    if ((int)this->_channelUsers.size() < this->_limit)
+    std::string result;
+    for (std::string::size_type i = 0; i < str.size(); ++i)
     {
-        if ((int)this->_channelUsers.size() == 0)
+        if (str[i] != mode)
+            result += str[i];
+    }
+    return (result);
+}
+
+
+// Need to check if user is an operator !!
+void Channel::setMode(std::string new_modes, int flag) // flag == 0 means remove and flag == 1 means add
+{
+
+    int i = 0;
+    while (new_modes[++i])
+    {
+        if (!flag)
         {
-            User userCopy = user;
-            userCopy.setNickname('@' + userCopy.getNickname());
-            this->_channelOperators.push_back(userCopy);
+            if (this->_modes.find(new_modes[i]))
+                this->setMode(removeMode(this->_modes, new_modes[i]));
+            // else
+                // ERROR MESSAGE (?) the mode to delete is not preset
         }
         else
         {
+            if (!this->_modes.find(new_modes[i]))
+                this->setMode(this->_modes + new_modes[i]);
+            // else
+                // ERROR MESSAGE (?) the mode to add exists already
+        }
+    }
+}
+
+void Channel::setLimit(int limit)
+{
+    // if (this->userIsOperator(user.getNickname()))
+    this->_limit = limit;
+}
+
+void    Channel::addUser(User &user)
+{
+    if ((int)(this->_channelUsers.size() + this->_channelOperators.size()) < this->_limit)
+    {
+        if ((int)(this->_channelUsers.size() + this->_channelOperators.size()) == 0)
+            this->addOperator(user);
+        else
+        {
+            // need a checker for banned user
             this->_channelUsers.push_back(user);
-            user.getChannelRights().insert(std::make_pair(this->_title, "blabla")); // (?) what are the basic rights for a normal user
+            user.getChannelRights().insert(std::make_pair(this->_title, this->getModes())); // (?) what are the basic rights for a normal user
         }
     }
     // else
         // ERROR MSG (channel is full)
+}
+
+bool    Channel::userIsMember(std::string name)
+{
+	for (std::vector<User>::iterator it = this->_channelUsers.begin(); it != this->_channelUsers.end(); ++it)
+    {
+        if (it->getNickname() == name)
+            return (true);
+    }
+	return (false);
+}
+
+bool    Channel::userIsOperator(std::string name)
+{
+	for (std::vector<User>::iterator it = this->_channelOperators.begin(); it != this->_channelOperators.end(); ++it)
+    {
+        if (it->getNickname() == name)
+            return (true);
+    }
+	return (false);
+}
+
+void    Channel::addOperator(User &user)
+{
+    User userCopy = user;
+    userCopy.setNickname('@' + userCopy.getNickname());
+    if (!this->userIsOperator(userCopy.getNickname()))
+    {
+        this->_channelOperators.push_back(userCopy);
+        this->deleteUser(user.getNickname());
+    }
+}
+
+bool    Channel::userIsBanned(std::string name)
+{
+    for (std::vector<User>::iterator it = this->_channelBanned.begin(); it != this->_channelBanned.end(); ++it)
+    {
+        if (it->getNickname() == name)
+            return (true);
+    }
+	return (false);
+}
+
+void    Channel::setOperators(User &user, int flag) //flag 0 means delete from channelOperators and adds it to channelUsers, 1 means to add the user as an operator
+{
+    //need to know if the user has the rights to add or delete operator
+
+    if (!flag && this->userIsOperator(user.getNickname()))
+    {
+        user.setNickname(user.getNickname().substr(1));
+        this->addUser(user);
+        this->deleteOperator(user.getNickname());
+    }
+    else
+    {
+        if (userIsMember(user.getNickname()))
+            this->addOperator(user);
+        // else
+            // user is not in the channel or already Op
+    }
+}
+
+void    Channel::deleteUser(std::string name)
+{
+    //need to know if the user has the rights to delete user
+
+    for (std::vector<User>::iterator it = this->_channelUsers.begin(); it != this->_channelUsers.end(); ++it)
+    {
+        if (it->getNickname() == name)
+        {
+            this->_channelUsers.erase(it);
+            break;
+        }
+    }
+}
+
+void    Channel::deleteOperator(std::string name)
+{
+    //need to know if the user has the rights to delete user
+
+    for (std::vector<User>::iterator it = this->_channelOperators.begin(); it != this->_channelOperators.end(); ++it)
+    {
+        if (it->getNickname() == name)
+        {
+            this->_channelOperators.erase(it);
+            break;
+        }
+    }
 }
