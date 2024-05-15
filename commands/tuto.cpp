@@ -1,4 +1,4 @@
-void COMMANDE(User &user, Channel &channel, Command &command)
+void COMMANDE(User &user, Channel &channel, std::vector<std::string> params)
 {
     
 }

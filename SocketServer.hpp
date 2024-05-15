@@ -29,10 +29,12 @@
 #include <stdio.h>
 #include <cstring>
 #include <ctime>
+#include <sstream>
 #include <unistd.h>
 #include "User.hpp"
 #include "Channel.hpp"
 #include "Server_comments.hpp"
+#include "Command.hpp"
 
 class User;
 
@@ -64,6 +66,11 @@ public:
 	const std::vector<User>	&getAllUsers() const;
 	Channel					*getChannel(std::string title);
 	void					addChannel(std::string title);
+	void					addChannel(std::string title, std::string password);
+
+	bool					findChannel(std::string channel_name);
+
+	void					join(User &user, Channel &channel, std::vector<std::string> params);
 };
 
 class Message  {

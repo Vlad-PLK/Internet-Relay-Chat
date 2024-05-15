@@ -22,6 +22,16 @@ User *SocketServer::getUser(std::string name)
     return NULL;
 }
 
+bool    SocketServer::findChannel(std::string title)
+{
+    for (std::vector<Channel>::iterator it = this->_allChannels.begin(); it != this->_allChannels.end(); ++it)
+    {
+        if (it->getTitle() == title)
+            return (true);
+    }
+    return (false);
+}
+
 Channel *SocketServer::getChannel(std::string title)
 {
     for (std::vector<Channel>::iterator it = this->_allChannels.begin(); it != this->_allChannels.end(); ++it)
@@ -32,10 +42,20 @@ Channel *SocketServer::getChannel(std::string title)
     return NULL;
 }
 
+
 void    SocketServer::addChannel(std::string title)
 {
     Channel new_channel;
     new_channel.setTitle(title);
+    this->_allChannels.push_back(new_channel);
+}
+
+void    SocketServer::addChannel(std::string title, std::string password)
+{
+    Channel new_channel;
+    new_channel.setTitle(title);
+    if (!password.empty()) // Check if the password is not empty
+        new_channel.setPassword(password);
     this->_allChannels.push_back(new_channel);
 }
 

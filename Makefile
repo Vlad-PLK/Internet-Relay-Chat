@@ -1,6 +1,6 @@
 NAME = ircserv
 
-OBJS = main.cpp main_loop.cpp User.cpp SocketServer.cpp Quit.cpp Channel.cpp Command.cpp
+OBJS = main.cpp main_loop.cpp User.cpp SocketServer.cpp Quit.cpp Channel.cpp Command.cpp commands/Join.cpp
 
 SRCS = ${subst .cpp,.o,$(OBJS)}
 

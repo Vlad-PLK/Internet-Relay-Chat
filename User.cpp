@@ -62,6 +62,11 @@ std::map<std::string, std::string>  User::getChannelRights(void) const
 	return (this->_channelRights);
 }
 
+const std::vector<Command> &User::getCmds(void) const
+{
+	return (this->cmds);
+}
+
 void	User::setNickname(const std::string &nname)
 {
 	this->nickname.assign(nname);
@@ -164,21 +169,39 @@ void User::cmds_center(std::vector<std::string> cmd)
 	}
 }
 
-void User::parse_cmd(std::string &buf)
+void User::parse_buffer(std::string &buf)
 {
-	std::cout << "HERE cmd parse" << std::endl;
 	std::string tmp;
 	size_t		pos = 0;
-	for (size_t i = 0; i != buf.size(); i++)
+
+	buffer.append(buf);
+	for (size_t i=0; i != buffer.size(); i++)
 	{
-		if (buf[i] == '\r' && buf[i + 1] == '\n')
+		if (buffer[i] == '\r' && buffer[i + 1] == '\n')
 		{
-			tmp = buf.substr(pos, i - pos);
+			Command cmd;
+			tmp = buffer.substr(pos, i - pos);
+			cmd.setRawCommand(tmp);
 			pos = i + 2;
-			this->cmds.push_back(tmp);
-			this->cmds_center(cmds);
+			this->cmds.push_back(cmd);
 			tmp.clear();
 		}
+	}
+	buffer.erase(0, pos);
+}
+
+
+void User::parse_cmds()
+{
+	std::vector<Command>::iterator it;
+	for (it = this->cmds.begin(); it != this->cmds.end(); it++)
+	{
+		it->setCmdParams();
+		std::cout << "CMD NAME : " << it->getCmd() << " CMD FIRST PARAM : " << it->getParams().front() << std::endl;
+		//std::cout << "CMD NAME : " << it->getCmd() << "FIRST PARAM NAME : " << it->getParams().front() << std::endl;
+		// first COMMAND
+		// then Params
+		// end Trailing
 	}
 }
 
@@ -193,34 +216,45 @@ void User::setAnswer(void)
 	std::cout << this->getAnswer() << std::endl;
 }
 
-int User::connexion_try(void)
-{
-	std::vector<std::string>::iterator it;
-	for (it = this->cmds.begin(); it != this->cmds.end(); it++)
-	{
-		if (it->compare(0, 4, "PASS") == 0 && it->compare(6, server_password.size(), server_password) == 0)
-			setCurrentState(ACCEPTED);
-		else if (current_state == ACCEPTED && it->compare(0, 4, "NICK") == 0)
-			setNickname(it->substr(5, std::string::npos));
-		else if (current_state == ACCEPTED && it->compare(0, 4, "USER") == 0)
-			setUsername(it->substr(5, it->find(" ", 6) - 5));
-		it->clear();
-	}
-	if (this->getNickname().size() == 0 || this->getUsername().size() == 0)
-		return (REJECTED);
-	this->answer.append("001 ").append(this->getNickname()).append(" :Welcome to my Network ").append(this->getNickname()).append("\r\n");
-	return (ACCEPTED); 
-}
+// int User::connexion_try(void)
+// {
+// 	std::vector<std::string>::iterator it;
+// 	for (it = this->cmds.begin(); it != this->cmds.end(); it++)
+// 	{
+// 		if (it->compare(0, 4, "PASS") == 0 && it->compare(6, server_password.size(), server_password) == 0)
+// 			setCurrentState(ACCEPTED);
+// 		else if (current_state == ACCEPTED && it->compare(0, 4, "NICK") == 0)
+// 			setNickname(it->substr(5, std::string::npos));
+// 		else if (current_state == ACCEPTED && it->compare(0, 4, "USER") == 0)
+// 			setUsername(it->substr(5, it->find(" ", 6) - 5));
+// 		it->clear();
+// 	}
+// 	if (this->getNickname().size() == 0 || this->getUsername().size() == 0)
+// 		return (REJECTED);
+// 	this->answer.append("001 ").append(this->getNickname()).append(" :Welcome to my Network ").append(this->getNickname()).append("\r\n");
+// 	return (ACCEPTED); 
+// }
 
 int	User::process_cmd(std::string buf)
 {
-	std::cout << "buffer_cmd :" << buf << std::endl;
-	parse_cmd(buf);
-	if (connexion_try() == ACCEPTED)
-		return (ACCEPTED);
-	else 
-		return (REJECTED);
+	parse_buffer(buf);
+	parse_cmds();
+	return (ACCEPTED);
+	/*
+		if (find_cmd() == true)
+		{
+			handle_cmd();
+			return (ACCEPTED);
+		}
+		else
+			return (REJECTED);
+	*/
+	//if (connexion_try() == ACCEPTED)
+	//	return (ACCEPTED);
+	//else 
+	//	return (REJECTED);
 }
+
 
 std::ostream &operator<<(std::ostream &output, const User &user)
 {
