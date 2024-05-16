@@ -28,7 +28,7 @@ void Command::setCmdName()
 
 void Command::setCmdParams()
 {
-    size_t      index = 0;
+    size_t  index = 0;
 
     if (this->raw_command[0] == ':')
        index = this->raw_command.find(' ', 0);

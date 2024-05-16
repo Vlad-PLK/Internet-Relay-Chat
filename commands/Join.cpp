@@ -25,22 +25,35 @@ void SocketServer::join(User &user, Channel &channel, std::vector<std::string> p
     // Creating non existing channels
     for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); ++it)
     {
-        if (it->at(0) != '#')
+        if (!it->empty() && (*it)[0] != '#')
             it->insert(0, 1, '#'); // adds # as first character of the nickname
     }
-    size_t i = -1;
-    size_t j = 0;
-    while (++i < channels.size())
+    int i = -1;
+    int j = 0;
+    while (++i < (int)channels.size())
     {
-        if (j < passwords.size())
+        if (!findChannel(channels[i]))
         {
-            if (!passwords[j].empty())
-                addChannel(channels[i], passwords[j]);
+            if (j < (int)passwords.size())
+            {
+                if (!passwords[j].empty())
+                {
+                    addChannel(channels[i], passwords[j]);
+                    getChannel(channels[i])->addUser(user);
+                }
+                else
+                {
+                    addChannel(channels[i]);
+                    getChannel(channels[i])->addUser(user);
+                }
+                ++j;
+            }
             else
-                addChannel(channels[i]);
-            ++j;
+            {
+                // if less passwords than channel names
+                this->addChannel(channels[i]); 
+                getChannel(channels[i])->addUser(user);
+            }
         }
-        else
-            this->addChannel(channels[i]); // if less passwords than channel names
     }
 }

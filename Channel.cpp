@@ -86,7 +86,6 @@ std::string Channel::removeMode(std::string &str, char mode)
     return (result);
 }
 
-
 // Need to check if user is an operator !!
 void Channel::setMode(std::string new_modes, int flag) // flag == 0 means remove and flag == 1 means add
 {
@@ -111,23 +110,34 @@ void Channel::setMode(std::string new_modes, int flag) // flag == 0 means remove
     }
 }
 
-void Channel::setLimit(int limit)
+void    Channel::setLimit(int limit)
 {
     // if (this->userIsOperator(user.getNickname()))
     this->_limit = limit;
 }
 
+void    Channel::channelWelcome(User &user)
+{
+    
+}
+
 void    Channel::addUser(User &user)
 {
-    if ((int)(this->_channelUsers.size() + this->_channelOperators.size()) < this->_limit)
+    if ((int)((this->_channelUsers.size() + this->_channelOperators.size())) < this->_limit)
     {
         if ((int)(this->_channelUsers.size() + this->_channelOperators.size()) == 0)
             this->addOperator(user);
         else
         {
-            // need a checker for banned user
-            this->_channelUsers.push_back(user);
-            user.getChannelRights().insert(std::make_pair(this->_title, this->getModes())); // (?) what are the basic rights for a normal user
+            if (!userIsMember(user.getNickname()) && !userIsOperator(user.getNickname()) && !userIsBanned(user.getNickname()))
+            {
+                if (!this->getModes().find('i'))
+                {
+                    this->_channelUsers.push_back(user);
+                    user.getChannelRights().insert(std::make_pair(this->_title, this->getModes()));// (?) what are the basic rights for a normal user
+                }
+                // need to check if user is invited
+            }
         }
     }
     // else
