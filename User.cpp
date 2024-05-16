@@ -6,13 +6,12 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/14 11:07:37 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/08 09:44:34 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "User.hpp"
 #include "SocketServer.hpp"
-#include "Command.hpp"
 
 User::User() : userfd(0), admin_state(0), current_state(0)
 {
@@ -58,6 +57,11 @@ int User::getCurrentState(void) const
 	return (this->current_state);
 }
 
+std::map<std::string, std::string>  User::getChannelRights(void) const
+{
+	return (this->_channelRights);
+}
+
 const std::vector<Command> &User::getCmds(void) const
 {
 	return (this->cmds);
@@ -96,6 +100,75 @@ void	User::setFD(int fd)
 	this->userfd = fd;
 }
 
+bool	User::parseRights(std::string userRights, std::string channelRights)
+{
+	int count = 0;
+	int i = -1;
+	while (++i < (int)channelRights.length())
+	{
+		int j = -1;
+		while (userRights[++j])
+		{
+			if (userRights[j] == channelRights[i])
+			{
+				count++;
+				break;
+			}
+		}
+	}
+	if (count == (int)channelRights.length())
+		return true;
+	return false;
+}
+
+bool	User::checkRights(const std::string channelTitle, const std::string channelRights)
+{
+	for (std::map<std::string, std::string>::iterator it = this->_channelRights.begin(); it != this->_channelRights.end(); ++it)
+	{
+		if (it->first == channelTitle)
+			return (parseRights(it->second, channelRights));
+	}
+	return false; //ERROR MSG ?(what to do if title not found?)
+}
+
+void User::my_send(std::string response, int length, int flag)
+{
+    send(this->userfd, response.c_str(), length, flag);
+    std::cout << "--> Message sent to client " << this->userfd << " = " << response << std::endl;
+}
+
+
+void User::cmds_center(std::vector<std::string> cmd)
+{
+	for (size_t i = 0; i < cmd.back().length(); i++)
+	{
+		std::cout << "cmd.back()[" << i << "] :" << cmd.back()[i] << std::endl;
+		if (cmd.back()[i] == ' ')
+			break;
+		else
+			cmd.back()[i] = std::toupper(cmd.back()[i]);
+	}
+	// std::cout << "cmd is: ";
+    // for (size_t i = 0; i < cmd.size(); ++i)
+	// {
+    //     std::cout << "(" << i << ") " << cmd[i];
+    //     if (i != cmd.size() - 1) {
+    //         std::cout << ", ";
+    //     }
+    // }
+    // std::cout << std::endl;
+	std::string allcmdnames[2] = {"QUIT"};	
+	cmdPtr allcmds[2] = { &User::quit};
+	for (int index = 0; index < 1; index++)
+	{
+		if (cmd.back() == allcmdnames[index])
+		{
+			(this->*allcmds[index])(cmd);
+			return ;
+		}
+	}
+}
+
 void User::parse_buffer(std::string &buf)
 {
 	std::string tmp;
@@ -117,6 +190,7 @@ void User::parse_buffer(std::string &buf)
 	buffer.erase(0, pos);
 }
 
+
 void User::parse_cmds()
 {
 	std::vector<Command>::iterator it;
@@ -131,7 +205,6 @@ void User::parse_cmds()
 	}
 }
 
-
 void User::setPassword(const std::string &pass)
 {
 	this->server_password.assign(pass);
@@ -139,28 +212,28 @@ void User::setPassword(const std::string &pass)
 
 void User::setAnswer(void)
 {
-	this->answer = "001 " + this->getNickname() + " :Welcome to my Network " + this->getNickname() + "\r\n";
+	this->answer.append("001 ").append(this->getNickname()).append(" :Welcome to my Network ").append(this->getNickname()).append("\r\n");
 	std::cout << this->getAnswer() << std::endl;
 }
 
-/*int User::connexion_try(void)
-{
-	std::vector<std::string>::iterator it;
-	for (it = this->cmds.begin(); it != this->cmds.end(); it++)
-	{
-		if (it->compare(0, 4, "PASS") == 0 && it->compare(6, server_password.size(), server_password) == 0)
-			setCurrentState(ACCEPTED);
-		else if (current_state == ACCEPTED && it->compare(0, 4, "NICK") == 0)
-			setNickname(it->substr(5, std::string::npos));
-		else if (current_state == ACCEPTED && it->compare(0, 4, "USER") == 0)
-			setUsername(it->substr(5, it->find(" ", 6) - 5));
-		it->clear();
-	}
-	if (this->getNickname().size() == 0 || this->getUsername().size() == 0)
-		return (REJECTED);
-	this->answer.append("001 ").append(this->getNickname()).append(" :Welcome to my Network ").append(this->getNickname()).append("\r\n");
-	return (ACCEPTED); 
-}*/
+// int User::connexion_try(void)
+// {
+// 	std::vector<std::string>::iterator it;
+// 	for (it = this->cmds.begin(); it != this->cmds.end(); it++)
+// 	{
+// 		if (it->compare(0, 4, "PASS") == 0 && it->compare(6, server_password.size(), server_password) == 0)
+// 			setCurrentState(ACCEPTED);
+// 		else if (current_state == ACCEPTED && it->compare(0, 4, "NICK") == 0)
+// 			setNickname(it->substr(5, std::string::npos));
+// 		else if (current_state == ACCEPTED && it->compare(0, 4, "USER") == 0)
+// 			setUsername(it->substr(5, it->find(" ", 6) - 5));
+// 		it->clear();
+// 	}
+// 	if (this->getNickname().size() == 0 || this->getUsername().size() == 0)
+// 		return (REJECTED);
+// 	this->answer.append("001 ").append(this->getNickname()).append(" :Welcome to my Network ").append(this->getNickname()).append("\r\n");
+// 	return (ACCEPTED); 
+// }
 
 int	User::process_cmd(std::string buf)
 {
@@ -181,6 +254,7 @@ int	User::process_cmd(std::string buf)
 	//else 
 	//	return (REJECTED);
 }
+
 
 std::ostream &operator<<(std::ostream &output, const User &user)
 {

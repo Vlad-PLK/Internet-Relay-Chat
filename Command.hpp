@@ -15,7 +15,7 @@
 
 #include "SocketServer.hpp"
 #include "User.hpp"
-#include "Chanel.hpp"
+#include "Channel.hpp"
 
 class Command
 {

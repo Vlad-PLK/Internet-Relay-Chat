@@ -12,12 +12,71 @@
 
 #include "SocketServer.hpp"
 
+User *SocketServer::getUser(std::string name)
+{
+    for (std::vector<User>::iterator it = this->_allUsers.begin(); it != this->_allUsers.end(); ++it)
+    {
+        if (it->getNickname() == name)
+            return &(*it); // return pointer to the User
+    }
+    return NULL;
+}
+
+bool    SocketServer::findChannel(std::string title)
+{
+    for (std::vector<Channel>::iterator it = this->_allChannels.begin(); it != this->_allChannels.end(); ++it)
+    {
+        if (it->getTitle() == title)
+            return (true);
+    }
+    return (false);
+}
+
+Channel *SocketServer::getChannel(std::string title)
+{
+    for (std::vector<Channel>::iterator it = this->_allChannels.begin(); it != this->_allChannels.end(); ++it)
+    {
+        if (it->getTitle() == title)
+            return &(*it); // return pointer to the Channel
+    }
+    return NULL;
+}
+
+
+void    SocketServer::addChannel(std::string title)
+{
+    Channel new_channel;
+    new_channel.setTitle(title);
+    this->_allChannels.push_back(new_channel);
+}
+
+void    SocketServer::addChannel(std::string title, std::string password)
+{
+    Channel new_channel;
+    new_channel.setTitle(title);
+    if (!password.empty()) // Check if the password is not empty
+        new_channel.setPassword(password);
+    this->_allChannels.push_back(new_channel);
+}
+
+
+void    SocketServer::addUser(const User &user) const
+{
+    _allUsers.push_back(user);
+}
+
+const std::vector<User> &SocketServer::getAllUsers() const
+{
+    return _allUsers;
+}
+
 SocketServer::SocketServer(int _port, std::string _password)
 {
     sockfd = 0;
     sock_opt = 0;
     port = _port;
     password.assign(_password);
+    date = std::time(0);
 }
 
 SocketServer::~SocketServer(){
