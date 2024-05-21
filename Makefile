@@ -21,7 +21,7 @@ ${NAME}: ${OBJS}
 	@printf "2 : password - The connection password. It will be needed by any IRC client that tries to connect to your server. \n"
 	@printf "\n"
 
-main.o: main.cpp SocketServer.hpp User.hpp Channel.hpp Server_comments.hpp Command.hpp
+main.o: main.cpp SocketServer.hpp User.hpp Channel.hpp Server_comments.hpp Command.hpp CommandHandler.hpp
 	${CXX} ${CFLAGS} -c main.cpp
 
 SocketServer.o: SocketServer.hpp

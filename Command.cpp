@@ -6,13 +6,17 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:45:37 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/14 15:04:51 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/21 11:17:02 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Command.hpp"
+#include "SocketServer.hpp"
 
-Command::Command(){}
+Command::Command()
+{
+    
+}
 
 Command::~Command(){}
 

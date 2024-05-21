@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/08 09:44:34 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/21 11:06:05 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,14 +190,12 @@ void User::parse_buffer(std::string &buf)
 	buffer.erase(0, pos);
 }
 
-
 void User::parse_cmds()
 {
 	std::vector<Command>::iterator it;
 	for (it = this->cmds.begin(); it != this->cmds.end(); it++)
 	{
 		it->setCmdParams();
-		std::cout << "CMD NAME : " << it->getCmd() << " CMD FIRST PARAM : " << it->getParams().front() << std::endl;
 		//std::cout << "CMD NAME : " << it->getCmd() << "FIRST PARAM NAME : " << it->getParams().front() << std::endl;
 		// first COMMAND
 		// then Params
@@ -240,14 +238,10 @@ int	User::process_cmd(std::string buf)
 	parse_buffer(buf);
 	parse_cmds();
 	return (ACCEPTED);
-	/*
-		if (find_cmd() == true)
-		{
-			handle_cmd();
-			return (ACCEPTED);
-		}
-		else
-			return (REJECTED);
+	/*if (find_cmd() == true)
+		return (ACCEPTED);
+	else
+		return (REJECTED);
 	*/
 	//if (connexion_try() == ACCEPTED)
 	//	return (ACCEPTED);

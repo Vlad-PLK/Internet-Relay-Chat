@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/13 16:17:22 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/21 10:32:32 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,6 @@ public:
     void                setPassword(const std::string &pass);
     void                setCurrentState(int state);
     void                setAdminState(int state);
-
-    // int                process_cmd(std::string buffer);
-    // void               parse_cmd(std::string &buffer);
-    // int                connexion_try(void);
 
     void                my_send(std::string response, int length, int flag);
     typedef void        (User::*cmdPtr)(std::vector<std::string> cmd);

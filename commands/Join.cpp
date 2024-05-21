@@ -12,6 +12,7 @@ std::vector<std::string>    joinSetter(std::string param)
 
 void SocketServer::join(User &user, Channel &channel, std::vector<std::string> params)
 {
+    (void)channel;
     if (params.empty())
         user.my_send((ERR_NEEDMOREPARAMS(user.getNickname(), "JOIN")).c_str(), (ERR_NEEDMOREPARAMS(user.getNickname(), "JOIN")).length(), 0);
     

@@ -116,10 +116,10 @@ void    Channel::setLimit(int limit)
     this->_limit = limit;
 }
 
-void    Channel::channelWelcome(User &user)
-{
-    
-}
+//void    Channel::channelWelcome(User &user)
+//{
+//    
+//}
 
 void    Channel::addUser(User &user)
 {

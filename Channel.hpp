@@ -34,7 +34,7 @@ class Channel
         void deleteOperator(std::string name);
         std::string removeMode(std::string &str, char mode);
 
-        void channelWelcome(User &user);
+        //void channelWelcome(User &user);
         bool userIsMember(std::string name);
         bool userIsOperator(std::string name);
         bool userIsBanned(std::string name);
