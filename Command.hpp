@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:10:43 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/21 11:17:19 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/27 10:15:21 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@
 #include "SocketServer.hpp"
 #include "User.hpp"
 #include "Channel.hpp"
+
+class User;
+class Channel;
+class SocketServer;
 
 class Command
 {
@@ -37,5 +41,10 @@ public:
     void                      setCmdName();
     void                      setCmdParams();
 };
+
+void					cap(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
+void					pass(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
+void					nick(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
+void					user(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 
 #endif

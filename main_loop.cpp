@@ -6,14 +6,14 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/14 10:10:32 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/27 10:22:44 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "SocketServer.hpp"
 #include "User.hpp"
 
-void    main_loop(const SocketServer &main_socket)
+void    main_loop(SocketServer &main_socket)
 {
     ///////////array of fds part///////////
     std::vector<struct pollfd> tab_fd;
@@ -70,17 +70,20 @@ void    main_loop(const SocketServer &main_socket)
                     {
                         buffer[read_value] = 0;
                         str.append(buffer);
+                       
                         /* parse the command */
-                        users[it->fd - 4].process_cmd(str);
+                        users[it->fd - 4].process_cmd(str, main_socket);
+                        
                         /* shows info about current user in the loop (optionnal, for debugging )*/
-                        ///std::cout << users[it->fd - 4];
+                        //std::cout << users[it->fd - 4];
                         
                         /* after parsing is done the answer should be appropriate to the initial received message */
-                        //send(it->fd, users[it->fd - 4].getAnswer().c_str(), users[it->fd - 4].getAnswerSize(), MSG_DONTWAIT | MSG_NOSIGNAL);
+                        send(it->fd, users[it->fd - 4].getAnswer().c_str(), users[it->fd - 4].getAnswerSize(), MSG_DONTWAIT | MSG_NOSIGNAL);
                         
                         /* clear all buffers and strings from previous message */
                         str.clear();
                         users[it->fd - 4].getAnswer().clear();
+                        users[it->fd - 4].getCmds().clear();
                     }
                 }
             }

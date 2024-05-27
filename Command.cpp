@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:45:37 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/21 11:17:02 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/27 10:25:40 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 Command::Command()
 {
-    
 }
 
 Command::~Command(){}
@@ -70,3 +69,33 @@ std::vector<std::string> &Command::getParams(void)
     return (this->params);
 }
 
+void					cap(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
+{
+    (void)channel;
+    (void)params;
+    (void)server;
+    user.setCurrentState(WAITING_FOR_APPROVAL);
+}
+
+void					pass(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
+{
+    (void)channel;
+    if (server.getPassword() == params.front() && user.getCurrentState() == WAITING_FOR_APPROVAL)
+        user.setCurrentState(ACCEPTED);
+}
+
+void					nick(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
+{
+    (void)channel;
+    (void)server;
+    if (user.getCurrentState() == ACCEPTED)
+        user.setNickname(params.front());
+}
+void					user(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
+{
+    (void)channel;
+    (void)server;
+    if (user.getCurrentState() == ACCEPTED)
+        user.setUsername(params.front());
+    user.setAnswer("001 " + user.getNickname() + " :Welcome to my Network " + user.getNickname() + "\r\n");
+}

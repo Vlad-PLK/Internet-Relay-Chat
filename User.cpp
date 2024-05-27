@@ -6,12 +6,13 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/21 11:06:05 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/27 10:23:40 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "User.hpp"
 #include "SocketServer.hpp"
+#include "Command.hpp"
 
 User::User() : userfd(0), admin_state(0), current_state(0)
 {
@@ -35,6 +36,11 @@ const std::string   &User::getNickname(void) const
 const std::string   &User::getUsername(void) const
 {
 	return (this->username);
+}
+
+const std::string   &User::getPasssword(void) const
+{
+	return (this->server_password);
 }
 
 std::string	&User::getAnswer(void)
@@ -62,7 +68,7 @@ std::map<std::string, std::string>  User::getChannelRights(void) const
 	return (this->_channelRights);
 }
 
-const std::vector<Command> &User::getCmds(void) const
+std::vector<Command> &User::getCmds(void)
 {
 	return (this->cmds);
 }
@@ -172,6 +178,7 @@ void User::cmds_center(std::vector<std::string> cmd)
 void User::parse_buffer(std::string &buf)
 {
 	std::string tmp;
+	Command		*cmd;
 	size_t		pos = 0;
 
 	buffer.append(buf);
@@ -179,24 +186,52 @@ void User::parse_buffer(std::string &buf)
 	{
 		if (buffer[i] == '\r' && buffer[i + 1] == '\n')
 		{
-			Command cmd;
+			cmd = new Command;
 			tmp = buffer.substr(pos, i - pos);
-			cmd.setRawCommand(tmp);
+			cmd->setRawCommand(tmp);
 			pos = i + 2;
-			this->cmds.push_back(cmd);
+			this->cmds.push_back(*cmd);
 			tmp.clear();
+			delete cmd;
 		}
 	}
 	buffer.erase(0, pos);
 }
 
-void User::parse_cmds()
+typedef struct S_Command_Dictionnary{
+    std::string name;
+    void (*fct)(User &, Channel &, SocketServer &, std::vector<std::string> &);
+}Command_Dictionnary;
+
+static const Command_Dictionnary cmds[] = {
+    {"CAP LS", cap},
+    {"PASS", pass},
+    {"NICK", nick},
+    {"USER", user},
+};
+
+void HandleCommand(Command &cmd, User &usr, Channel &chl, SocketServer &server)
+{
+	(void)chl;
+    for (long unsigned int i = 0; i < sizeof(cmds) / sizeof(cmds[0]); i++)
+    {
+        if (cmd.getCmd() == cmds[i].name)
+		{
+			//std::cout << "CMD INDEX IN DICT " << i << " CMD NAME : " << cmd.getCmd() << " FIRST PARAM NAME : " << cmd.getParams().front() << std::endl;
+            cmds[i].fct(usr, chl, server, cmd.getParams());
+		}
+    }
+}
+
+void User::parse_cmds(SocketServer &server)
 {
 	std::vector<Command>::iterator it;
+	Channel							chnl;
 	for (it = this->cmds.begin(); it != this->cmds.end(); it++)
 	{
 		it->setCmdParams();
-		//std::cout << "CMD NAME : " << it->getCmd() << "FIRST PARAM NAME : " << it->getParams().front() << std::endl;
+		//std::cout << "CMD NAME : " << it->getCmd() << " FIRST PARAM NAME : " << it->getParams().front() << std::endl;
+		HandleCommand(*it, *this, chnl, server);
 		// first COMMAND
 		// then Params
 		// end Trailing
@@ -208,10 +243,9 @@ void User::setPassword(const std::string &pass)
 	this->server_password.assign(pass);
 }
 
-void User::setAnswer(void)
+void User::setAnswer(std::string ans)
 {
-	this->answer.append("001 ").append(this->getNickname()).append(" :Welcome to my Network ").append(this->getNickname()).append("\r\n");
-	std::cout << this->getAnswer() << std::endl;
+	this->answer = ans;
 }
 
 // int User::connexion_try(void)
@@ -233,10 +267,10 @@ void User::setAnswer(void)
 // 	return (ACCEPTED); 
 // }
 
-int	User::process_cmd(std::string buf)
+int	User::process_cmd(std::string buf, SocketServer &server)
 {
 	parse_buffer(buf);
-	parse_cmds();
+	parse_cmds(server);
 	return (ACCEPTED);
 	/*if (find_cmd() == true)
 		return (ACCEPTED);

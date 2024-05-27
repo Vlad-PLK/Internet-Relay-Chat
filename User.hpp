@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/21 10:32:32 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/27 10:15:01 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # define NOT_ADMIN 4
 
 class Command;
+
+class SocketServer;
 
 class User
 {
@@ -45,13 +47,14 @@ public:
 
     const std::string   &getUsername(void) const;
     const std::string   &getNickname(void) const;
+    const std::string   &getPasssword(void) const;
     std::string         &getAnswer(void);
     int                 getAnswerSize(void) const;
     int                 getFD(void) const;
     int                 getCurrentState(void) const;
     std::map<std::string, std::string>  getChannelRights(void) const;
     void                setFD(int fd);
-    void                setAnswer(void);
+    void                setAnswer(std::string ans);
     void                setUsername(const std::string &uname);
     void                setNickname(const std::string &nname);
     void                setPassword(const std::string &pass);
@@ -66,10 +69,10 @@ public:
     bool                checkRights(std::string channelTitle, std::string channelRights); //string if multiple rihts to check at once
     bool                parseRights(std::string userRights, std::string channelRights);
 
-    const std::vector<Command>    &getCmds(void) const;
-    int                process_cmd(std::string buffer);
+    std::vector<Command>    &getCmds(void);
+    int                process_cmd(std::string buffer, SocketServer &server);
     void               parse_buffer(std::string &buffer);
-    void               parse_cmds();
+    void               parse_cmds(SocketServer &server);
     //int                connexion_try(void);
 };
 
