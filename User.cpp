@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/28 09:06:22 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/28 10:36:36 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,9 @@ static const Command_Dictionnary cmds[] = {
     {"PASS", pass},
     {"NICK", nick},
     {"USER", user},
+	{"MODE", mode},
+	{"WHOIS", whois},
+	{"PING", ping},
 };
 
 void HandleCommand(Command &cmd, User &usr, Channel &chl, SocketServer &server)
@@ -192,7 +195,7 @@ void HandleCommand(Command &cmd, User &usr, Channel &chl, SocketServer &server)
     }
 }
 
-void User::parse_buffer(std::string &buf, SocketServer &server)
+void User::parsing_and_handle(std::string &buf, SocketServer &server)
 {
 	std::string tmp;
 	Command		tmpcmd;
@@ -228,7 +231,7 @@ void User::setAnswer(std::string ans)
 
 int	User::process_cmd(std::string buf, SocketServer &server)
 {
-	parse_buffer(buf, server);
+	parsing_and_handle(buf, server);
 	return (ACCEPTED);
 }
 

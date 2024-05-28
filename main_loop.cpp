@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/28 08:56:16 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/28 09:33:53 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,8 @@ void    main_loop(SocketServer &main_socket)
 						//std::cout << users[it->fd - 4];
 						
 						/* after parsing is done the answer should be appropriate to the initial received message */
-						send(it->fd, users[it->fd - 4].getAnswer().c_str(), users[it->fd - 4].getAnswerSize(), MSG_DONTWAIT | MSG_NOSIGNAL);
+						// using send directly in appropriate cmds
+						//send(it->fd, users[it->fd - 4].getAnswer().c_str(), users[it->fd - 4].getAnswerSize(), MSG_DONTWAIT | MSG_NOSIGNAL);//
 						
 						/* clear all buffers and strings from previous message */
 						str.clear();

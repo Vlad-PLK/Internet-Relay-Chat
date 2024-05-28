@@ -6,12 +6,13 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:45:37 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/27 11:10:11 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/28 10:44:06 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Command.hpp"
 #include "SocketServer.hpp"
+#include "Server_comments.hpp"
 
 Command::Command()
 {
@@ -87,22 +88,67 @@ void					cap(User &user, Channel &channel, SocketServer &server, std::vector<std
 void					pass(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
 {
     (void)channel;
-    if (server.getPassword() == params.front() && user.getCurrentState() == WAITING_FOR_APPROVAL)
+    if (server.getPassword() == params.front())
         user.setCurrentState(ACCEPTED);
+    else
+        user.setCurrentState(REJECTED);
 }
 
 void					nick(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
 {
     (void)channel;
     (void)server;
-    if (user.getCurrentState() == ACCEPTED)
-        user.setNickname(params.front());
+    std::string answer;
+    user.setNickname(params.front());
+    if (user.getCurrentState() == REJECTED)
+    {
+        answer = ERR_PASSWDMISMATCH(user.getNickname());
+        send(user.getFD(), answer.c_str(), answer.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
+        //send(user.getFD(), "ERROR: incorrect password\r\n", 28, MSG_DONTWAIT | MSG_NOSIGNAL);
+    }
 }
 void					user(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
 {
     (void)channel;
     (void)server;
     if (user.getCurrentState() == ACCEPTED)
+    {
         user.setUsername(params.front());
-    user.setAnswer("001 " + user.getNickname() + " :Welcome to my Network " + user.getNickname() + "\r\n");
+        user.setAnswer("001 " + user.getNickname() + " :Welcome to 42's Network " + user.getNickname() + "\r\n");
+        send(user.getFD(), user.getAnswer().c_str(), user.getAnswerSize(), MSG_DONTWAIT | MSG_NOSIGNAL);
+        user.setAnswer("002 " + user.getNickname() + " :Your host is VPTV, running version lol.dev.c3plus\r\n");
+        send(user.getFD(), user.getAnswer().c_str(), user.getAnswerSize(), MSG_DONTWAIT | MSG_NOSIGNAL);
+        user.setAnswer("003 " + user.getNickname() + " :This server was created 2024-05-28 10:11 CEST:+0200\r\n");
+        send(user.getFD(), user.getAnswer().c_str(), user.getAnswerSize(), MSG_DONTWAIT | MSG_NOSIGNAL);
+    }
+}
+
+void					whois(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
+{
+    (void)channel;
+    (void)server;
+    (void)params;
+    std::string answer;
+    answer = "318 " + user.getUsername() + " " + user.getNickname() + " :END of /WHOIS list\r\n";
+    send(user.getFD(), answer.c_str(), answer.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
+}
+
+void					mode(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
+{
+    (void)channel;
+    (void)server;
+    (void)params;
+    std::string answer;
+    answer = "221 " + user.getNickname() + " +i\r\n";
+    send(user.getFD(), answer.c_str(), answer.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
+}
+
+void					ping(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
+{
+    (void)channel;
+    (void)server;
+    (void)params;
+    std::string answer;
+    answer = "PONG " + params.front() + "\r\n";
+    send(user.getFD(), answer.c_str(), answer.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
 }

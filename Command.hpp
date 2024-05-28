@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:10:43 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/27 11:10:18 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/28 10:36:20 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,9 @@ void					cap(User &user, Channel &channel, SocketServer &server, std::vector<std
 void					pass(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void					nick(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void					user(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
+void                    whois(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
+void                    mode(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
+void                    ping(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
+
 
 #endif

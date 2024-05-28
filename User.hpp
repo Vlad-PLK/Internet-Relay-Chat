@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/28 08:55:23 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/28 09:50:20 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ public:
     bool                parseRights(std::string userRights, std::string channelRights);
 
     int                process_cmd(std::string buffer, SocketServer &server);
-    void               parse_buffer(std::string &buffer, SocketServer &server);
+    void               parsing_and_handle(std::string &buffer, SocketServer &server);
 };
 
 std::ostream&   operator<<(std::ostream& outstream, const User &user);
