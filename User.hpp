@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/27 10:15:01 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/28 08:55:23 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ private:
     int                         admin_state;
     int                         current_state;
     std::string                 buffer;
-    std::vector<Command>        cmds;
     std::string                 answer;
     std::map<std::string, std::string>    _channelRights;
 
@@ -69,11 +68,8 @@ public:
     bool                checkRights(std::string channelTitle, std::string channelRights); //string if multiple rihts to check at once
     bool                parseRights(std::string userRights, std::string channelRights);
 
-    std::vector<Command>    &getCmds(void);
     int                process_cmd(std::string buffer, SocketServer &server);
-    void               parse_buffer(std::string &buffer);
-    void               parse_cmds(SocketServer &server);
-    //int                connexion_try(void);
+    void               parse_buffer(std::string &buffer, SocketServer &server);
 };
 
 std::ostream&   operator<<(std::ostream& outstream, const User &user);

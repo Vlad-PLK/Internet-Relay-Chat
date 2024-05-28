@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/27 10:23:40 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/28 09:06:22 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,6 @@ int User::getCurrentState(void) const
 std::map<std::string, std::string>  User::getChannelRights(void) const
 {
 	return (this->_channelRights);
-}
-
-std::vector<Command> &User::getCmds(void)
-{
-	return (this->cmds);
 }
 
 void	User::setNickname(const std::string &nname)
@@ -175,29 +170,6 @@ void User::cmds_center(std::vector<std::string> cmd)
 	}
 }
 
-void User::parse_buffer(std::string &buf)
-{
-	std::string tmp;
-	Command		*cmd;
-	size_t		pos = 0;
-
-	buffer.append(buf);
-	for (size_t i=0; i != buffer.size(); i++)
-	{
-		if (buffer[i] == '\r' && buffer[i + 1] == '\n')
-		{
-			cmd = new Command;
-			tmp = buffer.substr(pos, i - pos);
-			cmd->setRawCommand(tmp);
-			pos = i + 2;
-			this->cmds.push_back(*cmd);
-			tmp.clear();
-			delete cmd;
-		}
-	}
-	buffer.erase(0, pos);
-}
-
 typedef struct S_Command_Dictionnary{
     std::string name;
     void (*fct)(User &, Channel &, SocketServer &, std::vector<std::string> &);
@@ -215,27 +187,33 @@ void HandleCommand(Command &cmd, User &usr, Channel &chl, SocketServer &server)
 	(void)chl;
     for (long unsigned int i = 0; i < sizeof(cmds) / sizeof(cmds[0]); i++)
     {
-        if (cmd.getCmd() == cmds[i].name)
-		{
-			//std::cout << "CMD INDEX IN DICT " << i << " CMD NAME : " << cmd.getCmd() << " FIRST PARAM NAME : " << cmd.getParams().front() << std::endl;
+        if (cmd.getCmdName() == cmds[i].name)
             cmds[i].fct(usr, chl, server, cmd.getParams());
-		}
     }
 }
 
-void User::parse_cmds(SocketServer &server)
+void User::parse_buffer(std::string &buf, SocketServer &server)
 {
-	std::vector<Command>::iterator it;
-	Channel							chnl;
-	for (it = this->cmds.begin(); it != this->cmds.end(); it++)
+	std::string tmp;
+	Command		tmpcmd;
+	Channel		channel;
+	size_t		pos = 0;
+
+	buffer.append(buf);
+	for (size_t i=0; i != buffer.size(); i++)
 	{
-		it->setCmdParams();
-		//std::cout << "CMD NAME : " << it->getCmd() << " FIRST PARAM NAME : " << it->getParams().front() << std::endl;
-		HandleCommand(*it, *this, chnl, server);
-		// first COMMAND
-		// then Params
-		// end Trailing
+		if (buffer[i] == '\r' && buffer[i + 1] == '\n')
+		{
+			tmp = buffer.substr(pos, i - pos);
+			tmpcmd.setRawCommand(tmp);
+			tmpcmd.setCmdParams();
+			HandleCommand(tmpcmd, *this, channel, server);
+			pos = i + 2;
+			tmp.clear();
+			tmpcmd.clearCmd();
+		}
 	}
+	buffer.erase(0, pos);
 }
 
 void User::setPassword(const std::string &pass)
@@ -248,39 +226,10 @@ void User::setAnswer(std::string ans)
 	this->answer = ans;
 }
 
-// int User::connexion_try(void)
-// {
-// 	std::vector<std::string>::iterator it;
-// 	for (it = this->cmds.begin(); it != this->cmds.end(); it++)
-// 	{
-// 		if (it->compare(0, 4, "PASS") == 0 && it->compare(6, server_password.size(), server_password) == 0)
-// 			setCurrentState(ACCEPTED);
-// 		else if (current_state == ACCEPTED && it->compare(0, 4, "NICK") == 0)
-// 			setNickname(it->substr(5, std::string::npos));
-// 		else if (current_state == ACCEPTED && it->compare(0, 4, "USER") == 0)
-// 			setUsername(it->substr(5, it->find(" ", 6) - 5));
-// 		it->clear();
-// 	}
-// 	if (this->getNickname().size() == 0 || this->getUsername().size() == 0)
-// 		return (REJECTED);
-// 	this->answer.append("001 ").append(this->getNickname()).append(" :Welcome to my Network ").append(this->getNickname()).append("\r\n");
-// 	return (ACCEPTED); 
-// }
-
 int	User::process_cmd(std::string buf, SocketServer &server)
 {
-	parse_buffer(buf);
-	parse_cmds(server);
+	parse_buffer(buf, server);
 	return (ACCEPTED);
-	/*if (find_cmd() == true)
-		return (ACCEPTED);
-	else
-		return (REJECTED);
-	*/
-	//if (connexion_try() == ACCEPTED)
-	//	return (ACCEPTED);
-	//else 
-	//	return (REJECTED);
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:10:43 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/27 10:15:21 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/27 11:10:18 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ private:
     std::string raw_command;
     std::string cmd_name;
     std::vector<std::string> params;
-    size_t      min_arg;
-    size_t      max_arg;
 public: 
     Command();
     ~Command();
@@ -36,10 +34,11 @@ public:
     void                      parseCommand(std::string &buffer);
     std::string const         &getRawCommand(void);
     std::vector<std::string> &getParams(void);
-    std::string const         &getCmd(void);
+    std::string const         &getCmdName(void);
     void                      setRawCommand(std::string &cmd);
     void                      setCmdName();
     void                      setCmdParams();
+    void                      clearCmd();
 };
 
 void					cap(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);

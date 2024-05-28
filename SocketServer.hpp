@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:59:54 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/27 10:17:09 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/27 10:46:34 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,6 @@ public:
 	bool					findChannel(std::string channel_name);
 
 	void					join(User &user, Channel &channel, std::vector<std::string> params);
-	///void					pass(User &user, Channel &channel, std::vector<std::string> params);
-	///void					nick(User &user, Channel &channel, std::vector<std::string> params);
-	///void					user(User &user, Channel &channel, std::vector<std::string> params);
 };
 
 class Message  {

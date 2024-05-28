@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:45:37 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/27 10:25:40 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/27 11:10:11 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ std::string const &Command::getRawCommand(void)
     return (this->raw_command);
 }
 
-std::string const &Command::getCmd(void)
+std::string const &Command::getCmdName(void)
 {
     return (this->cmd_name);
 }
@@ -67,6 +67,13 @@ std::string const &Command::getCmd(void)
 std::vector<std::string> &Command::getParams(void)
 {
     return (this->params);
+}
+
+void    Command::clearCmd(void)
+{
+    this->raw_command.clear();
+    this->cmd_name.clear();
+    this->params.clear();
 }
 
 void					cap(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
