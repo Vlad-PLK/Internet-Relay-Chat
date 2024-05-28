@@ -14,6 +14,28 @@
 #include "SocketServer.hpp"
 #include "Server_comments.hpp"
 
+static const Command_Dictionnary cmds[] = {
+    {"CAP LS", cap},
+    {"PASS", pass},
+    {"NICK", nick},
+    {"USER", user},
+	{"MODE", mode},
+	{"WHOIS", whois},
+	{"PING", ping},
+    {"JOIN", join_bis}
+};
+
+void HandleCommand(Command &cmd, User &usr, Channel &chl, SocketServer &server)
+{
+	(void)chl;
+    for (long unsigned int i = 0; i < sizeof(cmds) / sizeof(cmds[0]); i++)
+    {
+        if (cmd.getCmdName() == cmds[i].name)
+            cmds[i].fct(usr, chl, server, cmd.getParams());
+        // handle unknown commands ? //
+    }
+}
+
 Command::Command()
 {
 }
@@ -107,6 +129,7 @@ void					nick(User &user, Channel &channel, SocketServer &server, std::vector<st
         //send(user.getFD(), "ERROR: incorrect password\r\n", 28, MSG_DONTWAIT | MSG_NOSIGNAL);
     }
 }
+
 void					user(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
 {
     (void)channel;
@@ -151,4 +174,68 @@ void					ping(User &user, Channel &channel, SocketServer &server, std::vector<st
     std::string answer;
     answer = "PONG " + params.front() + "\r\n";
     send(user.getFD(), answer.c_str(), answer.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
+}
+
+std::vector<std::string>    joinSetters(std::string param)
+{
+    std::vector<std::string> res;
+    std::stringstream ss(param); // Use stringstream to split the string
+    std::string copy;
+    while (std::getline(ss, copy, ','))
+        res.push_back(copy);
+    return res;
+}
+
+void                    join_bis(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
+{
+    (void)channel;
+    //std::string answer;
+    //if (params.empty())
+    //{
+    //    answer =
+    //}
+        //user.my_send((ERR_NEEDMOREPARAMS(user.getNickname(), "JOIN")).c_str(), (ERR_NEEDMOREPARAMS(user.getNickname(), "JOIN")).length(), 0);
+        //user.my_send((ERR_NEEDMOREPARAMS(user.getNickname(), "JOIN")).c_str(), (ERR_NEEDMOREPARAMS(user.getNickname(), "JOIN")).length(), 0);
+    
+    // Setting up the channel_titles vector to store all the names given in the command
+    std::vector<std::string> channels = joinSetters(params[0]);
+    
+    std::vector<std::string> passwords;
+    if (params.size() > 1)
+        passwords = joinSetters(params[1]);
+
+    // Creating non existing channels
+    for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); ++it)
+    {
+        if (!it->empty() && (*it)[0] != '#')
+            it->insert(0, 1, '#'); // adds # as first character of the nickname
+    }
+    int i = -1;
+    int j = 0;
+    while (++i < (int)channels.size())
+    {
+        if (!server.findChannel(channels[i]))
+        {
+            if (j < (int)passwords.size())
+            {
+                if (!passwords[j].empty())
+                {
+                    server.addChannel(channels[i], passwords[j]);
+                    server.getChannel(channels[i])->addUser(user);
+                }
+                else
+                {
+                    server.addChannel(channels[i]);
+                    server.getChannel(channels[i])->addUser(user);
+                }
+                ++j;
+            }
+            else
+            {
+                // if less passwords than channel names
+                server.addChannel(channels[i]); 
+                server.getChannel(channels[i])->addUser(user);
+            }
+        }
+    }
 }

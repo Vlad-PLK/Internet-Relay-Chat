@@ -30,7 +30,6 @@ private:
 public: 
     Command();
     ~Command();
-    static const Command cmds[];
     void                      parseCommand(std::string &buffer);
     std::string const         &getRawCommand(void);
     std::vector<std::string> &getParams(void);
@@ -41,6 +40,14 @@ public:
     void                      clearCmd();
 };
 
+typedef struct S_Command_Dictionnary{
+    std::string name;
+    void (*fct)(User &, Channel &, SocketServer &, std::vector<std::string> &);
+}Command_Dictionnary;
+
+
+void HandleCommand(Command &cmd, User &usr, Channel &chl, SocketServer &server);
+
 void					cap(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void					pass(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void					nick(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
@@ -48,6 +55,6 @@ void					user(User &user, Channel &channel, SocketServer &server, std::vector<st
 void                    whois(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void                    mode(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void                    ping(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
-
+void                    join_bis(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 
 #endif

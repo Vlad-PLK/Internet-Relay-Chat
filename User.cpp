@@ -170,31 +170,6 @@ void User::cmds_center(std::vector<std::string> cmd)
 	}
 }
 
-typedef struct S_Command_Dictionnary{
-    std::string name;
-    void (*fct)(User &, Channel &, SocketServer &, std::vector<std::string> &);
-}Command_Dictionnary;
-
-static const Command_Dictionnary cmds[] = {
-    {"CAP LS", cap},
-    {"PASS", pass},
-    {"NICK", nick},
-    {"USER", user},
-	{"MODE", mode},
-	{"WHOIS", whois},
-	{"PING", ping},
-};
-
-void HandleCommand(Command &cmd, User &usr, Channel &chl, SocketServer &server)
-{
-	(void)chl;
-    for (long unsigned int i = 0; i < sizeof(cmds) / sizeof(cmds[0]); i++)
-    {
-        if (cmd.getCmdName() == cmds[i].name)
-            cmds[i].fct(usr, chl, server, cmd.getParams());
-    }
-}
-
 void User::parsing_and_handle(std::string &buf, SocketServer &server)
 {
 	std::string tmp;
