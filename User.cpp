@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/28 10:36:36 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/29 09:33:17 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,9 +132,9 @@ bool	User::checkRights(const std::string channelTitle, const std::string channel
 	return false; //ERROR MSG ?(what to do if title not found?)
 }
 
-void User::my_send(std::string response, int length, int flag)
+void User::usr_send(const std::string &response)
 {
-    send(this->userfd, response.c_str(), length, flag);
+    send(this->userfd, response.c_str(), response.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
     std::cout << "--> Message sent to client " << this->userfd << " = " << response << std::endl;
 }
 

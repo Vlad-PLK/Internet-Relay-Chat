@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/28 09:50:20 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/29 09:33:12 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ public:
     void                setCurrentState(int state);
     void                setAdminState(int state);
 
-    void                my_send(std::string response, int length, int flag);
+    void                usr_send(const std::string &response);
     typedef void        (User::*cmdPtr)(std::vector<std::string> cmd);
     void                cmds_center(std::vector<std::string> cmd);
     void                quit(std::vector<std::string> cmd);

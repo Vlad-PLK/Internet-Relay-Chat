@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:45:37 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/28 10:44:06 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/29 09:35:26 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,12 +137,9 @@ void					user(User &user, Channel &channel, SocketServer &server, std::vector<st
     if (user.getCurrentState() == ACCEPTED)
     {
         user.setUsername(params.front());
-        user.setAnswer("001 " + user.getNickname() + " :Welcome to 42's Network " + user.getNickname() + "\r\n");
-        send(user.getFD(), user.getAnswer().c_str(), user.getAnswerSize(), MSG_DONTWAIT | MSG_NOSIGNAL);
-        user.setAnswer("002 " + user.getNickname() + " :Your host is VPTV, running version lol.dev.c3plus\r\n");
-        send(user.getFD(), user.getAnswer().c_str(), user.getAnswerSize(), MSG_DONTWAIT | MSG_NOSIGNAL);
-        user.setAnswer("003 " + user.getNickname() + " :This server was created 2024-05-28 10:11 CEST:+0200\r\n");
-        send(user.getFD(), user.getAnswer().c_str(), user.getAnswerSize(), MSG_DONTWAIT | MSG_NOSIGNAL);
+        user.usr_send("001 " + user.getNickname() + " :Welcome to 42's Network " + user.getNickname() + "\r\n");
+        user.usr_send("002 " + user.getNickname() + " :Your host is VPTV, running version lol.dev.c3plus\r\n");
+        user.usr_send("003 " + user.getNickname() + " :This server was created 2024-05-28 10:11 CEST:+0200\r\n");
     }
 }
 
@@ -151,9 +148,7 @@ void					whois(User &user, Channel &channel, SocketServer &server, std::vector<s
     (void)channel;
     (void)server;
     (void)params;
-    std::string answer;
-    answer = "318 " + user.getUsername() + " " + user.getNickname() + " :END of /WHOIS list\r\n";
-    send(user.getFD(), answer.c_str(), answer.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
+    user.usr_send("318 " + user.getUsername() + " " + user.getNickname() + " :END of /WHOIS list\r\n");
 }
 
 void					mode(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
@@ -162,8 +157,7 @@ void					mode(User &user, Channel &channel, SocketServer &server, std::vector<st
     (void)server;
     (void)params;
     std::string answer;
-    answer = "221 " + user.getNickname() + " +i\r\n";
-    send(user.getFD(), answer.c_str(), answer.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
+    user.usr_send("221 " + user.getNickname() + " +i\r\n");
 }
 
 void					ping(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
@@ -171,9 +165,7 @@ void					ping(User &user, Channel &channel, SocketServer &server, std::vector<st
     (void)channel;
     (void)server;
     (void)params;
-    std::string answer;
-    answer = "PONG " + params.front() + "\r\n";
-    send(user.getFD(), answer.c_str(), answer.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
+    user.usr_send("PONG " + params.front() + "\r\n");
 }
 
 std::vector<std::string>    joinSetters(std::string param)

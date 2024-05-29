@@ -14,7 +14,7 @@ void SocketServer::join(User &user, Channel &channel, std::vector<std::string> p
 {
     (void)channel;
     if (params.empty())
-        user.my_send((ERR_NEEDMOREPARAMS(user.getNickname(), "JOIN")).c_str(), (ERR_NEEDMOREPARAMS(user.getNickname(), "JOIN")).length(), 0);
+        user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "JOIN")));
     
     // Setting up the channel_titles vector to store all the names given in the command
     std::vector<std::string> channels = joinSetter(params[0]);
