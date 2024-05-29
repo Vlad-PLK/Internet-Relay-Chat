@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:58:44 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/04/24 09:20:02 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/29 09:55:49 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,17 @@ int SocketServer::getPort(void) const
     return (this->port);
 }
 
+int SocketServer::is_in_range(int port)
+{
+    if ((6660 <= port && port <= 6669)
+        || (7000 <= port && port <= 7005)
+        || port == 6697 
+        || port == 8080)
+        return (0);
+    else 
+        return (1);
+}
+
 const std::string   &SocketServer::getPassword(void) const
 {
     return (this->password);
@@ -117,9 +128,11 @@ void    ft_init_server_socket(int port, std::string password)
 {
     SocketServer        main_socket(port, password);
 
+    if (main_socket.is_in_range(port) != 0)
+        throw std::invalid_argument("invalid port number");
     //AF_INET = IPv4 Internet Protocol
     //SOCK_STREAM = socket providing sequenced, reliable, two way communications
-    
+
     //////////server socket initialisation//////////
     main_socket.createSocket();
     main_loop(main_socket);

@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:59:54 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/28 10:10:43 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/29 09:50:37 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ public:
 	bool					findChannel(std::string channel_name);
 
 	void					join(User &user, Channel &channel, std::vector<std::string> params);
+	int						is_in_range(int port);
 };
 
 class Message  {

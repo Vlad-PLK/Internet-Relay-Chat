@@ -2,7 +2,7 @@
 
 void User::quit(std::vector<std::string> cmd)
 {
-    this->my_send("FUYEZ!!!", 8, 0);
+    this->usr_send("FUYEZ!!!");
 	(void)cmd;
 	close(this->userfd);
 }
