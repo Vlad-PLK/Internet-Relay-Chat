@@ -1,5 +1,0 @@
-<< CAP LS
-<< PASS lol
-<< NICK vladplk
-<< USER vpolojie vpolojie localhost :Vladimir Polojienko
->> 464 vladplk :Password incorrect

@@ -1,11 +1,9 @@
 NAME = ircserv
 
-OBJS = main.cpp main_loop.cpp User.cpp SocketServer.cpp Quit.cpp Channel.cpp Command.cpp commands/Join.cpp
-
-SRCS = ${subst .cpp,.o,$(OBJS)}
+SRCS = $(shell find . -name "*.cpp")
+OBJS = $(SRCS:.cpp=.o)
 
 CXX = c++
-
 FLAGS = -std=c++98 -Wall -Werror -Wextra
 
 all: ${NAME}
@@ -21,22 +19,16 @@ ${NAME}: ${OBJS}
 	@printf "2 : password - The connection password. It will be needed by any IRC client that tries to connect to your server. \n"
 	@printf "\n"
 
-main.o: main.cpp SocketServer.hpp User.hpp Channel.hpp Server_comments.hpp Command.hpp CommandHandler.hpp
-	${CXX} ${CFLAGS} -c main.cpp
-
-SocketServer.o: SocketServer.hpp
-
-User.o: User.hpp
-
-Command.o: Command.hpp
+%.o: %.cpp
+	${CXX} ${FLAGS} -c $< -o $@
 
 clean:
-	rm -rf ${SRCS}
+	rm -rf ${OBJS}
 
 fclean: clean
 	rm -rf ${NAME}
 
 re: fclean all
 
-.PHONY: all clean re%
+.PHONY: all clean fclean re
 
