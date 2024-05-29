@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/29 09:33:17 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/29 10:42:46 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ User::User() : userfd(0), admin_state(0), current_state(0)
 {
 }
 
-User::User(int fd, int logstate) : userfd(fd), current_state(logstate)
+User::User(int fd, int _admin_state, int _current_state) : userfd(fd), admin_state(_admin_state), current_state(_current_state)
 {
 	std::cout << "New User trying to join server" << std::endl;
 }
@@ -36,21 +36,6 @@ const std::string   &User::getNickname(void) const
 const std::string   &User::getUsername(void) const
 {
 	return (this->username);
-}
-
-const std::string   &User::getPasssword(void) const
-{
-	return (this->server_password);
-}
-
-std::string	&User::getAnswer(void)
-{
-	return (this->answer);
-}
-
-int			 User::getAnswerSize(void) const
-{
-	return (this->answer.size());
 }
 
 int	User::getFD(void) const
@@ -135,11 +120,46 @@ bool	User::checkRights(const std::string channelTitle, const std::string channel
 void User::usr_send(const std::string &response)
 {
     send(this->userfd, response.c_str(), response.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
-    std::cout << "--> Message sent to client " << this->userfd << " = " << response << std::endl;
+    std::cout << "--> Message sent to client " << this->userfd - 3 << " = " << response << std::endl;
 }
 
+void User::parsing_and_handle(std::string &buf, SocketServer &server)
+{
+	std::string tmp;
+	Command		tmpcmd;
+	Channel		channel;
+	size_t		pos = 0;
 
-void User::cmds_center(std::vector<std::string> cmd)
+	buffer.append(buf);
+	for (size_t i=0; i != buffer.size(); i++)
+	{
+		if (buffer[i] == '\r' && buffer[i + 1] == '\n')
+		{
+			tmp = buffer.substr(pos, i - pos);
+			tmpcmd.setRawCommand(tmp);
+			tmpcmd.setCmdParams();
+			HandleCommand(tmpcmd, *this, channel, server);
+			pos = i + 2;
+			tmp.clear();
+			tmpcmd.clearCmd();
+		}
+	}
+	buffer.erase(0, pos);
+}
+
+int	User::process_cmd(std::string buf, SocketServer &server)
+{
+	parsing_and_handle(buf, server);
+	return (ACCEPTED);
+}
+
+std::ostream &operator<<(std::ostream &output, const User &user)
+{
+	output << "nickname : " << user.getNickname() << " username : " << user.getUsername() << " fd : " << user.getFD() << " current status : " << user.getCurrentState() << std::endl;
+	return (output);
+}
+
+/*void User::cmds_center(std::vector<std::string> cmd)
 {
 	for (size_t i = 0; i < cmd.back().length(); i++)
 	{
@@ -168,51 +188,4 @@ void User::cmds_center(std::vector<std::string> cmd)
 			return ;
 		}
 	}
-}
-
-void User::parsing_and_handle(std::string &buf, SocketServer &server)
-{
-	std::string tmp;
-	Command		tmpcmd;
-	Channel		channel;
-	size_t		pos = 0;
-
-	buffer.append(buf);
-	for (size_t i=0; i != buffer.size(); i++)
-	{
-		if (buffer[i] == '\r' && buffer[i + 1] == '\n')
-		{
-			tmp = buffer.substr(pos, i - pos);
-			tmpcmd.setRawCommand(tmp);
-			tmpcmd.setCmdParams();
-			HandleCommand(tmpcmd, *this, channel, server);
-			pos = i + 2;
-			tmp.clear();
-			tmpcmd.clearCmd();
-		}
-	}
-	buffer.erase(0, pos);
-}
-
-void User::setPassword(const std::string &pass)
-{
-	this->server_password.assign(pass);
-}
-
-void User::setAnswer(std::string ans)
-{
-	this->answer = ans;
-}
-
-int	User::process_cmd(std::string buf, SocketServer &server)
-{
-	parsing_and_handle(buf, server);
-	return (ACCEPTED);
-}
-
-
-std::ostream &operator<<(std::ostream &output, const User &user)
-{
-	output << "nickname : " << user.getNickname() << " username : " << user.getUsername() << " fd : " << user.getFD() << " current status : " << user.getCurrentState() << std::endl;
-	return (output);
-}
+}*/

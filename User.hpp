@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/29 09:33:12 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/29 10:39:24 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,38 +31,30 @@ class User
 private:
     std::string                 username;
     std::string                 nickname;
-    std::string                 server_password;
     int                         userfd;
     int                         admin_state;
     int                         current_state;
     std::string                 buffer;
-    std::string                 answer;
     std::map<std::string, std::string>    _channelRights;
 
 public:
     User(/* args */);
-    User(int fd, int logstate);
+    User(int fd, int admin_state, int current_state);
     ~User();
 
     const std::string   &getUsername(void) const;
     const std::string   &getNickname(void) const;
-    const std::string   &getPasssword(void) const;
-    std::string         &getAnswer(void);
-    int                 getAnswerSize(void) const;
     int                 getFD(void) const;
     int                 getCurrentState(void) const;
     std::map<std::string, std::string>  getChannelRights(void) const;
     void                setFD(int fd);
-    void                setAnswer(std::string ans);
     void                setUsername(const std::string &uname);
     void                setNickname(const std::string &nname);
-    void                setPassword(const std::string &pass);
     void                setCurrentState(int state);
     void                setAdminState(int state);
 
     void                usr_send(const std::string &response);
     typedef void        (User::*cmdPtr)(std::vector<std::string> cmd);
-    void                cmds_center(std::vector<std::string> cmd);
     void                quit(std::vector<std::string> cmd);
 
     bool                checkRights(std::string channelTitle, std::string channelRights); //string if multiple rihts to check at once

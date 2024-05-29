@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/28 09:33:53 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/29 10:42:23 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,9 @@ void    main_loop(SocketServer &main_socket)
 			fd_tmp.fd = accept(tab_fd[0].fd, NULL, NULL);
 			fd_tmp.events = POLLIN;
 			tab_fd.push_back(fd_tmp);
-			tmp_user = new User;
-			tmp_user->setFD(fd_tmp.fd);
-			tmp_user->setCurrentState(WAITING_FOR_APPROVAL);
+			tmp_user = new User(fd_tmp.fd, NOT_ADMIN, WAITING_FOR_APPROVAL);
 			users.push_back(*tmp_user);
 			delete tmp_user;
-			std::cout << "New Client" << std::endl;
 		}
 		/* other events received from all users of the server */
 		else
@@ -73,19 +70,14 @@ void    main_loop(SocketServer &main_socket)
 						buffer[read_value] = 0;
 						str.append(buffer);
 					   
-						/* parse the command */
+						/* parse the command, process and send the answer*/
 						users[it->fd - 4].process_cmd(str, main_socket);
 						
 						/* shows info about current user in the loop (optionnal, for debugging )*/
 						//std::cout << users[it->fd - 4];
-						
-						/* after parsing is done the answer should be appropriate to the initial received message */
-						// using send directly in appropriate cmds
-						//send(it->fd, users[it->fd - 4].getAnswer().c_str(), users[it->fd - 4].getAnswerSize(), MSG_DONTWAIT | MSG_NOSIGNAL);//
-						
+
 						/* clear all buffers and strings from previous message */
 						str.clear();
-						users[it->fd - 4].getAnswer().clear();
 					}
 				}
 			}
