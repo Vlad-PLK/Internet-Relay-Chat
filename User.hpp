@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/29 12:34:36 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/29 12:51:29 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # define WAITING_FOR_APPROVAL 2
 # define IS_ADMIN 3
 # define NOT_ADMIN 4
+# define ALREADY_REGISTRED 5
 
 class Command;
 
