@@ -63,8 +63,6 @@ public:
     // void               parse_cmd(std::string &buffer);
     // int                connexion_try(void);
 
-    void                my_send(std::string reply);
-
     bool                checkRights(std::string channelTitle, std::string channelRights); //string if multiple rihts to check at once
     bool                parseRights(std::string userRights, std::string channelRights);
 
