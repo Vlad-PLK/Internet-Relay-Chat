@@ -34,12 +34,14 @@ bool    SocketServer::findChannel(std::string title)
 
 Channel *SocketServer::getChannel(std::string title)
 {
-    for (std::vector<Channel>::iterator it = this->_allChannels.begin(); it != this->_allChannels.end(); ++it)
+    std::vector<Channel>::iterator it = this->_allChannels.begin();
+    while (it != this->_allChannels.end())
     {
         if (it->getTitle() == title)
-            return &(*it); // return pointer to the Channel
+            break;
+        it++;
     }
-    return NULL;
+    return &(*it);
 }
 
 
@@ -47,18 +49,34 @@ void    SocketServer::addChannel(std::string title)
 {
     Channel new_channel;
     new_channel.setTitle(title);
+    new_channel.setTopic("");
     this->_allChannels.push_back(new_channel);
 }
 
 void    SocketServer::addChannel(std::string title, std::string password)
 {
     Channel new_channel;
-    new_channel.setTitle(title);
+    if (title[0] == '#')
+        new_channel.setTitle(title);
+    else
+        new_channel.setTitle('#' + title);
     if (!password.empty()) // Check if the password is not empty
         new_channel.setPassword(password);
+    new_channel.setTopic("");
     this->_allChannels.push_back(new_channel);
 }
 
+void	SocketServer::deleteChannel(std::string title)
+{
+    for (std::vector<Channel>::iterator it = this->_allChannels.begin(); it != this->_allChannels.end(); ++it)
+    {
+        if (it->getTitle() == title)
+        {
+            this->_allChannels.erase(it);
+            break;
+        }
+    }
+}
 
 void    SocketServer::addUser(const User &user) const
 {

@@ -48,6 +48,7 @@ public:
     int                 getFD(void) const;
     int                 getCurrentState(void) const;
     std::map<std::string, std::string>  getChannelRights(void) const;
+
     void                setFD(int fd);
     void                setUsername(const std::string &uname);
     void                setNickname(const std::string &nname);
@@ -58,6 +59,11 @@ public:
     void                usr_clean(void);
     typedef void        (User::*cmdPtr)(std::vector<std::string> cmd);
     void                quit(std::vector<std::string> cmd);
+    // int                process_cmd(std::string buffer);
+    // void               parse_cmd(std::string &buffer);
+    // int                connexion_try(void);
+
+    void                my_send(std::string reply);
 
     bool                checkRights(std::string channelTitle, std::string channelRights); //string if multiple rihts to check at once
     bool                parseRights(std::string userRights, std::string channelRights);
