@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/29 10:39:24 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/29 12:34:36 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ public:
     void                setAdminState(int state);
 
     void                usr_send(const std::string &response);
+    void                usr_clean(void);
     typedef void        (User::*cmdPtr)(std::vector<std::string> cmd);
     void                quit(std::vector<std::string> cmd);
 

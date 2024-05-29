@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:10:43 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/29 10:06:51 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/29 12:23:44 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,6 @@ void                    mode(User &user, Channel &channel, SocketServer &server,
 void                    ping(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void                    pong(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void                    join_bis(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
+void                    quit(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 
 #endif

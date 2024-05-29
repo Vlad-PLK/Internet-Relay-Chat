@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/29 10:42:23 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/29 11:41:59 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ void    main_loop(SocketServer &main_socket)
 			fd_tmp.events = POLLIN;
 			tab_fd.push_back(fd_tmp);
 			tmp_user = new User(fd_tmp.fd, NOT_ADMIN, WAITING_FOR_APPROVAL);
-			users.push_back(*tmp_user);
+			main_socket.addUser(*tmp_user);
+			//users.push_back(*tmp_user);
 			delete tmp_user;
 		}
 		/* other events received from all users of the server */
@@ -71,7 +72,8 @@ void    main_loop(SocketServer &main_socket)
 						str.append(buffer);
 					   
 						/* parse the command, process and send the answer*/
-						users[it->fd - 4].process_cmd(str, main_socket);
+						main_socket.getAllUsers()[it->fd - 4].process_cmd(str, main_socket);
+						//users[it->fd - 4].process_cmd(str, main_socket);
 						
 						/* shows info about current user in the loop (optionnal, for debugging )*/
 						//std::cout << users[it->fd - 4];

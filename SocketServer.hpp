@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:59:54 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/29 09:50:37 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/29 11:41:56 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ public:
 
 	User					*getUser(std::string name); //const?
 	void 					addUser(const User& user) const;
-	const std::vector<User>	&getAllUsers() const;
+	std::vector<User>	&getAllUsers();
 	Channel					*getChannel(std::string title);
 	void					addChannel(std::string title);
 	void					addChannel(std::string title, std::string password);

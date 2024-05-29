@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/29 10:42:46 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/29 12:38:28 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,12 @@ void User::usr_send(const std::string &response)
 {
     send(this->userfd, response.c_str(), response.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
     std::cout << "--> Message sent to client " << this->userfd - 3 << " = " << response << std::endl;
+}
+
+void User::usr_clean(void)
+{
+	this->nickname.clear();
+	this->username.clear();
 }
 
 void User::parsing_and_handle(std::string &buf, SocketServer &server)
