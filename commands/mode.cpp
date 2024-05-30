@@ -1,7 +1,18 @@
-#include "../Command.hpp"
-#include "../Server_comments.hpp"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mode.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/30 13:58:31 by vpolojie          #+#    #+#             */
+/*   Updated: 2024/05/30 13:59:09 by vpolojie         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void    mode(User &user, Channel &channel, SocketServer &server, std::vector<std::string> params)
+#include "../Command.hpp"
+
+void    Mode(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
 {
     (void)channel;
     (void)server;

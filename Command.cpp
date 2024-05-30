@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:45:37 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/29 12:24:16 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/30 13:59:23 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ static const Command_Dictionnary cmds[] = {
     {"PASS", pass},
     {"NICK", nick},
     {"USER", user},
-	//{"MODE", mode},
+	{"MODE", Mode},
 	{"WHOIS", whois},
 	{"PING", ping},
-    {"JOIN", join_bis},
+    {"JOIN", Join},
     {"QUIT", quit},
 
 };
