@@ -1,7 +1,9 @@
 #include "../SocketServer.hpp"
+#include "../Command.hpp"
 
-void    SocketServer::invite(User &user, std::vector<std::string> params)
+void    Invite(User &user, Channel &chl, SocketServer &server, std::vector<std::string> &params)
 {
+    (void)chl;
     if (params.size() < 2)
     {
         user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "INVITE")));
@@ -11,12 +13,12 @@ void    SocketServer::invite(User &user, std::vector<std::string> params)
     std::string user_target = params[0];
     std::string channel_title = params[1];
 
-    if (!this->findChannel(channel_title))
+    if (!server.findChannel(channel_title))
     {
         user.usr_send((ERR_NOSUCHCHANNEL(user.getNickname(), channel_title)));
         return;
     }
-    Channel *channel = this->getChannel(channel_title);
+    Channel *channel = server.getChannel(channel_title);
 
     if (!channel->userIsMember(user.getNickname()) && !channel->userIsOperator(user.getNickname()))
         user.usr_send((ERR_NOTONCHANNEL(user.getNickname(), channel->getTitle())));
@@ -28,6 +30,6 @@ void    SocketServer::invite(User &user, std::vector<std::string> params)
     {
         channel->addInvited(user);
         user.usr_send((RPL_INVITING(user.getNickname(), user_target, channel_title)));
-        this->getUser(user_target)->usr_send((RPL_INVITE(user.getNickname(), user_target, channel_title)));
+        server.getUser(user_target)->usr_send((RPL_INVITE(user.getNickname(), user_target, channel_title)));
     }
 }

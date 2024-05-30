@@ -1,7 +1,9 @@
 #include "../SocketServer.hpp"
+#include "../Command.hpp"
 
-void    SocketServer::kick(User &user, std::vector<std::string> params)
+void    Kick(User &user, Channel &chl, SocketServer &server, std::vector<std::string> &params)
 {
+    (void)chl;
     if (params.size() < 2)
     {
         user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "KICK")));
@@ -10,15 +12,15 @@ void    SocketServer::kick(User &user, std::vector<std::string> params)
     std::string channel_title = params[0];
     // if (channel_title[0] != '#'  channel_title[0] != '@')
     // //         channel_title.insert(0, 1, '#');
-    if (!findChannel(channel_title))
+    if (!server.findChannel(channel_title))
         user.usr_send((ERR_NOSUCHCHANNEL(user.getNickname(), channel_title)));
-    else if (!this->getChannel(channel_title)->userIsMember(user.getNickname()) && !this->getChannel(channel_title)->userIsOperator(user.getNickname()) && !this->getChannel(channel_title)->userIsOperator('@' + user.getNickname()))
-        user.usr_send((ERR_NOTONCHANNEL(user.getNickname(), this->getChannel(channel_title)->getTitle())));
-    else if (this->getChannel(channel_title)->userIsMember(user.getNickname()) && !this->getChannel(channel_title)->userIsOperator(user.getNickname()) && !this->getChannel(channel_title)->userIsOperator('@' + user.getNickname()))
-        user.usr_send((ERR_CHANOPRIVSNEEDED(user.getNickname(), this->getChannel(channel_title)->getTitle())));
+    else if (!server.getChannel(channel_title)->userIsMember(user.getNickname()) && !server.getChannel(channel_title)->userIsOperator(user.getNickname()) && !server.getChannel(channel_title)->userIsOperator('@' + user.getNickname()))
+        user.usr_send((ERR_NOTONCHANNEL(user.getNickname(), server.getChannel(channel_title)->getTitle())));
+    else if (server.getChannel(channel_title)->userIsMember(user.getNickname()) && !server.getChannel(channel_title)->userIsOperator(user.getNickname()) && !server.getChannel(channel_title)->userIsOperator('@' + user.getNickname()))
+        user.usr_send((ERR_CHANOPRIVSNEEDED(user.getNickname(), server.getChannel(channel_title)->getTitle())));
 
-    std::vector<std::string> users = splitSetter(params[1]);
-    Channel *channel = this->getChannel(channel_title);
+    std::vector<std::string> users = joinSetters(params[1]);
+    Channel *channel = server.getChannel(channel_title);
 
     for (std::vector<std::string>::iterator it = users.begin(); it != users.end(); ++it)
     {

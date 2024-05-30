@@ -1,14 +1,16 @@
 #include "../SocketServer.hpp"
+#include "../Command.hpp"
 
-void    SocketServer::part(User &user, std::vector<std::string> params)
+void    Part(User &user, Channel &chl, SocketServer &server, std::vector<std::string> &params)
 {
+    (void)chl;
     if (params.empty())
     {
         user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "PART")));
         return ;
     }
     
-    std::vector<std::string> channels = splitSetter(params[0]);
+    std::vector<std::string> channels = joinSetters(params[0]);
 
     // for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); ++it)
     // {
@@ -19,12 +21,12 @@ void    SocketServer::part(User &user, std::vector<std::string> params)
     int i = -1;
     while (++i < (int)channels.size())
     {
-        if (!findChannel(channels[i]))
+        if (!server.findChannel(channels[i]))
             user.usr_send((ERR_NOSUCHCHANNEL(user.getNickname(), channels[i])));
         else
         {
-            if (!this->getChannel(channels[i])->userIsMember(user.getNickname()) && !this->getChannel(channels[i])->userIsMember(user.getNickname()))
-                user.usr_send((ERR_NOTONCHANNEL(user.getNickname(), this->getChannel(channels[i])->getTitle())));
+            if (!server.getChannel(channels[i])->userIsMember(user.getNickname()) && !server.getChannel(channels[i])->userIsMember(user.getNickname()))
+                user.usr_send((ERR_NOTONCHANNEL(user.getNickname(), server.getChannel(channels[i])->getTitle())));
             else
             {
                 std::string reason;
@@ -33,13 +35,13 @@ void    SocketServer::part(User &user, std::vector<std::string> params)
                     for (size_t i = 1; i < params.size(); i++)
                         reason += params[i] + ' ';
                 }
-                user.usr_send((RPL_PART(user.getNickname(), this->getChannel(channels[i])->getTitle(), reason)));
-                if (this->getChannel(channels[i])->userIsMember(user.getNickname()))   
-                    this->getChannel(channels[i])->deleteUser(user.getNickname());
+                user.usr_send((RPL_PART(user.getNickname(), server.getChannel(channels[i])->getTitle(), reason)));
+                if (server.getChannel(channels[i])->userIsMember(user.getNickname()))   
+                    server.getChannel(channels[i])->deleteUser(user.getNickname());
                 else
-                    this->getChannel(channels[i])->deleteOperator(user.getNickname());
-                if (this->getChannel(channels[i])->getChannelUsers().size() + this->getChannel(channels[i])->getChannelOperators().size() == 0)
-                    this->deleteChannel(channels[i]);
+                    server.getChannel(channels[i])->deleteOperator(user.getNickname());
+                if (server.getChannel(channels[i])->getChannelUsers().size() + server.getChannel(channels[i])->getChannelOperators().size() == 0)
+                    server.deleteChannel(channels[i]);
             }
         }
     }

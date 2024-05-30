@@ -1,7 +1,9 @@
 #include "../SocketServer.hpp"
+#include "../Command.hpp"
 
-void    SocketServer::topic(User &user, std::vector<std::string> params)
+void    Topic(User &user, Channel &chl, SocketServer &server, std::vector<std::string> &params)
 {
+    (void)chl;
     if (params.empty())
     {
         user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "TOPIC")));
@@ -11,13 +13,13 @@ void    SocketServer::topic(User &user, std::vector<std::string> params)
     std::string channel_title = params[0];
     // if (channel_title[0] != '#')
     //         channel_title.insert(0, 1, '#');
-    if (!findChannel(channel_title))
+    if (!server.findChannel(channel_title))
         user.usr_send((ERR_NOSUCHCHANNEL(user.getNickname(), channel_title)));
-    else if (!this->getChannel(channel_title)->userIsMember(user.getNickname()) && !this->getChannel(channel_title)->userIsOperator(user.getNickname()))
-        user.usr_send((ERR_NOTONCHANNEL(user.getNickname(), this->getChannel(channel_title)->getTitle())));
+    else if (!server.getChannel(channel_title)->userIsMember(user.getNickname()) && !server.getChannel(channel_title)->userIsOperator(user.getNickname()))
+        user.usr_send((ERR_NOTONCHANNEL(user.getNickname(), server.getChannel(channel_title)->getTitle())));
     else
     {
-        Channel *channel = this->getChannel(channel_title);
+        Channel *channel = server.getChannel(channel_title);
         if (params.size() == 1)
         {
             if (channel->getTopic() == "")

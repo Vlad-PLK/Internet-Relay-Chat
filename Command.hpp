@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:10:43 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/30 13:59:17 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/30 14:19:06 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,13 @@ void                    ping(User &user, Channel &channel, SocketServer &server,
 void                    pong(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void                    Join(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void                    quit(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
+void                    Invite(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
+void                    Kick(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
+void                    Topic(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
+void                    Part(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
+
+
+
+std::vector<std::string>    joinSetters(std::string param);
 
 #endif

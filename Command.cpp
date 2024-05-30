@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:45:37 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/30 13:59:23 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/30 14:19:53 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@ static const Command_Dictionnary cmds[] = {
 	{"PING", ping},
     {"JOIN", Join},
     {"QUIT", quit},
-
+    {"INVITE", Invite},
+    {"KICK", Kick},
+    {"PART", Part},
+    {"TOPIC", Topic},
 };
 
 void HandleCommand(Command &cmd, User &usr, Channel &chl, SocketServer &server)
