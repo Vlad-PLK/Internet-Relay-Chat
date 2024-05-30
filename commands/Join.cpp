@@ -55,10 +55,10 @@ void SocketServer::join(User &user, std::vector<std::string> params)
                 if (this->getChannel(channels[i])->getPassword() == passwords[j])
                     this->getChannel(channels[i])->addUser(user);
                 else
-                    user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), this->getChannel(channels[i])->getTitle())).c_str());
+                    user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), this->getChannel(channels[i])->getTitle())));
             }
             // else if (this->getChannel(channels[i])->getPassword().empty() && !passwords[j].empty())
-            //     user.my_send((ERR_BADCHANNELKEY(user.getNickname(), this->getChannel(channels[i])->getTitle())).c_str());
+            //     user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), this->getChannel(channels[i])->getTitle())).c_str());
             ++j;
         }
     }

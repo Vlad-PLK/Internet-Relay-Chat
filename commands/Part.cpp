@@ -4,7 +4,7 @@ void    SocketServer::part(User &user, std::vector<std::string> params)
 {
     if (params.empty())
     {
-        user.my_send((ERR_NEEDMOREPARAMS(user.getNickname(), "PART")).c_str());
+        user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "PART")));
         return ;
     }
     
@@ -20,11 +20,11 @@ void    SocketServer::part(User &user, std::vector<std::string> params)
     while (++i < (int)channels.size())
     {
         if (!findChannel(channels[i]))
-            user.my_send((ERR_NOSUCHCHANNEL(user.getNickname(), channels[i])).c_str());
+            user.usr_send((ERR_NOSUCHCHANNEL(user.getNickname(), channels[i])));
         else
         {
             if (!this->getChannel(channels[i])->userIsMember(user.getNickname()) && !this->getChannel(channels[i])->userIsMember(user.getNickname()))
-                user.my_send((ERR_NOTONCHANNEL(user.getNickname(), this->getChannel(channels[i])->getTitle())).c_str());
+                user.usr_send((ERR_NOTONCHANNEL(user.getNickname(), this->getChannel(channels[i])->getTitle())));
             else
             {
                 std::string reason;
@@ -33,7 +33,7 @@ void    SocketServer::part(User &user, std::vector<std::string> params)
                     for (size_t i = 1; i < params.size(); i++)
                         reason += params[i] + ' ';
                 }
-                user.my_send((RPL_PART(user.getNickname(), this->getChannel(channels[i])->getTitle(), reason)).c_str());
+                user.usr_send((RPL_PART(user.getNickname(), this->getChannel(channels[i])->getTitle(), reason)));
                 if (this->getChannel(channels[i])->userIsMember(user.getNickname()))   
                     this->getChannel(channels[i])->deleteUser(user.getNickname());
                 else

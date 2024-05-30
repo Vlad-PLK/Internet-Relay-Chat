@@ -19,7 +19,7 @@ static const Command_Dictionnary cmds[] = {
     {"PASS", pass},
     {"NICK", nick},
     {"USER", user},
-	{"MODE", mode},
+	//{"MODE", mode},
 	{"WHOIS", whois},
 	{"PING", ping},
     {"JOIN", join_bis},
