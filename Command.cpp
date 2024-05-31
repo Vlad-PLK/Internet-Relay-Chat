@@ -14,20 +14,21 @@
 #include "SocketServer.hpp"
 #include "Server_comments.hpp"
 
-static const Command_Dictionnary cmds[] = {
+static const Command_Dictionnary cmds[] =
+{
     {"CAP LS", cap},
     {"PASS", pass},
     {"NICK", nick},
     {"USER", user},
-	{"MODE", Mode},
+	// {"MODE", Mode},
 	{"WHOIS", whois},
 	{"PING", ping},
-    {"JOIN", Join},
-    {"QUIT", quit},
-    {"INVITE", Invite},
-    {"KICK", Kick},
-    {"PART", Part},
-    {"TOPIC", Topic},
+    {"JOIN", join},
+    {"INVITE", invite},
+    {"PART", part},
+    {"TOPIC", topic},
+    {"KICK", kick},
+
 };
 
 void HandleCommand(Command &cmd, User &usr, Channel &chl, SocketServer &server)

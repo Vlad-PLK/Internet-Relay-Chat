@@ -1,12 +1,11 @@
-#include "../SocketServer.hpp"
 #include "../Command.hpp"
 
-void    Part(User &user, Channel &chl, SocketServer &server, std::vector<std::string> &params)
+void    part(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params)
 {
-    (void)chl;
+    (void)channel_void;
     if (params.empty())
     {
-        user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "PART")));
+        user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "PART")).c_str());
         return ;
     }
     
@@ -22,11 +21,11 @@ void    Part(User &user, Channel &chl, SocketServer &server, std::vector<std::st
     while (++i < (int)channels.size())
     {
         if (!server.findChannel(channels[i]))
-            user.usr_send((ERR_NOSUCHCHANNEL(user.getNickname(), channels[i])));
+            user.usr_send((ERR_NOSUCHCHANNEL(user.getNickname(), channels[i])).c_str());
         else
         {
             if (!server.getChannel(channels[i])->userIsMember(user.getNickname()) && !server.getChannel(channels[i])->userIsMember(user.getNickname()))
-                user.usr_send((ERR_NOTONCHANNEL(user.getNickname(), server.getChannel(channels[i])->getTitle())));
+                user.usr_send((ERR_NOTONCHANNEL(user.getNickname(), server.getChannel(channels[i])->getTitle())).c_str());
             else
             {
                 std::string reason;
@@ -35,7 +34,7 @@ void    Part(User &user, Channel &chl, SocketServer &server, std::vector<std::st
                     for (size_t i = 1; i < params.size(); i++)
                         reason += params[i] + ' ';
                 }
-                user.usr_send((RPL_PART(user.getNickname(), server.getChannel(channels[i])->getTitle(), reason)));
+                user.usr_send((RPL_PART(user.getNickname(), server.getChannel(channels[i])->getTitle(), reason)).c_str());
                 if (server.getChannel(channels[i])->userIsMember(user.getNickname()))   
                     server.getChannel(channels[i])->deleteUser(user.getNickname());
                 else

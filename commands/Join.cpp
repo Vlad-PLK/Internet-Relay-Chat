@@ -1,30 +1,8 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   join_bis.cpp                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/29 10:18:47 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/29 10:19:10 by vpolojie         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../Command.hpp"
 
-std::vector<std::string>    joinSetters(std::string param)
+void    join(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params)
 {
-    std::vector<std::string> res;
-    std::stringstream ss(param); // Use stringstream to split the string
-    std::string copy;
-    while (std::getline(ss, copy, ','))
-        res.push_back(copy);
-    return res;
-}
-
-void                    Join(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
-{
-    (void)channel;
+    (void)channel_void;
     if (params.empty())
     {
         user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "JOIN")).c_str());
@@ -32,11 +10,11 @@ void                    Join(User &user, Channel &channel, SocketServer &server,
     }
 
     // Setting up the channel_titles vector to store all the names given in the command
-    std::vector<std::string> channels = joinSetters(params[0]);
+    std::vector<std::string> channels = splitSetter(params[0]);
     
     std::vector<std::string> passwords;
     if (params.size() > 1)
-        passwords = joinSetters(params[1]);
+        passwords = splitSetter(params[1]);
 
     // Creating non existing channels
     for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); ++it)
@@ -73,12 +51,13 @@ void                    Join(User &user, Channel &channel, SocketServer &server,
         }
         else
         {
-            if (!server.getChannel(channels[i])->getPassword().empty())
+            Channel *channel = server.getChannel(channels[i]);
+            if (!channel->getPassword().empty())
             {
-                if (server.getChannel(channels[i])->getPassword() == passwords[j])
-                    server.getChannel(channels[i])->addUser(user);
+                if (channel->getPassword() == passwords[j])
+                    channel->addUser(user);
                 else
-                    user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), server.getChannel(channels[i])->getTitle())));
+                    user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), channel->getTitle())).c_str());
             }
             // else if (this->getChannel(channels[i])->getPassword().empty() && !passwords[j].empty())
             //     user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), this->getChannel(channels[i])->getTitle())).c_str());

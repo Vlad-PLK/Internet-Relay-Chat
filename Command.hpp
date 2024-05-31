@@ -56,15 +56,17 @@ void                    whois(User &user, Channel &channel, SocketServer &server
 void                    Mode(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void                    ping(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void                    pong(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
-void                    Join(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void                    quit(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
-void                    Invite(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
-void                    Kick(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
-void                    Topic(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
-void                    Part(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
+
+std::vector<std::string>    splitSetter(std::string param);
+
+void                    join(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params);
+void                    invite(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params);
+void                    kick(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params);
+void                    topic(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params);
+void                    part(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params);
+void                    mode(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params);
 
 
-
-std::vector<std::string>    joinSetters(std::string param);
 
 #endif
