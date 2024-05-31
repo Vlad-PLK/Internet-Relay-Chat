@@ -6,14 +6,14 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:13:00 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/29 12:49:27 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/31 14:56:05 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_COMMENTS_HPP
 # define SERVER_COMMENTS_HPP
 
-# define ERR_NEEDMOREPARAMS(user_nickname, cmd) "461localhost 461 " + user_nickname + " " + cmd + " :Not enough parameters given\r\n"
+# define ERR_NEEDMOREPARAMS(user_nickname, cmd) "461 " + user_nickname + " " + cmd + " :Not enough parameters given\r\n"
 
 # define ERR_CHANNELISFULL(user_nickname, channel_title) ":localhost 471 " + user_nickname + " " + channel_title + " :Cannot join channel (+l)\r\n"
 # define ERR_INVITEONLYCHAN(user_nickname, channel_title) ":localhost 473 " + user_nickname + " " + channel_title + " :Cannot join channel (+i)\r\n"

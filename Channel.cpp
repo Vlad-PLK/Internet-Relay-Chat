@@ -99,20 +99,20 @@ void    Channel::channelWelcome(User &user)
 
     for (std::vector<User>::iterator itOp = this->getChannelOperators().begin(); itOp != this->getChannelOperators().end(); ++itOp)
     {
-        itOp->usr_send((RPL_JOIN(user.getNickname() + "!" + user.getUsername() + "@localhost", this->_title)).c_str());
+        itOp->usr_send((RPL_JOIN(user.getNickname() + "!" + user.getUsername() + "@localhost", this->_title)));
          if (this->_topic != "")
-            itOp->usr_send((RPL_TOPIC((user.getNickname() + "!" + user.getUsername() + "@localhost"), this->_title, this->_topic)).c_str());
-        itOp->usr_send((RPL_NAMREPLY(itOp->getNickname(), "=", this->_title, allOp)).c_str());
-        itOp->usr_send((RPL_ENDOFNAMES(itOp->getNickname(), this->_title)).c_str());
+            itOp->usr_send((RPL_TOPIC((user.getNickname() + "!" + user.getUsername() + "@localhost"), this->_title, this->_topic)));
+        itOp->usr_send((RPL_NAMREPLY(itOp->getNickname(), "=", this->_title, allOp)));
+        itOp->usr_send((RPL_ENDOFNAMES(itOp->getNickname(), this->_title)));
     }
     
     for (std::vector<User>::iterator itUser = this->_channelUsers.begin(); itUser != this->_channelUsers.end(); ++itUser)
     {
-        itUser->usr_send((RPL_JOIN(user.getNickname() + "!" + user.getUsername() + "@localhost", this->_title)).c_str());
+        itUser->usr_send((RPL_JOIN(user.getNickname() + "!" + user.getUsername() + "@localhost", this->_title)));
         if (this->_topic != "")
-            itUser->usr_send((RPL_TOPIC((user.getNickname() + "!" + user.getUsername() + "@localhost"), this->_title, this->_topic)).c_str());
-        itUser->usr_send((RPL_NAMREPLY(itUser->getNickname(), "=", this->_title, allUsers)).c_str());
-        itUser->usr_send((RPL_ENDOFNAMES(itUser->getNickname(), this->_title)).c_str());
+            itUser->usr_send((RPL_TOPIC((user.getNickname() + "!" + user.getUsername() + "@localhost"), this->_title, this->_topic)));
+        itUser->usr_send((RPL_NAMREPLY(itUser->getNickname(), "=", this->_title, allUsers)));
+        itUser->usr_send((RPL_ENDOFNAMES(itUser->getNickname(), this->_title)));
     }
 }
 
@@ -147,15 +147,15 @@ void    Channel::addUser(User &user)
                         user.getChannelRights().insert(std::make_pair(this->_title, this->getModes()));// (?) what are the basic rights for a normal user
                     }
                     else
-                        user.usr_send((ERR_INVITEONLYCHAN(user.getNickname(), this->getTitle())).c_str());
+                        user.usr_send((ERR_INVITEONLYCHAN(user.getNickname(), this->getTitle())));
                 }
             }
             else if (userIsBanned(user.getNickname()))
-                user.usr_send((ERR_BANNEDFROMCHAN(user.getNickname(), this->getTitle())).c_str());
+                user.usr_send((ERR_BANNEDFROMCHAN(user.getNickname(), this->getTitle())));
         }
     }
     else
-        user.usr_send((ERR_CHANNELISFULL(user.getNickname(), this->getTitle())).c_str());
+        user.usr_send((ERR_CHANNELISFULL(user.getNickname(), this->getTitle())));
 }
 
 void removeUserVector(std::vector<User> &vector, const std::string &name)

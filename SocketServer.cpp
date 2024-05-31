@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:58:44 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/29 11:41:57 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/05/31 15:32:17 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void    SocketServer::addChannel(std::string title)
     Channel new_channel;
     new_channel.setTitle(title);
     new_channel.setTopic("");
+    new_channel.setLimit(10);
     this->_allChannels.push_back(new_channel);
 }
 
@@ -63,6 +64,7 @@ void    SocketServer::addChannel(std::string title, std::string password)
     if (!password.empty()) // Check if the password is not empty
         new_channel.setPassword(password);
     new_channel.setTopic("");
+    new_channel.setLimit(10);
     this->_allChannels.push_back(new_channel);
 }
 
