@@ -100,7 +100,7 @@ void    Channel::channelWelcome(User &user)
     for (std::vector<User>::iterator itOp = this->getChannelOperators().begin(); itOp != this->getChannelOperators().end(); ++itOp)
     {
         itOp->usr_send((RPL_JOIN(user.getNickname() + "!" + user.getUsername() + "@localhost", this->_title)));
-         if (this->_topic != "")
+        if (this->_topic != "")
             itOp->usr_send((RPL_TOPIC((user.getNickname() + "!" + user.getUsername() + "@localhost"), this->_title, this->_topic)));
         itOp->usr_send((RPL_NAMREPLY(itOp->getNickname(), "=", this->_title, allOp)));
         itOp->usr_send((RPL_ENDOFNAMES(itOp->getNickname(), this->_title)));
@@ -124,7 +124,7 @@ void    Channel::addInvited(User &user)
 
 void    Channel::addUser(User &user)
 {
-    if ((int)((this->_channelUsers.size() + this->_channelOperators.size())) < this->_limit)
+    if ((int)((this->_channelUsers.size() + this->_channelOperators.size())) <= this->_limit)
     {
         if ((int)(this->_channelUsers.size() + this->_channelOperators.size()) == 0)
             this->addOperator(user);

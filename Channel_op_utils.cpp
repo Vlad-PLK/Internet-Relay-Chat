@@ -17,6 +17,7 @@ void    Channel::addOperator(User &user)
     {
         userCopy.setNickname('@' + userCopy.getNickname());
         this->_channelOperators.push_back(userCopy);
+        this->channelWelcome(userCopy);
         this->deleteUser(user.getNickname());
     }
 }
