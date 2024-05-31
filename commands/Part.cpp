@@ -9,7 +9,7 @@ void    part(User &user, Channel &channel_void, SocketServer &server, std::vecto
         return ;
     }
     
-    std::vector<std::string> channels = joinSetters(params[0]);
+    std::vector<std::string> channels = splitSetter(params[0]);
 
     // for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); ++it)
     // {
