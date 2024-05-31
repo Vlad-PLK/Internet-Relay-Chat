@@ -1,7 +1,8 @@
-#include "../SocketServer.hpp"
+#include "../Command.hpp"
 
-void SocketServer::join(User &user, std::vector<std::string> params)
+void    join(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params)
 {
+    (void)channel_void;
     if (params.empty())
     {
         user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "JOIN")));
@@ -25,40 +26,41 @@ void SocketServer::join(User &user, std::vector<std::string> params)
     int j = 0;
     while (++i < (int)channels.size())
     {
-        if (!findChannel(channels[i]))
+        if (!server.findChannel(channels[i]))
         {
             if (j < (int)passwords.size())
             {
                 if (!passwords[j].empty())
                 {
-                    addChannel(channels[i], passwords[j]);
-                    getChannel(channels[i])->addUser(user);
+                    server.addChannel(channels[i], passwords[j]);
+                    server.getChannel(channels[i])->addUser(user);
                 }
                 else
                 {
-                    addChannel(channels[i]);
-                    getChannel(channels[i])->addUser(user);
+                    server.addChannel(channels[i]);
+                    server.getChannel(channels[i])->addUser(user);
                 }
                 ++j;
             }
             else
             {
                 // if less passwords than channel names
-                this->addChannel(channels[i]); 
-                this->getChannel(channels[i])->addUser(user);
+                server.addChannel(channels[i]); 
+                server.getChannel(channels[i])->addUser(user);
             }
         }
         else
         {
-            if (!this->getChannel(channels[i])->getPassword().empty())
+            Channel *channel = server.getChannel(channels[i]);
+            if (!channel->getPassword().empty())
             {
-                if (this->getChannel(channels[i])->getPassword() == passwords[j])
-                    this->getChannel(channels[i])->addUser(user);
+                if (channel->getPassword() == passwords[j])
+                    channel->addUser(user);
                 else
-                    user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), this->getChannel(channels[i])->getTitle())).c_str());
+                    user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), channel->getTitle())).c_str());
             }
             // else if (this->getChannel(channels[i])->getPassword().empty() && !passwords[j].empty())
-            //     user.my_send((ERR_BADCHANNELKEY(user.getNickname(), this->getChannel(channels[i])->getTitle())).c_str());
+            //     user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), this->getChannel(channels[i])->getTitle())).c_str());
             ++j;
         }
     }

@@ -75,14 +75,6 @@ public:
 	int						is_in_range(int port);
 	typedef void        (SocketServer::*cmdPtr)(std::vector<std::string> cmd);
     void                cmds_center(std::vector<std::string> cmd);
-
-	std::vector<std::string>	splitSetter(std::string param);
-	void						join(User &user, std::vector<std::string> params);
-	void						part(User &user, std::vector<std::string> params);
-	void						topic(User &user, std::vector<std::string> params);
-	void						kick(User &user, std::vector<std::string> params);
-	void    					invite(User &user, std::vector<std::string> params);
-	void						mode(User &user, std::vector<std::string> params);
 };
 
 class Message  {

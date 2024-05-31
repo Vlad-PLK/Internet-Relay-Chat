@@ -2,8 +2,6 @@ NAME = ircserv
 
 SRCS = $(shell find . -name "*.cpp")
 OBJS = $(SRCS:.cpp=.o)
-SRCS = $(shell find . -name "*.cpp")
-OBJS = $(SRCS:.cpp=.o)
 
 CXX = c++
 FLAGS = -std=c++98 -Wall -Werror -Wextra
@@ -23,11 +21,8 @@ ${NAME}: ${OBJS}
 
 %.o: %.cpp
 	${CXX} ${FLAGS} -c $< -o $@
-%.o: %.cpp
-	${CXX} ${FLAGS} -c $< -o $@
 
 clean:
-	rm -rf ${OBJS}
 	rm -rf ${OBJS}
 
 fclean: clean
@@ -36,4 +31,3 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
-

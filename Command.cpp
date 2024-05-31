@@ -14,7 +14,8 @@
 #include "SocketServer.hpp"
 #include "Server_comments.hpp"
 
-static const Command_Dictionnary cmds[] = {
+static const Command_Dictionnary cmds[] =
+{
     {"CAP LS", cap},
     {"PASS", pass},
     {"NICK", nick},
@@ -22,8 +23,11 @@ static const Command_Dictionnary cmds[] = {
 	{"MODE", mode},
 	{"WHOIS", whois},
 	{"PING", ping},
-    {"JOIN", join_bis},
-    {"QUIT", quit},
+    {"JOIN", join},
+    {"INVITE", invite},
+    {"PART", part},
+    {"TOPIC", topic},
+    {"KICK", kick},
 
 };
 

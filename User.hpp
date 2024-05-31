@@ -65,6 +65,7 @@ public:
 
     bool                checkRights(std::string channelTitle, std::string channelRights); //string if multiple rihts to check at once
     bool                parseRights(std::string userRights, std::string channelRights);
+    void                deleteChannelRights(std::string title);
 
     int                process_cmd(std::string buffer, SocketServer &server);
     void               parsing_and_handle(std::string &buffer, SocketServer &server);

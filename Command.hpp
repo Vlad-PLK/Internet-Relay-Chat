@@ -48,15 +48,23 @@ typedef struct S_Command_Dictionnary{
 
 void HandleCommand(Command &cmd, User &usr, Channel &chl, SocketServer &server);
 
+std::vector<std::string>    splitSetter(std::string param);
 void					cap(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void					pass(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void					nick(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void					user(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void                    whois(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
-void                    mode(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void                    ping(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void                    pong(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
-void                    join_bis(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void                    quit(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
+
+void                    join(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params);
+void                    invite(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params);
+void                    kick(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params);
+void                    topic(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params);
+void                    part(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params);
+void                    mode(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params);
+
+
 
 #endif
