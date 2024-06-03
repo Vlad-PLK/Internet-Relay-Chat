@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:14:57 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/01 08:33:36 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/03 13:30:02 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,7 @@ char	*ft_itoa(int n)
 int check_nickname_in_use(std::string &nick, const std::vector<User> &users)
 {
     for (size_t i = 0; i != users.size(); i++)
-    {
-        srand(time(0));
-        // NEED TO FIX IT WITH SERVER PART //
+	{
         if (nick == users[i].getNickname())
             return (1);
     }
@@ -101,8 +99,10 @@ void					nick(User &user, Channel &channel, SocketServer &server, std::vector<st
     (void)server;
     if (check_nickname_in_use(params.front(), server.getAllUsers()) == 1)
     {
-        user.usr_send("");
+        user.usr_send(ERR_NICKNAMEINUSE(params.front()));
+		srand(time(0));
         user.setNickname(params.front() + ft_itoa(rand() % 1000));
+		return ;
     }
     else if (check_nickname_validity(params.front()) == 1)
         user.usr_send(ERR_ERRONEUSNICKNAME(params.front()));
@@ -110,6 +110,4 @@ void					nick(User &user, Channel &channel, SocketServer &server, std::vector<st
         user.usr_send(ERR_NONICKNAMEGIVEN());
     else
         user.setNickname(params.front());
-    if (user.getCurrentState() == REJECTED)
-        user.usr_send(ERR_PASSWDMISMATCH(user.getNickname()));
 }
