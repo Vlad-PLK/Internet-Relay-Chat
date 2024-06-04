@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:14:57 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/03 13:30:02 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/04 08:51:14 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,12 +96,11 @@ int check_nickname_validity(const std::string &nick)
 void					nick(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
 {
     (void)channel;
-    (void)server;
-    if (check_nickname_in_use(params.front(), server.getAllUsers()) == 1)
+    if (check_nickname_in_use(params[0], server.getAllUsers()) == 1)
     {
         user.usr_send(ERR_NICKNAMEINUSE(params.front()));
-		srand(time(0));
-        user.setNickname(params.front() + ft_itoa(rand() % 1000));
+		//srand(time(0));
+        //user.setNickname(params.front() + ft_itoa(rand() % 1000));
 		return ;
     }
     else if (check_nickname_validity(params.front()) == 1)

@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:45:37 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/31 16:14:38 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/04 07:58:01 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static const Command_Dictionnary cmds[] =
     {"PASS", pass},
     {"NICK", nick},
     {"USER", user},
-	// {"MODE", Mode},
+	{"MODE", Mode},
 	{"WHOIS", whois},
 	{"PING", ping},
     {"JOIN", join},
@@ -37,7 +37,10 @@ void HandleCommand(Command &cmd, User &usr, Channel &chl, SocketServer &server)
     for (long unsigned int i = 0; i < sizeof(cmds) / sizeof(cmds[0]); i++)
     {
         if (cmd.getCmdName() == cmds[i].name)
+        {
+            std::cout << cmd.getCmdName() << std::endl;
             cmds[i].fct(usr, chl, server, cmd.getParams());
+        }
         // handle unknown commands ? //
     }
 }
