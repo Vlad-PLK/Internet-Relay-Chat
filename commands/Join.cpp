@@ -10,6 +10,8 @@ void    join(User &user, Channel &channel_void, SocketServer &server, std::vecto
         return ;
     }
 
+    //MAYBE NEED TO USE PART HERE
+
     // Setting up the channel_titles vector to store all the names given in the command
     std::vector<std::string> channels = splitSetter(params[0]);
     // Setting up the channel_passwords vector 

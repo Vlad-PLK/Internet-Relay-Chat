@@ -24,7 +24,8 @@ class Channel
         void setTitle(std::string title);
         void setPassword(std::string pass);
         void setTopic(std::string message);
-        void setMode(std::string new_mode);
+        void setMode(std::string new_modes);
+        void setMode(char new_mode, int flag);
         void setMode(std::string new_modes, int flag);
         void setLimit(int limit);
         void setOperators(User &user, int flag);

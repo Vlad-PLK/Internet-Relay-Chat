@@ -40,6 +40,8 @@
 # define ERR_USERONCHANNEL(user_nickname, target, channel_title) ":localhost 443 " + user_nickname + " " + target + " " + channel_title + " :is already on channel\r\n"
 # define ERR_NOSUCHNICK(user_nickname, target) ":localhost 401 " + user_nickname + " " + target + " :No such nick/channel\r\n"
 
+# define RPL_CHANGECHANNELMODE(user_nickname, channel_title, mode) ":" + user_nickname + " MODE " + channel_title + " " + mode + "\r\n"
+# define RPL_CHANGECHANNELMODEWITHPARAM(user_nickname, channel_title, mode, param) ":" + user_nickname + " MODE " + channel_title + " " + mode + " " + param + "\r\n"
 
 # define ERR_ALREADYREGISTERED(username) "462 " + username + " :You may not reregister\r\n"
 # define ERR_PASSWDMISMATCH(username) "464 " + username + " :Password incorrect\r\n"

@@ -53,7 +53,6 @@ void					pass(User &user, Channel &channel, SocketServer &server, std::vector<st
 void					nick(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void					user(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void                    whois(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
-void                    Mode(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void                    ping(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void                    pong(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
 void                    quit(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);

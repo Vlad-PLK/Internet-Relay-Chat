@@ -64,7 +64,7 @@ void    SocketServer::addChannel(std::string title)
     Channel new_channel;
     new_channel.setTitle(title);
     new_channel.setTopic("");
-    new_channel.setLimit(10);
+    new_channel.setLimit(-1);
     this->_allChannels.push_back(new_channel);
 }
 
@@ -78,7 +78,7 @@ void    SocketServer::addChannel(std::string title, std::string password)
     if (!password.empty()) // Check if the password is not empty
         new_channel.setPassword(password);
     new_channel.setTopic("");
-    new_channel.setLimit(10);
+    new_channel.setLimit(-1);
     this->_allChannels.push_back(new_channel);
 }
 

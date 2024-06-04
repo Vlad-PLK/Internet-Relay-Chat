@@ -84,7 +84,6 @@ void Channel::setMode(std::string modes)
 
 void    Channel::setLimit(int limit)
 {
-    // if (this->userIsOperator(user.getNickname()))
     this->_limit = limit;
 }
 
@@ -124,8 +123,7 @@ void    Channel::addInvited(User &user)
 
 void    Channel::addUser(User &user)
 {
-    // if the channel is not full
-    if ((int)((this->_channelUsers.size() + this->_channelOperators.size())) <= this->_limit)
+    if ((int)((this->_channelUsers.size() + this->_channelOperators.size())) < this->getLimit() || this->getLimit() == -1)
     {
         // if there's no users yet
         if ((int)(this->_channelUsers.size() + this->_channelOperators.size()) == 0)
