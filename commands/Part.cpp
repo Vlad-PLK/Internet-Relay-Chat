@@ -11,11 +11,11 @@ void    part(User &user, Channel &channel_void, SocketServer &server, std::vecto
     
     std::vector<std::string> channels = splitSetter(params[0]);
 
-    // for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); ++it)
-    // {
-    //     if (!it->empty() && (*it)[0] != '#')
-    //         it->insert(0, 1, '#');
-    // }
+    for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); ++it)
+    {
+        if (!it->empty() && (*it)[0] != '#')
+            it->insert(0, 1, '#');
+    }
 
     int i = -1;
     while (++i < (int)channels.size())
