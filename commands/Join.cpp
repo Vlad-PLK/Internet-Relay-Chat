@@ -17,7 +17,6 @@ void    join(User &user, Channel &channel_void, SocketServer &server, std::vecto
     if (params.size() > 1)
         passwords = splitSetter(params[1]);
 
-    // Creating non existing channels
     for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); ++it)
     {
         if (!it->empty() && (*it)[0] != '#')
@@ -55,14 +54,17 @@ void    join(User &user, Channel &channel_void, SocketServer &server, std::vecto
         // if channel already exists //
         else
         {
-            Channel *channel = server.getChannel(channels[i]);
-            if (!channel->getPassword().empty())
-            {
-                if (channel->getPassword() == passwords[j])
-                    channel->addUser(user);
-                else
-                    user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), channel->getTitle())).c_str());
-            }
+            //Channel *channel = server.getChannel(channels[i]);
+            //if (!channel->getPassword().empty())
+            //{
+            //    if (channel->getPassword() == passwords[j])
+            //        channel->addUser(user);
+            //    else
+            //        user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), channel->getTitle())).c_str());
+            //}
+            if (server.getChannel(channels[i])->getPassword().empty() && passwords[j].empty())
+                std::cout << "adding current user to existing channel : " << user.getNickname() << server.getChannel(channels[i])->getTitle() << std::endl;
+                //server.getChannel(channels[i])->addUser(user);
             // else if (this->getChannel(channels[i])->getPassword().empty() && !passwords[j].empty())
             //     user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), this->getChannel(channels[i])->getTitle())).c_str());
             ++j;

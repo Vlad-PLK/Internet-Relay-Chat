@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:13:00 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/03 13:13:31 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/04 11:09:31 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define RPL_TOPIC(user_nickname, channel_title, channel_topic) ":localhost 332 " + user_nickname + " " + channel_title + " :" + channel_topic + "\r\n"
 # define RPL_NOTOPIC(user_nickname, channel_title) ":localhost 331 " + user_nickname + " " + channel_title + " :No topic is set\r\n"
 # define ERR_CHANOPRIVSNEEDED(user_nickname, channel_title) ":localhost 482 " + user_nickname + " " + channel_title + " :You're not channel operator\r\n"
-# define RPL_ENDOFNAMES(user_nickname, channel_title) ":localhost 366 " + user_nickname + " " + channel_title + " :End of NAMES list\r\n"
+# define RPL_ENDOFNAMES(user_nickname, channel_title) ":localhost 366 " + user_nickname + " " + channel_title + " :End of NAMES list.\r\n"
 
 # define RPL_KICK(user_nickname, channel_title, kicked_user, reason) ":" + user_nickname + " KICK " + channel_title + " " + kicked_user + " " + reason + "\r\n"
 # define ERR_USERNOTINCHANNEL(user_nickname, channel_title) ":localhost 441 " + user_nickname + " " + channel_title + " :They aren't on that channel\r\n"

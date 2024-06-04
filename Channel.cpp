@@ -99,7 +99,7 @@ void    Channel::channelWelcome(User &user)
 
     for (std::vector<User>::iterator itOp = this->getChannelOperators().begin(); itOp != this->getChannelOperators().end(); ++itOp)
     {
-        itOp->usr_send((RPL_JOIN(user.getNickname() + "!" + user.getUsername() + "@localhost", this->_title)));
+        itOp->usr_send((RPL_JOIN(user.getNickname() + "!~" + user.getUsername() + "@" + user.getIp(), this->_title)));
         if (this->_topic != "")
             itOp->usr_send((RPL_TOPIC((user.getNickname() + "!" + user.getUsername() + "@localhost"), this->_title, this->_topic)));
         itOp->usr_send((RPL_NAMREPLY(itOp->getNickname(), "=", this->_title, allOp)));
@@ -108,7 +108,7 @@ void    Channel::channelWelcome(User &user)
     
     for (std::vector<User>::iterator itUser = this->_channelUsers.begin(); itUser != this->_channelUsers.end(); ++itUser)
     {
-        itUser->usr_send((RPL_JOIN(user.getNickname() + "!" + user.getUsername() + "@localhost", this->_title)));
+        itUser->usr_send((RPL_JOIN(user.getNickname() + "!~" + user.getUsername() + "@" + user.getIp(), this->_title)));
         if (this->_topic != "")
             itUser->usr_send((RPL_TOPIC((user.getNickname() + "!" + user.getUsername() + "@localhost"), this->_title, this->_topic)));
         itUser->usr_send((RPL_NAMREPLY(itUser->getNickname(), "=", this->_title, allUsers)));
@@ -124,15 +124,19 @@ void    Channel::addInvited(User &user)
 
 void    Channel::addUser(User &user)
 {
+    // if the channel is not full
     if ((int)((this->_channelUsers.size() + this->_channelOperators.size())) <= this->_limit)
     {
+        // if there's no users yet
         if ((int)(this->_channelUsers.size() + this->_channelOperators.size()) == 0)
             this->addOperator(user);
         else
         {
             if (!userIsMember(user.getNickname()) && !userIsOperator(user.getNickname()) && !userIsBanned(user.getNickname()))
             {
-                if (!this->getModes().find('i'))
+                this->_channelUsers.push_back(user);
+                this->channelWelcome(user);
+                /*if (!this->getModes().find('i'))
                 {
                     this->_channelUsers.push_back(user);
                     this->channelWelcome(user);
@@ -148,7 +152,7 @@ void    Channel::addUser(User &user)
                     }
                     else
                         user.usr_send((ERR_INVITEONLYCHAN(user.getNickname(), this->getTitle())));
-                }
+                }*/
             }
             else if (userIsBanned(user.getNickname()))
                 user.usr_send((ERR_BANNEDFROMCHAN(user.getNickname(), this->getTitle())));
