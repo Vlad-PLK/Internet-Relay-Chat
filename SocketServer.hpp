@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:59:54 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/29 11:41:56 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/04 11:18:58 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ public:
 	SocketServer(int _port, std::string _password);
 	~SocketServer();
 
+	void				printAllChannels();
 	int					getSockfd(void) const;
 	int					getPort(void) const;
 	const std::string 	&getPassword(void) const;

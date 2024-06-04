@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:58:44 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/29 11:41:57 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/04 11:27:20 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,26 @@ User *SocketServer::getUser(std::string name)
     return NULL;
 }
 
+void    SocketServer::printAllChannels()
+{
+    std::vector<Channel>::iterator it;
+    for (it = this->_allChannels.begin(); it != this->_allChannels.end(); it++)
+    {
+        std::cout << "CHANNEL NAME : " << it->getTitle()
+            << "\nCHANNEL USERS : " << it->getChannelUsers().size() << std::endl;
+    }
+}
+
 bool    SocketServer::findChannel(std::string title)
 {
-    for (std::vector<Channel>::iterator it = this->_allChannels.begin(); it != this->_allChannels.end(); ++it)
+    std::vector<Channel>::iterator it;
+    for (it = this->_allChannels.begin(); it != this->_allChannels.end(); it++)
     {
         if (it->getTitle() == title)
+        {
+            std::cout << it->getTitle() << std::endl;
             return (true);
+        }
     }
     return (false);
 }

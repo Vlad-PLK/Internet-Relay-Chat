@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/29 12:51:29 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/04 09:58:26 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ class User
 private:
     std::string                 username;
     std::string                 nickname;
+    std::string                 realname;
+    std::string                 ip;
     int                         userfd;
     int                         admin_state;
     int                         current_state;
@@ -45,6 +47,8 @@ public:
 
     const std::string   &getUsername(void) const;
     const std::string   &getNickname(void) const;
+    const std::string   &getRealname(void) const;
+    const std::string   &getIp(void) const;
     int                 getFD(void) const;
     int                 getCurrentState(void) const;
     std::map<std::string, std::string>  getChannelRights(void) const;
@@ -52,6 +56,8 @@ public:
     void                setFD(int fd);
     void                setUsername(const std::string &uname);
     void                setNickname(const std::string &nname);
+    void                setRealname(const std::string &nname);
+    void                setIp(const std::string &nname);
     void                setCurrentState(int state);
     void                setAdminState(int state);
 

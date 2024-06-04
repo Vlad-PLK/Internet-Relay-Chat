@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/29 12:38:28 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/04 09:59:28 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,16 @@ const std::string   &User::getUsername(void) const
 	return (this->username);
 }
 
+const std::string   &User::getRealname(void) const
+{
+	return (this->realname);
+}
+
+const std::string   &User::getIp(void) const
+{
+	return (this->ip);
+}
+
 int	User::getFD(void) const
 {
 	return (this->userfd);
@@ -62,6 +72,17 @@ void	User::setUsername(const std::string &uname)
 {
 	this->username.assign(uname);
 }
+
+void	User::setRealname(const std::string &uname)
+{
+	this->realname.assign(uname);
+}
+
+void	User::setIp(const std::string &uname)
+{
+	this->ip.assign(uname);
+}
+
 
 void	User::setCurrentState(int state)
 {

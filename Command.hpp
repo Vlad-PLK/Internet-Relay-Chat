@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:10:43 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/30 14:19:06 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/01 08:29:08 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct S_Command_Dictionnary{
     void (*fct)(User &, Channel &, SocketServer &, std::vector<std::string> &);
 }Command_Dictionnary;
 
-
+int check_nickname_in_use(std::string &nick, const std::vector<User> &users);
 void HandleCommand(Command &cmd, User &usr, Channel &chl, SocketServer &server);
 
 void					cap(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
