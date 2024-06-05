@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/04 09:59:28 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/05 09:07:36 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,6 @@ void User::parsing_and_handle(std::string &buf, SocketServer &server)
 {
 	std::string tmp;
 	Command		tmpcmd;
-	Channel		channel;
 	size_t		pos = 0;
 
 	buffer.append(buf);
@@ -177,7 +176,7 @@ void User::parsing_and_handle(std::string &buf, SocketServer &server)
 			tmp = buffer.substr(pos, i - pos);
 			tmpcmd.setRawCommand(tmp);
 			tmpcmd.setCmdParams();
-			HandleCommand(tmpcmd, *this, channel, server);
+			HandleCommand(tmpcmd, *this, server);
 			pos = i + 2;
 			tmp.clear();
 			tmpcmd.clearCmd();

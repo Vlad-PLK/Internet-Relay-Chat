@@ -1,8 +1,7 @@
 #include "../Command.hpp"
 
-void    join(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params)
+void    join(User &user, SocketServer &server, std::vector<std::string> &params)
 {
-    (void)channel_void;
     // not params == error //
     if (params.empty())
     {
@@ -64,9 +63,9 @@ void    join(User &user, Channel &channel_void, SocketServer &server, std::vecto
             //    else
             //        user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), channel->getTitle())).c_str());
             //}
-            if (server.getChannel(channels[i])->getPassword().empty() && passwords[j].empty())
-                std::cout << "adding current user to existing channel : " << user.getNickname() << server.getChannel(channels[i])->getTitle() << std::endl;
-                //server.getChannel(channels[i])->addUser(user);
+            if (server.getChannel(channels[i])->getPassword().empty())
+                server.getChannel(channels[i])->addUser(user);
+                //std::cout << "adding current user to existing channel : " << user.getNickname() << server.getChannel(channels[i])->getTitle() << std::endl;
             // else if (this->getChannel(channels[i])->getPassword().empty() && !passwords[j].empty())
             //     user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), this->getChannel(channels[i])->getTitle())).c_str());
             ++j;

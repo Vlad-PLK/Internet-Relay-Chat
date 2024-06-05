@@ -6,15 +6,14 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:15:07 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/04 10:01:08 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/05 09:17:38 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Command.hpp"
 
-void					user(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
+void					user(User &user, SocketServer &server, std::vector<std::string> &params)
 {
-    (void)channel;
     (void)server;
     if (user.getCurrentState() == ACCEPTED)
     {

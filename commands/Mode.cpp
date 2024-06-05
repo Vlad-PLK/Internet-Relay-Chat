@@ -91,10 +91,8 @@ void modeLimit(User *user, Channel *channel, int pos, std::vector<std::string> &
     }
 }
 
-void    mode(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params)
+void    mode(User &user, SocketServer &server, std::vector<std::string> &params)
 {
-    (void)channel_void;
-    
     if (!params.size())
     {
         user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "MODE")).c_str());

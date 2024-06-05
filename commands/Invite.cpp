@@ -1,8 +1,7 @@
 #include "../Command.hpp"
 
-void    invite(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params)
+void    invite(User &user, SocketServer &server, std::vector<std::string> &params)
 {
-    (void)channel_void;
     if (params.size() < 2)
     {
         user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "INVITE")).c_str());

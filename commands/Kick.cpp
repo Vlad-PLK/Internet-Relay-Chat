@@ -1,8 +1,7 @@
 #include "../Command.hpp"
 
-void    kick(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params)
+void    kick(User &user, SocketServer &server, std::vector<std::string> &params)
 {
-    (void)channel_void;
     if (params.size() < 2)
     {
         user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "KICK")).c_str());
