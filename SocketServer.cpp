@@ -82,7 +82,7 @@ void    SocketServer::addChannel(std::string title, std::string password)
     this->_allChannels.push_back(new_channel);
 }
 
-void	SocketServer::deleteChannel(std::string title)
+void    SocketServer::deleteChannel(std::string title)
 {
     for (std::vector<Channel>::iterator it = this->_allChannels.begin(); it != this->_allChannels.end(); ++it)
     {
@@ -175,7 +175,7 @@ void    ft_init_server_socket(int port, std::string password)
     //acc_length = sizeof(acc_addr);
     //acc_sockfd = accept(sockfd, (struct sockaddr *)&acc_addr, &acc_length);
     //printf("New client #%d from %s:%d\n", sockfd,
-	 //inet_ntoa(acc_addr.sin_addr), ntohs(acc_addr.sin_port));
+     //inet_ntoa(acc_addr.sin_addr), ntohs(acc_addr.sin_port));
     ///accept(sockfd, (struct sockaddr *)&addr, addr);
     //  sockfd = socket(int socket_family, int socket_type, int protocol); //
         //  socket -> creates a socket

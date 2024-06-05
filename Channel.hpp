@@ -28,7 +28,7 @@ class Channel
         void setMode(char new_mode, int flag);
         void setMode(std::string new_modes, int flag);
         void setLimit(int limit);
-        void setOperators(User &user, int flag);
+        bool setOperators(User &user, bool flag);
         void setInvited(User &user, int flag);
 
         void addUser(User &user);
