@@ -7,7 +7,7 @@ bool    Channel::userIsOperator(const std::string name)
         if ((*it)->getNickname() == name)
             return (true);
     }
-	return (false);
+    return (false);
 }
 
 void    Channel::addOperator(User &user)
@@ -23,7 +23,7 @@ void    Channel::addOperator(User &user)
     }
 }
 
-void    Channel::setOperators(User &user, int flag) //flag 0 means delete from channelOperators and adds it to channelUsers, 1 means to add the user as an operator
+bool    Channel::setOperators(User &user, bool flag) //flag 0 means delete from channelOperators and adds it to channelUsers, 1 means to add the user as an operator
 {
     //need to know if the user has the rights to add or delete operator
     if (!flag && this->userIsOperator(user.getNickname()))
@@ -31,14 +31,18 @@ void    Channel::setOperators(User &user, int flag) //flag 0 means delete from c
         user.setNickname(user.getNickname().substr(1));
         this->addUser(user);
         this->deleteOperator(user.getNickname());
+        return true;
     }
     else
     {
         if (userIsMember(user.getNickname()))
+        {
             this->addOperator(user);
-        // else
-            // user is not in the channel or already Op
+            this->deleteUser(user.getNickname());
+            return true;
+        }
     }
+    return false;
 }
 
 void    Channel::deleteOperator(std::string name)
