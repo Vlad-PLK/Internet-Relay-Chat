@@ -127,14 +127,17 @@ void    Channel::addUser(User &user)
     {
         // if there's no users yet
         if ((int)(this->_channelUsers.size() + this->_channelOperators.size()) == 0)
+        {
             this->addOperator(user);
+            this->channelWelcome(user);
+        }
         else
         {
             if (!userIsMember(user.getNickname()) && !userIsOperator(user.getNickname()) && !userIsBanned(user.getNickname()))
             {
                 this->_channelUsers.push_back(&user);
                 this->channelWelcome(user);
-                if (!this->getModes().find('i'))
+                /*if (!this->getModes().find('i'))
                 {
                     this->_channelUsers.push_back(&user);
                     this->channelWelcome(user);
@@ -150,7 +153,7 @@ void    Channel::addUser(User &user)
                     }
                     else
                         user.usr_send((ERR_INVITEONLYCHAN(user.getNickname(), this->getTitle())));
-                }
+                }*/
             }
             else if (userIsBanned(user.getNickname()))
                 user.usr_send((ERR_BANNEDFROMCHAN(user.getNickname(), this->getTitle())));

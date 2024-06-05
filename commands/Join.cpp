@@ -5,7 +5,7 @@ void    join(User &user, SocketServer &server, std::vector<std::string> &params)
     // not params == error //
     if (params.empty())
     {
-        user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "JOIN")).c_str());
+        user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "JOIN")));
         return ;
     }
 
@@ -49,6 +49,7 @@ void    join(User &user, SocketServer &server, std::vector<std::string> &params)
             {
                 // if less passwords than channel names
                 server.addChannel(channels[i]); 
+                //std::cout << server.getChannel(channels[i]) << std::endl;
                 server.getChannel(channels[i])->addUser(user);
             }
         }
@@ -61,13 +62,13 @@ void    join(User &user, SocketServer &server, std::vector<std::string> &params)
             //    if (channel->getPassword() == passwords[j])
             //        channel->addUser(user);
             //    else
-            //        user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), channel->getTitle())).c_str());
+            //        user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), channel->getTitle())));
             //}
             if (server.getChannel(channels[i])->getPassword().empty())
                 server.getChannel(channels[i])->addUser(user);
                 //std::cout << "adding current user to existing channel : " << user.getNickname() << server.getChannel(channels[i])->getTitle() << std::endl;
             // else if (this->getChannel(channels[i])->getPassword().empty() && !passwords[j].empty())
-            //     user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), this->getChannel(channels[i])->getTitle())).c_str());
+            //     user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), this->getChannel(channels[i])->getTitle())));
             ++j;
         }
     }

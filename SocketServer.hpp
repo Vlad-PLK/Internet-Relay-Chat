@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:59:54 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/05 10:01:16 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/05 10:55:39 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ public:
 	void				createSocket(void);
 
 	User					*getUser(std::string name); //const?
-	void 					addUser(User& user);
+	void 					addUser(User *user);
 	std::vector<User *>	&getAllUsers();
 	Channel					*getChannel(std::string title);
 	void					addChannel(std::string title);

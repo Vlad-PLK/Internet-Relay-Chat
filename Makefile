@@ -4,7 +4,7 @@ SRCS = $(shell find . -name "*.cpp")
 OBJS = $(SRCS:.cpp=.o)
 
 CXX = c++
-FLAGS = -std=c++98 -Wall -Werror -Wextra
+FLAGS = -std=c++98 -Wall -Werror -Wextra -g3
 
 all: ${NAME}
 

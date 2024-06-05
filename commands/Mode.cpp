@@ -51,7 +51,7 @@ void modePass(User *user, Channel *channel, int pos, std::vector<std::string> &p
             (*itOp)->usr_send(RPL_CHANGECHANNELMODEWITHPARAM((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+k", param[pos]));
     }
     else if (add == true)
-        user->usr_send((ERR_NEEDMOREPARAMS(user->getNickname(), "MODE")).c_str());
+        user->usr_send((ERR_NEEDMOREPARAMS(user->getNickname(), "MODE")));
     else
     {
         channel->setPassword("");
@@ -70,7 +70,7 @@ void modePass(User *user, Channel *channel, int pos, std::vector<std::string> &p
 void modeLimit(User *user, Channel *channel, int pos, std::vector<std::string> &param, bool add)
 {
     if (add == true && param[pos].empty())
-        user->usr_send((ERR_NEEDMOREPARAMS(user->getNickname(), "MODE")).c_str());
+        user->usr_send((ERR_NEEDMOREPARAMS(user->getNickname(), "MODE")));
     else if (add == false)
     {
         channel->setLimit(-1);
@@ -95,7 +95,7 @@ void    mode(User &user, SocketServer &server, std::vector<std::string> &params)
 {
     if (!params.size())
     {
-        user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "MODE")).c_str());
+        user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "MODE")));
         return ;
     }
     std::string target = params[0];
@@ -103,7 +103,7 @@ void    mode(User &user, SocketServer &server, std::vector<std::string> &params)
     {
         if (!server.findChannel(target))
         {
-            user.usr_send((ERR_NOSUCHCHANNEL(user.getNickname(), target)).c_str());
+            user.usr_send((ERR_NOSUCHCHANNEL(user.getNickname(), target)));
             return;
         }
         else
@@ -152,7 +152,7 @@ void    mode(User &user, SocketServer &server, std::vector<std::string> &params)
                 }
             }
             else
-                user.usr_send((ERR_CHANOPRIVSNEEDED(user.getNickname(), channel->getTitle())).c_str());
+                user.usr_send((ERR_CHANOPRIVSNEEDED(user.getNickname(), channel->getTitle())));
         }
     }
 }

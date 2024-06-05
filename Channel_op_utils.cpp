@@ -17,6 +17,7 @@ void    Channel::addOperator(User &user)
     {
         //userCopy->setNickname('@' + userCopy->getNickname());
         this->_channelOperators.push_back(&user);
+        //this->_channelUsers.push_back(&user);
         //this->channelWelcome(*userCopy);
         //this->deleteUser(user.getNickname());
     }
@@ -25,7 +26,6 @@ void    Channel::addOperator(User &user)
 void    Channel::setOperators(User &user, int flag) //flag 0 means delete from channelOperators and adds it to channelUsers, 1 means to add the user as an operator
 {
     //need to know if the user has the rights to add or delete operator
-
     if (!flag && this->userIsOperator(user.getNickname()))
     {
         user.setNickname(user.getNickname().substr(1));

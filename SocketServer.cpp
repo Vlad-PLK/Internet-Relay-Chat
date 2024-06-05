@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:58:44 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/05 10:01:24 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/05 10:55:31 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,11 @@ Channel *SocketServer::getChannel(std::string title)
 
 void    SocketServer::addChannel(std::string title)
 {
-    Channel new_channel;
-    new_channel.setTitle(title);
-    new_channel.setTopic("");
-    new_channel.setLimit(-1);
-    this->_allChannels.push_back(&new_channel);
+    Channel *new_channel = new Channel();
+    new_channel->setTitle(title);
+    new_channel->setTopic("");
+    new_channel->setLimit(-1);
+    this->_allChannels.push_back(new_channel);
 }
 
 void    SocketServer::addChannel(std::string title, std::string password)
@@ -94,9 +94,9 @@ void	SocketServer::deleteChannel(std::string title)
     }
 }
 
-void    SocketServer::addUser(User &user)
+void    SocketServer::addUser(User *user)
 {
-    _allUsers.push_back(&user);
+    _allUsers.push_back(user);
 }
 
 std::vector<User *> &SocketServer::getAllUsers()
