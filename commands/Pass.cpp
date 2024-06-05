@@ -6,15 +6,14 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:15:00 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/03 13:25:37 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/05 09:11:03 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Command.hpp"
 
-void					pass(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
+void					pass(User &user , SocketServer &server, std::vector<std::string> &params)
 {
-    (void)channel;
     if (server.getPassword() == params.front())
         user.setCurrentState(ACCEPTED);
     else

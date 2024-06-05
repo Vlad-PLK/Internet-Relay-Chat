@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:59:54 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/04 11:18:58 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/05 10:55:39 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ private:
 	std::string					password;
 	struct sockaddr_in 			addr;
 	std::time_t					date;
-	mutable std::vector<User> 	_allUsers;
- 	std::vector<Channel> 		_allChannels;
+	std::vector<User *> 		_allUsers;
+ 	std::vector<Channel *> 		_allChannels;
 
 public:
 	SocketServer(int _port, std::string _password);
@@ -63,8 +63,8 @@ public:
 	void				createSocket(void);
 
 	User					*getUser(std::string name); //const?
-	void 					addUser(const User& user) const;
-	std::vector<User>	&getAllUsers();
+	void 					addUser(User *user);
+	std::vector<User *>	&getAllUsers();
 	Channel					*getChannel(std::string title);
 	void					addChannel(std::string title);
 	void					addChannel(std::string title, std::string password);

@@ -1,11 +1,10 @@
 #include "../Command.hpp"
 
-void    part(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params)
+void    part(User &user, SocketServer &server, std::vector<std::string> &params)
 {
-    (void)channel_void;
     if (params.empty())
     {
-        user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "PART")).c_str());
+        user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "PART")));
         return ;
     }
     
@@ -21,11 +20,11 @@ void    part(User &user, Channel &channel_void, SocketServer &server, std::vecto
     while (++i < (int)channels.size())
     {
         if (!server.findChannel(channels[i]))
-            user.usr_send((ERR_NOSUCHCHANNEL(user.getNickname(), channels[i])).c_str());
+            user.usr_send((ERR_NOSUCHCHANNEL(user.getNickname(), channels[i])));
         else
         {
-            if (!server.getChannel(channels[i])->userIsMember(user.getNickname()) && !server.getChannel(channels[i])->userIsMember(user.getNickname()))
-                user.usr_send((ERR_NOTONCHANNEL(user.getNickname(), server.getChannel(channels[i])->getTitle())).c_str());
+            if (!server.getChannel(channels[i])->userIsMember(user.getNickname()))
+                user.usr_send((ERR_NOTONCHANNEL(user.getNickname(), server.getChannel(channels[i])->getTitle())));
             else
             {
                 std::string reason;
@@ -34,7 +33,7 @@ void    part(User &user, Channel &channel_void, SocketServer &server, std::vecto
                     for (size_t i = 1; i < params.size(); i++)
                         reason += params[i] + ' ';
                 }
-                user.usr_send((RPL_PART(user.getNickname(), server.getChannel(channels[i])->getTitle(), reason)).c_str());
+                user.usr_send((RPL_PART(user.getNickname(), server.getChannel(channels[i])->getTitle(), reason)));
                 if (server.getChannel(channels[i])->userIsMember(user.getNickname()))   
                     server.getChannel(channels[i])->deleteUser(user.getNickname());
                 else

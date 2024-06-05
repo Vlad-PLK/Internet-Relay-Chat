@@ -6,25 +6,24 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:15:09 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/04 10:15:43 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/05 10:03:45 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Command.hpp"
 
-int check_nickname_in_use_whois(std::string &nick, const std::vector<User> &users)
+int check_nickname_in_use_whois(std::string &nick, const std::vector<User *> &users)
 {
     for (size_t i = 0; i != users.size(); i++)
 	{
-        if (nick == users[i].getNickname())
+        if (nick == users[i]->getNickname())
             return (1);
     }
     return (0);
 }
 
-void					whois(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
+void					whois(User &user, SocketServer &server, std::vector<std::string> &params)
 {
-    (void)channel;
     if (params.size() == 0 || params[0].size() == 0)
         user.usr_send(ERR_NONICKNAMEGIVEN());
     else if (check_nickname_in_use_whois(params[0], server.getAllUsers()) == 0)

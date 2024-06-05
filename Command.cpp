@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:45:37 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/04 11:22:20 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/05 09:21:59 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,12 @@ static const Command_Dictionnary cmds[] =
     {"KICK", kick},
 };
 
-void HandleCommand(Command &cmd, User &usr, Channel &chl, SocketServer &server)
+void HandleCommand(Command &cmd, User &usr, SocketServer &server)
 {
-	(void)chl;
     for (long unsigned int i = 0; i < sizeof(cmds) / sizeof(cmds[0]); i++)
     {
         if (cmd.getCmdName() == cmds[i].name)
-            cmds[i].fct(usr, chl, server, cmd.getParams());
+            cmds[i].fct(usr, server, cmd.getParams());
         // handle unknown commands ? //
     }
 }

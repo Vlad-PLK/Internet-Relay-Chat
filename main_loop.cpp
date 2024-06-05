@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/04 11:17:35 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/05 10:56:48 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void    main_loop(SocketServer &main_socket)
 
 	///////////users///////////
 	std::vector<User> 						users;
-	std::vector<User>::iterator 			user_it;
+	std::vector<User *>::iterator 			user_it;
 	User              						*tmp_user;
 	///////////users///////////
 
@@ -51,9 +51,8 @@ void    main_loop(SocketServer &main_socket)
 			fd_tmp.events = POLLIN;
 			tab_fd.push_back(fd_tmp);
 			tmp_user = new User(fd_tmp.fd, NOT_ADMIN, WAITING_FOR_APPROVAL);
-			main_socket.addUser(*tmp_user);
+			main_socket.addUser(tmp_user);
 			//users.push_back(*tmp_user);
-			delete tmp_user;
 		}
 		/* other events received from all users of the server */
 		else
@@ -72,8 +71,8 @@ void    main_loop(SocketServer &main_socket)
 						str.append(buffer);
 					   
 						/* parse the command, process and send the answer*/
-						main_socket.getAllUsers()[it->fd - 4].process_cmd(str, main_socket);
-						main_socket.printAllChannels();
+						main_socket.getAllUsers()[it->fd - 4]->process_cmd(str, main_socket);
+						//main_socket.printAllChannels();
 						//users[it->fd - 4].process_cmd(str, main_socket);
 						
 						/* shows info about current user in the loop (optionnal, for debugging )*/
