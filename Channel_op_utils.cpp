@@ -26,7 +26,6 @@ void    Channel::addOperator(User &user)
 bool    Channel::setOperators(User &user, bool flag) //flag 0 means delete from channelOperators and adds it to channelUsers, 1 means to add the user as an operator
 {
     //need to know if the user has the rights to add or delete operator
-
     if (!flag && this->userIsOperator(user.getNickname()))
     {
         user.setNickname(user.getNickname().substr(1));
