@@ -49,8 +49,8 @@ private:
 	std::string					password;
 	struct sockaddr_in 			addr;
 	std::time_t					date;
-	mutable std::vector<User> 	_allUsers;
- 	std::vector<Channel> 		_allChannels;
+	std::vector<User *> 		_allUsers;
+ 	std::vector<Channel *> 		_allChannels;
 
 public:
 	SocketServer(int _port, std::string _password);
@@ -63,8 +63,8 @@ public:
 	void				createSocket(void);
 
 	User					*getUser(std::string name); //const?
-	void 					addUser(const User& user) const;
-	std::vector<User>	&getAllUsers();
+	void 					addUser(User *user);
+	std::vector<User *>	&getAllUsers();
 	Channel					*getChannel(std::string title);
 	void					addChannel(std::string title);
 	void					addChannel(std::string title, std::string password);

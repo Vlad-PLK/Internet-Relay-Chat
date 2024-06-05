@@ -2,23 +2,24 @@
 
 bool    Channel::userIsOperator(const std::string name)
 {
-    for (std::vector<User>::iterator it = this->_channelOperators.begin(); it != this->_channelOperators.end(); ++it)
+	for (std::vector<User *>::iterator it = this->_channelOperators.begin(); it != this->_channelOperators.end(); ++it)
     {
-        if (it->getNickname() == name)
+        if ((*it)->getNickname() == name)
             return (true);
     }
-    return (false);
+	return (false);
 }
 
 void    Channel::addOperator(User &user)
 {
-    User userCopy = user;
-    if (!this->userIsOperator(userCopy.getNickname()))
+    //User *userCopy = &user;
+    if (!this->userIsOperator(user.getNickname()))
     {
-        userCopy.setNickname('@' + userCopy.getNickname());
-        this->_channelOperators.push_back(userCopy);
-        this->channelWelcome(userCopy);
-        this->deleteUser(user.getNickname());
+        //userCopy->setNickname('@' + userCopy->getNickname());
+        this->_channelOperators.push_back(&user);
+        //this->_channelUsers.push_back(&user);
+        //this->channelWelcome(*userCopy);
+        //this->deleteUser(user.getNickname());
     }
 }
 
@@ -49,11 +50,11 @@ void    Channel::deleteOperator(std::string name)
 {
     if (name[0] != '@')
         name.insert(0, 1, '@');
-    for (std::vector<User>::iterator it = this->_channelOperators.begin(); it != this->_channelOperators.end(); ++it)
+    for (std::vector<User *>::iterator it = this->_channelOperators.begin(); it != this->_channelOperators.end(); ++it)
     {
-        if (it->getNickname() == name)
+        if ((*it)->getNickname() == name)
         {
-            it->deleteChannelRights(this->getTitle());
+            (*it)->deleteChannelRights(this->getTitle());
             this->_channelOperators.erase(it);
             break;
         }

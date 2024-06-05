@@ -12,9 +12,8 @@
 
 #include "../Command.hpp"
 
-void quit(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
+void quit(User &user, SocketServer &server, std::vector<std::string> &params)
 {
-	(void)channel;
 	(void)server;
 	(void)params;
     user.usr_send("ERROR: connexion lost");

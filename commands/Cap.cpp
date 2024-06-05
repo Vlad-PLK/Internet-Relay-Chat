@@ -12,9 +12,8 @@
 
 #include "../Command.hpp"
 
-void					cap(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
+void					cap(User &user, SocketServer &server, std::vector<std::string> &params)
 {
-    (void)channel;
     (void)params;
     (void)server;
     user.setCurrentState(WAITING_FOR_APPROVAL);

@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Nick.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/29 10:14:57 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/04 09:32:58 by vpolojie         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../Command.hpp"
 
 int	ft_nbn(int n)
@@ -71,11 +59,11 @@ char	*ft_itoa(int n)
 }
 
 
-int check_nickname_in_use(std::string &nick, const std::vector<User> &users)
+int check_nickname_in_use(std::string &nick, const std::vector<User *> &users)
 {
     for (size_t i = 0; i != users.size(); i++)
 	{
-        if (nick == users[i].getNickname())
+        if (nick == users[i]->getNickname())
             return (1);
     }
     return (0);
@@ -93,9 +81,8 @@ int check_nickname_validity(const std::string &nick)
     return (0);
 }
 
-void					nick(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
+void					nick(User &user, SocketServer &server, std::vector<std::string> &params)
 {
-    (void)channel;
 	std::string str;
     if (check_nickname_in_use(params[0], server.getAllUsers()) == 1)
     {

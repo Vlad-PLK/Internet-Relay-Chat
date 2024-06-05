@@ -14,32 +14,32 @@
 
 User *SocketServer::getUser(std::string name)
 {
-    for (std::vector<User>::iterator it = this->_allUsers.begin(); it != this->_allUsers.end(); ++it)
+    for (std::vector<User *>::iterator it = this->_allUsers.begin(); it != this->_allUsers.end(); ++it)
     {
-        if (it->getNickname() == name)
-            return &(*it); // return pointer to the User
+        if ((*it)->getNickname() == name)
+            return (*it); // return pointer to the User
     }
     return NULL;
 }
 
 void    SocketServer::printAllChannels()
 {
-    std::vector<Channel>::iterator it;
+    std::vector<Channel*>::iterator it;
     for (it = this->_allChannels.begin(); it != this->_allChannels.end(); it++)
     {
-        std::cout << "CHANNEL NAME : " << it->getTitle()
-            << "\nCHANNEL USERS : " << it->getChannelUsers().size() << std::endl;
+        std::cout << "CHANNEL NAME : " << (*it)->getTitle()
+            << "\nCHANNEL USERS : " << (*it)->getChannelUsers().size() << std::endl;
     }
 }
 
 bool    SocketServer::findChannel(std::string title)
 {
-    std::vector<Channel>::iterator it;
+    std::vector<Channel*>::iterator it;
     for (it = this->_allChannels.begin(); it != this->_allChannels.end(); it++)
     {
-        if (it->getTitle() == title)
+        if ((*it)->getTitle() == title)
         {
-            std::cout << it->getTitle() << std::endl;
+            std::cout << (*it)->getTitle() << std::endl;
             return (true);
         }
     }
@@ -48,23 +48,23 @@ bool    SocketServer::findChannel(std::string title)
 
 Channel *SocketServer::getChannel(std::string title)
 {
-    std::vector<Channel>::iterator it = this->_allChannels.begin();
+    std::vector<Channel*>::iterator it = this->_allChannels.begin();
     while (it != this->_allChannels.end())
     {
-        if (it->getTitle() == title)
+        if ((*it)->getTitle() == title)
             break;
         it++;
     }
-    return &(*it);
+    return (*it);
 }
 
 
 void    SocketServer::addChannel(std::string title)
 {
-    Channel new_channel;
-    new_channel.setTitle(title);
-    new_channel.setTopic("");
-    new_channel.setLimit(-1);
+    Channel *new_channel = new Channel();
+    new_channel->setTitle(title);
+    new_channel->setTopic("");
+    new_channel->setLimit(-1);
     this->_allChannels.push_back(new_channel);
 }
 
@@ -79,14 +79,14 @@ void    SocketServer::addChannel(std::string title, std::string password)
         new_channel.setPassword(password);
     new_channel.setTopic("");
     new_channel.setLimit(-1);
-    this->_allChannels.push_back(new_channel);
+    this->_allChannels.push_back(&new_channel);
 }
 
-void    SocketServer::deleteChannel(std::string title)
+void	SocketServer::deleteChannel(std::string title)
 {
-    for (std::vector<Channel>::iterator it = this->_allChannels.begin(); it != this->_allChannels.end(); ++it)
+    for (std::vector<Channel *>::iterator it = this->_allChannels.begin(); it != this->_allChannels.end(); ++it)
     {
-        if (it->getTitle() == title)
+        if ((*it)->getTitle() == title)
         {
             this->_allChannels.erase(it);
             break;
@@ -94,12 +94,12 @@ void    SocketServer::deleteChannel(std::string title)
     }
 }
 
-void    SocketServer::addUser(const User &user) const
+void    SocketServer::addUser(User *user)
 {
     _allUsers.push_back(user);
 }
 
-std::vector<User> &SocketServer::getAllUsers()
+std::vector<User *> &SocketServer::getAllUsers()
 {
     return _allUsers;
 }
@@ -175,7 +175,7 @@ void    ft_init_server_socket(int port, std::string password)
     //acc_length = sizeof(acc_addr);
     //acc_sockfd = accept(sockfd, (struct sockaddr *)&acc_addr, &acc_length);
     //printf("New client #%d from %s:%d\n", sockfd,
-     //inet_ntoa(acc_addr.sin_addr), ntohs(acc_addr.sin_port));
+	 //inet_ntoa(acc_addr.sin_addr), ntohs(acc_addr.sin_port));
     ///accept(sockfd, (struct sockaddr *)&addr, addr);
     //  sockfd = socket(int socket_family, int socket_type, int protocol); //
         //  socket -> creates a socket

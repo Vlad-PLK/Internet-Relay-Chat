@@ -12,9 +12,8 @@
 
 #include "../Command.hpp"
 
-void					user(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
+void					user(User &user, SocketServer &server, std::vector<std::string> &params)
 {
-    (void)channel;
     (void)server;
     if (user.getCurrentState() == ACCEPTED)
     {

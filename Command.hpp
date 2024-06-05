@@ -42,29 +42,29 @@ public:
 
 typedef struct S_Command_Dictionnary{
     std::string name;
-    void (*fct)(User &, Channel &, SocketServer &, std::vector<std::string> &);
+    void (*fct)(User &, SocketServer &, std::vector<std::string> &);
 }Command_Dictionnary;
 
-int check_nickname_in_use(std::string &nick, const std::vector<User> &users);
-void HandleCommand(Command &cmd, User &usr, Channel &chl, SocketServer &server);
+int check_nickname_in_use(std::string &nick, const std::vector<User *> &users);
+void HandleCommand(Command &cmd, User &usr, SocketServer &server);
 
-void					cap(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
-void					pass(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
-void					nick(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
-void					user(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
-void                    whois(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
-void                    ping(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
-void                    pong(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
-void                    quit(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params);
+void					cap(User &user, SocketServer &server, std::vector<std::string> &params);
+void					pass(User &user, SocketServer &server, std::vector<std::string> &params);
+void					nick(User &user, SocketServer &server, std::vector<std::string> &params);
+void					user(User &user, SocketServer &server, std::vector<std::string> &params);
+void                    whois(User &user, SocketServer &server, std::vector<std::string> &params);
+void                    ping(User &user, SocketServer &server, std::vector<std::string> &params);
+void                    pong(User &user, SocketServer &server, std::vector<std::string> &params);
+void                    quit(User &user, SocketServer &server, std::vector<std::string> &params);
 
 std::vector<std::string>    splitSetter(std::string param);
 
-void                    join(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params);
-void                    invite(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params);
-void                    kick(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params);
-void                    topic(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params);
-void                    part(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params);
-void                    mode(User &user, Channel &channel_void, SocketServer &server, std::vector<std::string> &params);
+void                    join(User &user, SocketServer &server, std::vector<std::string> &params);
+void                    invite(User &user, SocketServer &server, std::vector<std::string> &params);
+void                    kick(User &user, SocketServer &server, std::vector<std::string> &params);
+void                    topic(User &user, SocketServer &server, std::vector<std::string> &params);
+void                    part(User &user, SocketServer &server, std::vector<std::string> &params);
+void                    mode(User &user, SocketServer &server, std::vector<std::string> &params);
 
 
 

@@ -30,13 +30,12 @@ static const Command_Dictionnary cmds[] =
     {"KICK", kick},
 };
 
-void HandleCommand(Command &cmd, User &usr, Channel &chl, SocketServer &server)
+void HandleCommand(Command &cmd, User &usr, SocketServer &server)
 {
-	(void)chl;
     for (long unsigned int i = 0; i < sizeof(cmds) / sizeof(cmds[0]); i++)
     {
         if (cmd.getCmdName() == cmds[i].name)
-            cmds[i].fct(usr, chl, server, cmd.getParams());
+            cmds[i].fct(usr, server, cmd.getParams());
         // handle unknown commands ? //
     }
 }

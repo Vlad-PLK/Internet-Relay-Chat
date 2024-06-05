@@ -17,9 +17,10 @@ class Channel
         std::string getTopic() const;
         std::string getModes() const;
         int         getLimit() const;
-        std::vector<User> &getChannelUsers();
-        std::vector<User> &getChannelOperators();
-        std::vector<User> &getChannelInvited();
+        std::vector<User *> &getChannelUsers();
+        std::vector<User *> &getChannelOperators();
+        std::vector<User *> &getChannelInvited();
+        std::vector<User *> &getChannelBanned();
 
         void setTitle(std::string title);
         void setPassword(std::string pass);
@@ -36,7 +37,7 @@ class Channel
         void addInvited(User &user);
         void deleteUser(const std::string name);
         void deleteOperator(std::string name);
-        void removeUserVector(std::vector<std::string> vector, const std::string name);
+        void removeUserVector(std::vector<User *> vector, const std::string &name);
         std::string removeMode(std::string &str, char mode);
         
 
@@ -46,7 +47,6 @@ class Channel
         bool userIsBanned(const std::string name);
         bool userIsInvited(const std::string name);
 
-        std::vector<User> &getChannelBanned();
 
     private:
         std::string _title;
@@ -56,10 +56,10 @@ class Channel
         int         _limit;
 
         // std::vector<std::string>    _channelTopic; in case we do RPL_TOPICWHOTIME (333) : "<client> <channel> <nick> <setat>"
-        std::vector<User>           _channelUsers;
-        std::vector<User>           _channelOperators;
-        std::vector<User>           _channelBanned;
-        std::vector<User>           _channelInvited;
+        std::vector<User *>           _channelUsers;
+        std::vector<User *>           _channelOperators;
+        std::vector<User *>           _channelBanned;
+        std::vector<User *>           _channelInvited;
 };
 
 #endif

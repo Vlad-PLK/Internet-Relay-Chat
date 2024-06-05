@@ -12,9 +12,8 @@
 
 #include "../Command.hpp"
 
-void					pong(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
+void					pong(User &user, SocketServer &server, std::vector<std::string> &params)
 {
-    (void)channel;
     (void)server;
     (void)params;
     user.usr_send("PING " + params.front() + "\r\n");

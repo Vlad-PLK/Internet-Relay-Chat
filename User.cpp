@@ -166,7 +166,6 @@ void User::parsing_and_handle(std::string &buf, SocketServer &server)
 {
 	std::string tmp;
 	Command		tmpcmd;
-	Channel		channel;
 	size_t		pos = 0;
 
 	buffer.append(buf);
@@ -177,7 +176,7 @@ void User::parsing_and_handle(std::string &buf, SocketServer &server)
 			tmp = buffer.substr(pos, i - pos);
 			tmpcmd.setRawCommand(tmp);
 			tmpcmd.setCmdParams();
-			HandleCommand(tmpcmd, *this, channel, server);
+			HandleCommand(tmpcmd, *this, server);
 			pos = i + 2;
 			tmp.clear();
 			tmpcmd.clearCmd();

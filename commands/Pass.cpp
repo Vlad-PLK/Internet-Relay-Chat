@@ -12,9 +12,8 @@
 
 #include "../Command.hpp"
 
-void					pass(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
+void					pass(User &user , SocketServer &server, std::vector<std::string> &params)
 {
-    (void)channel;
     if (server.getPassword() == params.front())
         user.setCurrentState(ACCEPTED);
     else

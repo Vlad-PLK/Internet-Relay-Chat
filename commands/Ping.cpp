@@ -12,9 +12,8 @@
 
 #include "../Command.hpp"
 
-void					ping(User &user, Channel &channel, SocketServer &server, std::vector<std::string> &params)
+void					ping(User &user, SocketServer &server, std::vector<std::string> &params)
 {
-    (void)channel;
     (void)server;
     (void)params;
     user.usr_send("PONG " + params.front() + "\r\n");
