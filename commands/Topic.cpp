@@ -37,10 +37,10 @@ void    topic(User &user, SocketServer &server, std::vector<std::string> &params
                 topic.erase(topic.length() - 1, 1);
                 if (topic != channel->getTopic())
                     channel->setTopic(topic);
-                for (std::vector<User>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
-                    itUser->usr_send((RPL_TOPIC(itUser->getNickname(), channel->getTitle(), channel->getTopic())).c_str());
-                for (std::vector<User>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
-                    itOp->usr_send((RPL_TOPIC(itOp->getNickname(), channel->getTitle(), channel->getTopic())).c_str());
+                for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
+                    (*itUser)->usr_send((RPL_TOPIC((*itUser)->getNickname(), channel->getTitle(), channel->getTopic())).c_str());
+                for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
+                    (*itOp)->usr_send((RPL_TOPIC((*itOp)->getNickname(), channel->getTitle(), channel->getTopic())).c_str());
             }
         }
     }

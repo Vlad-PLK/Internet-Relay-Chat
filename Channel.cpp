@@ -35,22 +35,22 @@ int Channel::getLimit() const
     return (this->_limit);
 }
 
-std::vector<User> &Channel::getChannelUsers()
+std::vector<User*> &Channel::getChannelUsers()
 {
     return (this->_channelUsers);
 }
 
-std::vector<User> &Channel::getChannelOperators()
+std::vector<User*> &Channel::getChannelOperators()
 {
     return (this->_channelOperators);
 }
 
-std::vector<User> &Channel::getChannelBanned()
+std::vector<User*> &Channel::getChannelBanned()
 {
     return (this->_channelBanned);
 }
 
-std::vector<User> &Channel::getChannelInvited()
+std::vector<User*> &Channel::getChannelInvited()
 {
     return (this->_channelInvited);
 }
@@ -91,34 +91,34 @@ void    Channel::channelWelcome(User &user)
 {
     std::string allOp;
     for (int i = 0; i < (int)this->_channelOperators.size(); i++)
-        allOp += this->_channelOperators[i].getNickname() + ' ';
+        allOp += this->_channelOperators[i]->getNickname() + ' ';
     std::string allUsers;
     for (int i = 0; i < (int)this->_channelUsers.size(); i++)
-        allUsers += this->_channelUsers[i].getNickname() + ' ';
+        allUsers += this->_channelUsers[i]->getNickname() + ' ';
 
-    for (std::vector<User>::iterator itOp = this->getChannelOperators().begin(); itOp != this->getChannelOperators().end(); ++itOp)
+    for (std::vector<User *>::iterator itOp = this->getChannelOperators().begin(); itOp != this->getChannelOperators().end(); ++itOp)
     {
-        itOp->usr_send((RPL_JOIN(user.getNickname() + "!~" + user.getUsername() + "@" + user.getIp(), this->_title)));
+        (*itOp)->usr_send((RPL_JOIN(user.getNickname() + "!~" + user.getUsername() + "@" + user.getIp(), this->_title)));
         if (this->_topic != "")
-            itOp->usr_send((RPL_TOPIC((user.getNickname() + "!" + user.getUsername() + "@localhost"), this->_title, this->_topic)));
-        itOp->usr_send((RPL_NAMREPLY(itOp->getNickname(), "=", this->_title, allOp)));
-        itOp->usr_send((RPL_ENDOFNAMES(itOp->getNickname(), this->_title)));
+            (*itOp)->usr_send((RPL_TOPIC((user.getNickname() + "!" + user.getUsername() + "@localhost"), this->_title, this->_topic)));
+        (*itOp)->usr_send((RPL_NAMREPLY((*itOp)->getNickname(), "=", this->_title, allOp)));
+        (*itOp)->usr_send((RPL_ENDOFNAMES((*itOp)->getNickname(), this->_title)));
     }
     
-    for (std::vector<User>::iterator itUser = this->_channelUsers.begin(); itUser != this->_channelUsers.end(); ++itUser)
+    for (std::vector<User *>::iterator itUser = this->_channelUsers.begin(); itUser != this->_channelUsers.end(); ++itUser)
     {
-        itUser->usr_send((RPL_JOIN(user.getNickname() + "!~" + user.getUsername() + "@" + user.getIp(), this->_title)));
+        (*itUser)->usr_send((RPL_JOIN(user.getNickname() + "!~" + user.getUsername() + "@" + user.getIp(), this->_title)));
         if (this->_topic != "")
-            itUser->usr_send((RPL_TOPIC((user.getNickname() + "!" + user.getUsername() + "@localhost"), this->_title, this->_topic)));
-        itUser->usr_send((RPL_NAMREPLY(itUser->getNickname(), "=", this->_title, allUsers)));
-        itUser->usr_send((RPL_ENDOFNAMES(itUser->getNickname(), this->_title)));
+            (*itUser)->usr_send((RPL_TOPIC((user.getNickname() + "!" + user.getUsername() + "@localhost"), this->_title, this->_topic)));
+        (*itUser)->usr_send((RPL_NAMREPLY((*itUser)->getNickname(), "=", this->_title, allUsers)));
+        (*itUser)->usr_send((RPL_ENDOFNAMES((*itUser)->getNickname(), this->_title)));
     }
 }
 
 void    Channel::addInvited(User &user)
 {
     if (!this->userIsInvited(user.getNickname()))
-        this->_channelInvited.push_back(user);
+        this->_channelInvited.push_back(&user);
 }
 
 void    Channel::addUser(User &user)
@@ -132,11 +132,11 @@ void    Channel::addUser(User &user)
         {
             if (!userIsMember(user.getNickname()) && !userIsOperator(user.getNickname()) && !userIsBanned(user.getNickname()))
             {
-                this->_channelUsers.push_back(user);
+                this->_channelUsers.push_back(&user);
                 this->channelWelcome(user);
-                /*if (!this->getModes().find('i'))
+                if (!this->getModes().find('i'))
                 {
-                    this->_channelUsers.push_back(user);
+                    this->_channelUsers.push_back(&user);
                     this->channelWelcome(user);
                     user.getChannelRights().insert(std::make_pair(this->_title, this->getModes()));// (?) what are the basic rights for a normal user
                 }
@@ -144,13 +144,13 @@ void    Channel::addUser(User &user)
                 {
                     if (this->userIsInvited(user.getNickname()))
                     {
-                        this->_channelUsers.push_back(user);
+                        this->_channelUsers.push_back(&user);
                         this->channelWelcome(user);
                         user.getChannelRights().insert(std::make_pair(this->_title, this->getModes()));// (?) what are the basic rights for a normal user
                     }
                     else
                         user.usr_send((ERR_INVITEONLYCHAN(user.getNickname(), this->getTitle())));
-                }*/
+                }
             }
             else if (userIsBanned(user.getNickname()))
                 user.usr_send((ERR_BANNEDFROMCHAN(user.getNickname(), this->getTitle())));
@@ -160,14 +160,14 @@ void    Channel::addUser(User &user)
         user.usr_send((ERR_CHANNELISFULL(user.getNickname(), this->getTitle())));
 }
 
-void removeUserVector(std::vector<User> &vector, const std::string &name)
+void removeUserVector(std::vector<User *> &vector, const std::string &name)
 {
-    std::vector<User> temp;
+    std::vector<User *> temp;
 
     // Copy users that don't match the name to keep them
-    for (std::vector<User>::iterator it = vector.begin(); it != vector.end(); ++it)
+    for (std::vector<User *>::iterator it = vector.begin(); it != vector.end(); ++it)
     {
-        if (it->getNickname() != name)
+        if ((*it)->getNickname() != name)
             temp.push_back(*it);
     }
     // Assign the temporary vector back to the original one

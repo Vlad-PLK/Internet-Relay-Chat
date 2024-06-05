@@ -4,19 +4,19 @@ void modeInvite(User *user, Channel *channel, int pos, std::vector<std::string> 
 {
     (void)param;
     (void)pos;
-    for (std::vector<User>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
+    for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
 	{
 		if (add)
-			itUser->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+i"));
+			(*itUser)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+i"));
 		else
-			itUser->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-i"));
+		    (*itUser)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-i"));
 	}
-    for (std::vector<User>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
+    for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
 	{
 		if (add)
-			itOp->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+i"));
+			(*itOp)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+i"));
 		else
-			itOp->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-i"));
+			(*itOp)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-i"));
 	}
 }
 
@@ -24,19 +24,19 @@ void modeTopic(User *user, Channel *channel, int pos, std::vector<std::string> &
 {
     (void)param;
     (void)pos;
-    for (std::vector<User>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
+    for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
 	{
 		if (add)
-			itUser->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+t"));
+			(*itUser)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+t"));
 		else
-			itUser->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-t"));
+			(*itUser)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-t"));
 	}
-    for (std::vector<User>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
+    for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
 	{
 		if (add)
-			itOp->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+t"));
+			(*itOp)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+t"));
 		else
-			itOp->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-t"));
+			(*itOp)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-t"));
 	}
 }
 
@@ -45,20 +45,20 @@ void modePass(User *user, Channel *channel, int pos, std::vector<std::string> &p
     if (add == true && !param[pos].empty())
     {
         channel->setPassword(param[pos]);
-        for (std::vector<User>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
-			itUser->usr_send(RPL_CHANGECHANNELMODEWITHPARAM((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+k", param[pos]));
-        for (std::vector<User>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
-            itOp->usr_send(RPL_CHANGECHANNELMODEWITHPARAM((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+k", param[pos]));
+        for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
+			(*itUser)->usr_send(RPL_CHANGECHANNELMODEWITHPARAM((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+k", param[pos]));
+        for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
+            (*itOp)->usr_send(RPL_CHANGECHANNELMODEWITHPARAM((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+k", param[pos]));
     }
     else if (add == true)
         user->usr_send((ERR_NEEDMOREPARAMS(user->getNickname(), "MODE")).c_str());
     else
     {
         channel->setPassword("");
-        for (std::vector<User>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
-			itUser->usr_send(RPL_CHANGECHANNELMODEWITHPARAM((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-k", param[pos]));
-        for (std::vector<User>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
-            itOp->usr_send(RPL_CHANGECHANNELMODEWITHPARAM((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-k", param[pos]));
+        for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
+			(*itUser)->usr_send(RPL_CHANGECHANNELMODEWITHPARAM((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-k", param[pos]));
+        for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
+            (*itOp)->usr_send(RPL_CHANGECHANNELMODEWITHPARAM((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-k", param[pos]));
     }
 }
 
@@ -74,20 +74,20 @@ void modeLimit(User *user, Channel *channel, int pos, std::vector<std::string> &
     else if (add == false)
     {
         channel->setLimit(-1);
-        for (std::vector<User>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
-            itUser->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+t"));
-        for (std::vector<User>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
-            itOp->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+t"));
+        for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
+            (*itUser)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+t"));
+        for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
+            (*itOp)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+t"));
     }
     else
     {
         int limit = atoi((param[pos]).c_str());
         if (limit > 0 && limit >= (int)(channel->getChannelUsers().size() + channel->getChannelOperators().size()))    
             channel->setLimit(limit);
-        for (std::vector<User>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
-			itUser->usr_send(RPL_CHANGECHANNELMODEWITHPARAM((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+l", param[pos]));
-        for (std::vector<User>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
-            itOp->usr_send(RPL_CHANGECHANNELMODEWITHPARAM((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+l", param[pos]));
+        for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
+			(*itUser)->usr_send(RPL_CHANGECHANNELMODEWITHPARAM((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+l", param[pos]));
+        for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
+            (*itOp)->usr_send(RPL_CHANGECHANNELMODEWITHPARAM((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+l", param[pos]));
     }
 }
 
