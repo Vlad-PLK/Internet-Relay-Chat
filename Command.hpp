@@ -45,7 +45,7 @@ typedef struct S_Command_Dictionnary{
     void (*fct)(User &, SocketServer &, std::vector<std::string> &);
 }Command_Dictionnary;
 
-int check_nickname_in_use(std::string &nick, const std::vector<User> &users);
+int check_nickname_in_use(std::string &nick, const std::vector<User *> &users);
 void HandleCommand(Command &cmd, User &usr, SocketServer &server);
 
 void					cap(User &user, SocketServer &server, std::vector<std::string> &params);

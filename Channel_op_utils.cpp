@@ -7,7 +7,7 @@ bool    Channel::userIsOperator(const std::string name)
         if ((*it)->getNickname() == name)
             return (true);
     }
-    return (false);
+	return (false);
 }
 
 void    Channel::addOperator(User &user)

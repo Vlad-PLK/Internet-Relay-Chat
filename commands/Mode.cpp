@@ -65,7 +65,7 @@ void modePass(User *user, Channel *channel, int pos, std::vector<std::string> &p
 void modeOp(User *user, Channel *channel, int pos, std::vector<std::string> &param, bool add)
 {
     if (!param.size())
-        user->usr_send((ERR_NEEDMOREPARAMS(user->getNickname(), "MODE")).c_str());
+        user->usr_send(ERR_NEEDMOREPARAMS(user->getNickname(), "MODE"));
     else
     {
         if (!channel->userIsMember(param[pos]) && !channel->userIsOperator(param[pos]))
