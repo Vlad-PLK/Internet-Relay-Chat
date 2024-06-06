@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:58:44 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/06 10:54:26 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/06 10:56:27 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void	SocketServer::deleteChannel(std::string title)
         if ((*it)->getTitle() == title)
         {
             this->_allChannels.erase(it);
+            delete (*it);
             break;
         }
     }
