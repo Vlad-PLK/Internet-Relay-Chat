@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:58:44 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/06 10:26:42 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/06 10:54:26 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ void	SocketServer::deleteChannel(std::string title)
             break;
         }
     }
+    // need to free the channel //
 }
 
 void    SocketServer::addUser(User *user)

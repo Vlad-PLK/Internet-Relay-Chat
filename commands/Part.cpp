@@ -33,13 +33,13 @@ void    part(User &user, SocketServer &server, std::vector<std::string> &params)
                     for (size_t i = 1; i < params.size(); i++)
                         reason += params[i] + ' ';
                 }
-                user.usr_send((RPL_PART(user.getNickname(), server.getChannel(channels[i])->getTitle(), reason)));
-                if (server.getChannel(channels[i])->userIsMember(user.getNickname()))   
-                    server.getChannel(channels[i])->deleteUser(user.getNickname());
-                else
+                user.usr_send((RPL_PART(user.getNickname(), user.getUsername(), user.getIp(), server.getChannel(channels[i])->getTitle(), reason)));
+                //if (server.getChannel(channels[i])->userIsMember(user.getNickname()))   
+                server.getChannel(channels[i])->deleteUser(user.getNickname());
+                if (server.getChannel(channels[i])->userIsOperator(user.getNickname()) == true)
                     server.getChannel(channels[i])->deleteOperator(user.getNickname());
-                if (server.getChannel(channels[i])->getChannelUsers().size() + server.getChannel(channels[i])->getChannelOperators().size() == 0)
-                    server.deleteChannel(channels[i]);
+                if (server.getChannel(channels[i])->getChannelUsers().size() == 0)
+                   server.deleteChannel(channels[i]);
             }
         }
     }

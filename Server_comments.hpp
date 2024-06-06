@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:13:00 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/05 08:39:31 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/06 10:47:20 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # define RPL_JOIN(user_nickname, channel_title) ":" + user_nickname + " JOIN " + channel_title + "\r\n"
 # define RPL_NAMREPLY(user_nickname, symbol, channel_title, all_members) ":server.VPTV 353 " + user_nickname + " " + symbol + " " + channel_title + " :" + all_members + "\r\n"
 
-# define RPL_PART(user_nickname, channel_title, reason) ":" + user_nickname + " PART " + channel_title + " " + reason +"\r\n"
+# define RPL_PART(user_nickname, username, ip, channel_title, reason) ":" + user_nickname + "!~" + username + "@" + ip + " PART " + channel_title + " " + reason +"\r\n"
 # define ERR_NOSUCHCHANNEL(user_nickname, channel_title) ":server.VPTV 404 " + user_nickname + " " + channel_title + " :No such channel\r\n"
 # define ERR_NOTONCHANNEL(user_nickname, channel_title) ":server.VPTV 442 " + user_nickname + " " + channel_title + " :You are not on that channel\r\n"
 

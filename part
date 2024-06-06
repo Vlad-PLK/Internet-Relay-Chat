@@ -1,0 +1,23 @@
+<< CAP LS
+<< PASS pass
+<< NICK vladplk
+<< USER vpolojie vpolojie localhost :Vladimir Polojienko
+>> 001 vladplk :Welcome to 42's Network vladplk
+<< MODE vladplk +i
+>> 002 vladplk :Your host is VPTV, running version lol.dev.c3plus
+>> 003 vladplk :This server was created 2024-05-28 10:11 CEST:+0200
+>> 004 vladplk VPTV version lol.dev.c3plus MODE : +/- itkol
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< JOIN #a
+>> :vladplk!~vpolojie@localhost JOIN #a
+>> :server.VPTV 353 vladplk = #a :@vladplk 
+>> :server.VPTV 366 vladplk #a :End of NAMES list.
+<< MODE #a
+>> :vladplk390!~vpolojie@localhost JOIN #a
+<< PART #a
+>> :vladplk!~vpolojie@localhost PART #a 
+<< PING localhost
+>> PONG localhost
+--> lag pong
