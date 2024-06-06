@@ -5,9 +5,7 @@ bool    Channel::userIsOperator(const std::string name)
 	for (std::vector<User *>::iterator it = this->_channelOperators.begin(); it != this->_channelOperators.end(); it++)
     {
         if ((*it)->getNickname() == name)
-        {
             return (true);
-        }
     }
 	return (false);
 }

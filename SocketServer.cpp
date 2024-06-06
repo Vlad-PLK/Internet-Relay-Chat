@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:58:44 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/05 10:55:31 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/06 10:26:42 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,7 @@ bool    SocketServer::findChannel(std::string title)
     for (it = this->_allChannels.begin(); it != this->_allChannels.end(); it++)
     {
         if ((*it)->getTitle() == title)
-        {
-            std::cout << (*it)->getTitle() << std::endl;
             return (true);
-        }
     }
     return (false);
 }

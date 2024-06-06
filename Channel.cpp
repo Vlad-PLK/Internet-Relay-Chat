@@ -103,7 +103,6 @@ void    Channel::channelWelcome(User &user)
             users.append("@");
         users.append(this->_channelUsers[i]->getNickname());
         users.append(" ");
-        std::cout << users << std::endl;
     }
 
     std::vector<User *>::iterator it;
@@ -112,8 +111,11 @@ void    Channel::channelWelcome(User &user)
         (*it)->usr_send(RPL_JOIN(user.getNickname() + "!~" + user.getUsername() + "@" + user.getIp(), this->_title));
         if (this->_topic != "")
             (*it)->usr_send(RPL_TOPIC((user.getNickname() + "!" + user.getUsername() + "@" + user.getIp()), this->_title, this->_topic));
-        (*it)->usr_send(RPL_NAMREPLY(user.getNickname(), "=", this->_title, users));
-        (*it)->usr_send(RPL_ENDOFNAMES(user.getNickname(), this->_title));
+        if ((*it)->getNickname() == user.getNickname())
+        {
+            (*it)->usr_send(RPL_NAMREPLY(user.getNickname(), "=", this->_title, users));
+            (*it)->usr_send(RPL_ENDOFNAMES(user.getNickname(), this->_title));
+        }
     }
     /*for (std::vector<User *>::iterator itOp = this->getChannelOperators().begin(); itOp != this->getChannelOperators().end(); ++itOp)
     {
