@@ -2,24 +2,24 @@
 
 bool    Channel::userIsOperator(const std::string name)
 {
-	for (std::vector<User *>::iterator it = this->_channelOperators.begin(); it != this->_channelOperators.end(); ++it)
+	for (std::vector<User *>::iterator it = this->_channelOperators.begin(); it != this->_channelOperators.end(); it++)
     {
         if ((*it)->getNickname() == name)
+        {
             return (true);
+        }
     }
 	return (false);
 }
 
 void    Channel::addOperator(User &user)
 {
-    //User *userCopy = &user;
     if (!this->userIsOperator(user.getNickname()))
     {
-        //userCopy->setNickname('@' + userCopy->getNickname());
+        if (this->userIsMember(user.getNickname()) == false)
+            this->_channelUsers.push_back(&user);
         this->_channelOperators.push_back(&user);
-        //this->_channelUsers.push_back(&user);
-        //this->channelWelcome(*userCopy);
-        //this->deleteUser(user.getNickname());
+        this->channelWelcome(user);
     }
 }
 

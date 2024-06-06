@@ -89,14 +89,33 @@ void    Channel::setLimit(int limit)
 
 void    Channel::channelWelcome(User &user)
 {
-    std::string allOp;
-    for (int i = 0; i < (int)this->_channelOperators.size(); i++)
-        allOp += this->_channelOperators[i]->getNickname() + ' ';
-    std::string allUsers;
-    for (int i = 0; i < (int)this->_channelUsers.size(); i++)
-        allUsers += this->_channelUsers[i]->getNickname() + ' ';
+    //std::string allOp;
+    //for (int i = 0; i < (int)this->_channelOperators.size(); i++)
+    //    allOp += this->_channelOperators[i]->getNickname() + ' ';
+    //std::string allUsers;
+    //for (int i = 0; i < (int)this->_channelUsers.size(); i++)
+    //    allUsers += this->_channelUsers[i]->getNickname() + ' ';
 
-    for (std::vector<User *>::iterator itOp = this->getChannelOperators().begin(); itOp != this->getChannelOperators().end(); ++itOp)
+    std::string users;
+    for (size_t i = 0; i != this->_channelUsers.size(); i++)
+    {
+        if (this->userIsOperator(this->_channelUsers[i]->getNickname()) == true)
+            users.append("@");
+        users.append(this->_channelUsers[i]->getNickname());
+        users.append(" ");
+        std::cout << users << std::endl;
+    }
+
+    std::vector<User *>::iterator it;
+    for (it = this->_channelUsers.begin(); it != this->_channelUsers.end(); it++)
+    {
+        (*it)->usr_send(RPL_JOIN(user.getNickname() + "!~" + user.getUsername() + "@" + user.getIp(), this->_title));
+        if (this->_topic != "")
+            (*it)->usr_send(RPL_TOPIC((user.getNickname() + "!" + user.getUsername() + "@" + user.getIp()), this->_title, this->_topic));
+        (*it)->usr_send(RPL_NAMREPLY(user.getNickname(), "=", this->_title, users));
+        (*it)->usr_send(RPL_ENDOFNAMES(user.getNickname(), this->_title));
+    }
+    /*for (std::vector<User *>::iterator itOp = this->getChannelOperators().begin(); itOp != this->getChannelOperators().end(); ++itOp)
     {
         (*itOp)->usr_send((RPL_JOIN(user.getNickname() + "!~" + user.getUsername() + "@" + user.getIp(), this->_title)));
         if (this->_topic != "")
@@ -112,7 +131,7 @@ void    Channel::channelWelcome(User &user)
             (*itUser)->usr_send((RPL_TOPIC((user.getNickname() + "!" + user.getUsername() + "@localhost"), this->_title, this->_topic)));
         (*itUser)->usr_send((RPL_NAMREPLY((*itUser)->getNickname(), "=", this->_title, allUsers)));
         (*itUser)->usr_send((RPL_ENDOFNAMES((*itUser)->getNickname(), this->_title)));
-    }
+    }*/
 }
 
 void    Channel::addInvited(User &user)
@@ -127,17 +146,15 @@ void    Channel::addUser(User &user)
     {
         // if there's no users yet
         if ((int)(this->_channelUsers.size() + this->_channelOperators.size()) == 0)
-        {
+        // first user become operator //
             this->addOperator(user);
-            this->channelWelcome(user);
-        }
         else
         {
             if (!userIsMember(user.getNickname()) && !userIsOperator(user.getNickname()) && !userIsBanned(user.getNickname()))
             {
                 this->_channelUsers.push_back(&user);
                 this->channelWelcome(user);
-                /*if (!this->getModes().find('i'))
+                if (!this->getModes().find('i'))
                 {
                     this->_channelUsers.push_back(&user);
                     this->channelWelcome(user);
@@ -153,7 +170,7 @@ void    Channel::addUser(User &user)
                     }
                     else
                         user.usr_send((ERR_INVITEONLYCHAN(user.getNickname(), this->getTitle())));
-                }*/
+                }
             }
             else if (userIsBanned(user.getNickname()))
                 user.usr_send((ERR_BANNEDFROMCHAN(user.getNickname(), this->getTitle())));
