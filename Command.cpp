@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:45:37 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/05 09:21:59 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/06 11:01:35 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ static const Command_Dictionnary cmds[] =
     {"PART", part},
     {"TOPIC", topic},
     {"KICK", kick},
+    {"PRIVMSG", privmsg}
 };
 
 void HandleCommand(Command &cmd, User &usr, SocketServer &server)

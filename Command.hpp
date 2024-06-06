@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:10:43 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/05 09:08:32 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/06 10:59:41 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ void                    whois(User &user, SocketServer &server, std::vector<std:
 void                    ping(User &user, SocketServer &server, std::vector<std::string> &params);
 void                    pong(User &user, SocketServer &server, std::vector<std::string> &params);
 void                    quit(User &user, SocketServer &server, std::vector<std::string> &params);
+void                    quit(User &user, SocketServer &server, std::vector<std::string> &params);
+void                    privmsg(User &user, SocketServer &server, std::vector<std::string> &params);
 
 std::vector<std::string>    splitSetter(std::string param);
 

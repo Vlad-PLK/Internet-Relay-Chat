@@ -34,7 +34,6 @@ void    part(User &user, SocketServer &server, std::vector<std::string> &params)
                         reason += params[i] + ' ';
                 }
                 user.usr_send((RPL_PART(user.getNickname(), user.getUsername(), user.getIp(), server.getChannel(channels[i])->getTitle(), reason)));
-                //if (server.getChannel(channels[i])->userIsMember(user.getNickname()))   
                 server.getChannel(channels[i])->deleteUser(user.getNickname());
                 if (server.getChannel(channels[i])->userIsOperator(user.getNickname()) == true)
                     server.getChannel(channels[i])->deleteOperator(user.getNickname());

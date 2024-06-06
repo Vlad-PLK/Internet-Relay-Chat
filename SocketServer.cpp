@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:58:44 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/06 10:56:27 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/06 11:08:50 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,11 @@ void    SocketServer::addUser(User *user)
 std::vector<User *> &SocketServer::getAllUsers()
 {
     return _allUsers;
+}
+
+std::vector<Channel *> &SocketServer::getAllChannels()
+{
+    return _allChannels;
 }
 
 SocketServer::SocketServer(int _port, std::string _password)

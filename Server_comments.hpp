@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:13:00 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/06 10:47:20 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/06 11:23:03 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,12 @@
 # define RPL_CHANGECHANNELMODE(user_nickname, channel_title, mode) ":" + user_nickname + " MODE " + channel_title + " " + mode + "\r\n"
 # define RPL_REPLACECHANNELMODE(user_nickname, channel_title, mode, param) ":" + user_nickname + " MODE " + channel_title + " " + mode + " " + param + "\r\n"
 
-
 # define ERR_ALREADYREGISTERED(username) "462 " + username + " :You may not reregister\r\n"
 # define ERR_PASSWDMISMATCH(username) "464 " + username + " :Password incorrect\r\n"
 # define ERR_NICKNAMEINUSE(nickname) "433 * " + nickname + " :Nickname is already in use\r\n"
 # define ERR_ERRONEUSNICKNAME(nickname) "432 " + nickname + " " + nickname + " :Erroneus nickname\r\n"
 # define ERR_NONICKNAMEGIVEN() "431 client :No nickname given\r\n"
+
+# define RPL_PRIVMSG(nick, username, ip, target, msg) ":" + nick + "!~" + username + "@" + ip + " PRIVMSG " + target + " :" + msg + "\r\n"
 
 #endif
