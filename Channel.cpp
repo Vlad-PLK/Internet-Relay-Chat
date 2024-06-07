@@ -71,10 +71,7 @@ void Channel::setPassword(std::string pass)
 void Channel::setTopic(std::string topic)
 {
     // if (this->userIsOperator(user.getNickname()) || user.checkRights(this->_title, "t"))
-    if (topic != "")
-        this->_topic = topic;
-    else
-        this->_topic = topic;
+    this->_topic = topic;
 }
 
 void Channel::setMode(std::string modes)
@@ -140,6 +137,9 @@ void    Channel::addInvited(User &user)
 {
     if (!this->userIsInvited(user.getNickname()))
         this->_channelInvited.push_back(&user);
+    std::cout << "INVITED :" << std::endl;
+    for (std::vector<User *>::iterator it = this->_channelInvited.begin(); it != this->_channelInvited.end(); ++it)
+        std::cout << (*it)->getNickname() << std::endl;
 }
 
 void    Channel::addUser(User &user)
@@ -148,19 +148,17 @@ void    Channel::addUser(User &user)
     {
         // if there's no users yet
         if ((int)(this->_channelUsers.size() + this->_channelOperators.size()) == 0)
-        // first user become operator //
+        // first user becomes operator //
             this->addOperator(user);
         else
         {
             if (!userIsMember(user.getNickname()) && !userIsOperator(user.getNickname()) && !userIsBanned(user.getNickname()))
             {
-                this->_channelUsers.push_back(&user);
-                this->channelWelcome(user);
-                if (!this->getModes().find('i'))
+                if (this->getModes().find('i') == std::string::npos) // Not invite-only
                 {
                     this->_channelUsers.push_back(&user);
                     this->channelWelcome(user);
-                    user.getChannelRights().insert(std::make_pair(this->_title, this->getModes()));// (?) what are the basic rights for a normal user
+                    user.getChannelRights().insert(std::make_pair(this->_title, this->getModes())); // Insert user's channel rights
                 }
                 else
                 {
@@ -169,6 +167,7 @@ void    Channel::addUser(User &user)
                         this->_channelUsers.push_back(&user);
                         this->channelWelcome(user);
                         user.getChannelRights().insert(std::make_pair(this->_title, this->getModes()));// (?) what are the basic rights for a normal user
+                        this->removeUserVector(this->getChannelInvited(), user.getNickname());
                     }
                     else
                         user.usr_send((ERR_INVITEONLYCHAN(user.getNickname(), this->getTitle())));
@@ -182,7 +181,7 @@ void    Channel::addUser(User &user)
         user.usr_send((ERR_CHANNELISFULL(user.getNickname(), this->getTitle())));
 }
 
-void removeUserVector(std::vector<User *> &vector, const std::string &name)
+void Channel::removeUserVector(std::vector<User *> &vector, const std::string &name)
 {
     std::vector<User *> temp;
 

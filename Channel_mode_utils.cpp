@@ -16,14 +16,14 @@ void Channel::setMode(char new_mode, int flag) // flag == 0 means remove and fla
 {
     if (!flag)
     {
-        if (this->_modes.find(new_mode))
+        if (this->_modes.find(new_mode) != std::string::npos)
             this->setMode(removeMode(this->_modes, new_mode));
         // else
             // ERROR MESSAGE (?) the mode to delete is not preset
     }
     else
     {
-        if (!this->_modes.find(new_mode))
+        if (this->_modes.find(new_mode) == std::string::npos)
             this->setMode(this->_modes + new_mode);
         // else
             // ERROR MESSAGE (?) the mode to add exists already

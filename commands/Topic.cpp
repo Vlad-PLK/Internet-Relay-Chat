@@ -20,16 +20,14 @@ void    topic(User &user, SocketServer &server, std::vector<std::string> &params
         Channel *channel = server.getChannel(channel_title);
         if (params.size() == 1)
         {
-            if (channel->getTopic() == "")
+            if (channel->getTopic().empty())
                 user.usr_send((RPL_NOTOPIC(user.getNickname(), channel->getTitle())));
             else
                 user.usr_send((RPL_TOPIC(user.getNickname(), channel->getTitle(), channel->getTopic())));
         }
         else
         {
-            if (channel->getModes().find('t') && !channel->userIsOperator(user.getNickname()))
-                user.usr_send((ERR_CHANOPRIVSNEEDED(user.getNickname(), channel->getTitle())));
-            else
+            if (channel->getModes().find('t') == std::string::npos || (channel->getModes().find('t') != std::string::npos && channel->userIsOperator(user.getNickname())))
             {
                 std::string topic;
                 for (int i = 1; i < (int)params.size(); i++)
@@ -39,9 +37,11 @@ void    topic(User &user, SocketServer &server, std::vector<std::string> &params
                     channel->setTopic(topic);
                 for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
                     (*itUser)->usr_send((RPL_TOPIC((*itUser)->getNickname(), channel->getTitle(), channel->getTopic())));
-                for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
-                    (*itOp)->usr_send((RPL_TOPIC((*itOp)->getNickname(), channel->getTitle(), channel->getTopic())));
+                // for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
+                //     (*itOp)->usr_send((RPL_TOPIC((*itOp)->getNickname(), channel->getTitle(), channel->getTopic())));
             }
+            else
+                user.usr_send((ERR_CHANOPRIVSNEEDED(user.getNickname(), channel->getTitle())));
         }
     }
 }
