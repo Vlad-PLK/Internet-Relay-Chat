@@ -37,7 +37,7 @@ class Channel
         void addInvited(User &user);
         void deleteUser(const std::string name);
         void deleteOperator(std::string name);
-        void removeUserVector(std::vector<User *> vector, const std::string &name);
+        void removeUserVector(std::vector<User *> &vector, const std::string &name);
         std::string removeMode(std::string &str, char mode);
         
 

@@ -162,27 +162,50 @@ void User::usr_clean(void)
 	this->username.clear();
 }
 
+// void User::parsing_and_handle(std::string &buf, SocketServer &server)
+// {
+// 	std::string tmp;
+// 	Command		tmpcmd;
+// 	size_t		pos = 0;
+
+// 	buffer.append(buf);
+// 	for (size_t i=0; i != buffer.size(); i++)
+// 	{
+// 		if (buffer[i] == '\r' && buffer[i + 1] == '\n')
+// 		{
+// 			tmp = buffer.substr(pos, i - pos);
+// 			tmpcmd.setRawCommand(tmp);
+// 			tmpcmd.setCmdParams();
+// 			HandleCommand(tmpcmd, *this, server);
+// 			pos = i + 2;
+// 			tmp.clear();
+// 			tmpcmd.clearCmd();
+// 		}
+// 	}
+// 	buffer.erase(0, pos);
+// }
+
 void User::parsing_and_handle(std::string &buf, SocketServer &server)
 {
-	std::string tmp;
-	Command		tmpcmd;
-	size_t		pos = 0;
+    std::string tmp;
+    Command tmpcmd;
+    size_t pos = 0;
 
-	buffer.append(buf);
-	for (size_t i=0; i != buffer.size(); i++)
-	{
-		if (buffer[i] == '\r' && buffer[i + 1] == '\n')
-		{
-			tmp = buffer.substr(pos, i - pos);
-			tmpcmd.setRawCommand(tmp);
-			tmpcmd.setCmdParams();
-			HandleCommand(tmpcmd, *this, server);
-			pos = i + 2;
-			tmp.clear();
-			tmpcmd.clearCmd();
-		}
-	}
-	buffer.erase(0, pos);
+    buffer.append(buf);
+    for (size_t i = 0; i < buffer.size(); i++)  // Use < instead of != for clarity
+    {
+        if (i + 1 < buffer.size() && buffer[i] == '\r' && buffer[i + 1] == '\n')  // Add boundary check
+        {
+            tmp = buffer.substr(pos, i - pos);
+            tmpcmd.setRawCommand(tmp);
+            tmpcmd.setCmdParams();
+            HandleCommand(tmpcmd, *this, server);
+            pos = i + 2;
+            tmp.clear();
+            tmpcmd.clearCmd();
+        }
+    }
+    buffer.erase(0, pos);
 }
 
 int	User::process_cmd(std::string buf, SocketServer &server)

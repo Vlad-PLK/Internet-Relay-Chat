@@ -34,8 +34,7 @@ void    SocketServer::printAllChannels()
 
 bool    SocketServer::findChannel(std::string title)
 {
-    std::vector<Channel*>::iterator it;
-    for (it = this->_allChannels.begin(); it != this->_allChannels.end(); it++)
+    for (std::vector<Channel *>::iterator it = this->_allChannels.begin(); it != this->_allChannels.end(); ++it)
     {
         if ((*it)->getTitle() == title)
             return (true);
@@ -62,21 +61,23 @@ void    SocketServer::addChannel(std::string title)
     new_channel->setTitle(title);
     new_channel->setTopic("");
     new_channel->setLimit(-1);
+    new_channel->setMode("");
     this->_allChannels.push_back(new_channel);
 }
 
 void    SocketServer::addChannel(std::string title, std::string password)
 {
-    Channel new_channel;
+    Channel *new_channel = new Channel();
     if (title[0] == '#')
-        new_channel.setTitle(title);
+        new_channel->setTitle(title);
     else
-        new_channel.setTitle('#' + title);
+        new_channel->setTitle('#' + title);
     if (!password.empty()) // Check if the password is not empty
-        new_channel.setPassword(password);
-    new_channel.setTopic("");
-    new_channel.setLimit(-1);
-    this->_allChannels.push_back(&new_channel);
+        new_channel->setPassword(password);
+    new_channel->setTopic("");
+    new_channel->setLimit(-1);
+    new_channel->setMode("");
+    this->_allChannels.push_back(new_channel);
 }
 
 void	SocketServer::deleteChannel(std::string title)

@@ -56,19 +56,19 @@ void    join(User &user, SocketServer &server, std::vector<std::string> &params)
         // if channel already exists //
         else
         {
-            //Channel *channel = server.getChannel(channels[i]);
-            //if (!channel->getPassword().empty())
-            //{
-            //    if (channel->getPassword() == passwords[j])
-            //        channel->addUser(user);
-            //    else
-            //        user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), channel->getTitle())));
-            //}
-            if (server.getChannel(channels[i])->getPassword().empty())
-                server.getChannel(channels[i])->addUser(user);
+            Channel *channel = server.getChannel(channels[i]);
+            if (!channel->getPassword().empty())
+            {
+               if (channel->getPassword() == passwords[j])
+                   channel->addUser(user);
+               else
+                   user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), channel->getTitle())));
+            }
+            if (channel->getPassword().empty())
+                channel->addUser(user);
                 //std::cout << "adding current user to existing channel : " << user.getNickname() << server.getChannel(channels[i])->getTitle() << std::endl;
-            // else if (this->getChannel(channels[i])->getPassword().empty() && !passwords[j].empty())
-            //     user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), this->getChannel(channels[i])->getTitle())));
+            else if (channel->getPassword().empty() && !passwords[j].empty())
+                user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), channel->getTitle())));
             ++j;
         }
     }
