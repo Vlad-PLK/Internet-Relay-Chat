@@ -72,7 +72,7 @@ void modeOp(User *user, Channel *channel, int pos, std::vector<std::string> &par
     else
     {
         if (!channel->userIsMember(param[pos]) && !channel->userIsOperator(param[pos]))
-            user->usr_send((ERR_USERNOTINCHANNEL(param[pos], channel->getTitle())).c_str());
+            user->usr_send(ERR_USERNOTINCHANNEL(param[pos], channel->getTitle()));
         else
         {
             if (add && channel->setOperators(*user, add))
@@ -94,27 +94,38 @@ void modeOp(User *user, Channel *channel, int pos, std::vector<std::string> &par
     }
 }
 
+
 void modeLimit(User *user, Channel *channel, int pos, std::vector<std::string> &param, bool add)
 {
-    if (add == true && param[pos].empty())
-        user->usr_send((ERR_NEEDMOREPARAMS(user->getNickname(), "MODE")));
-    else if (add == false)
+    (void)pos;
+    // std::cout << "position = " << pos << "|| param[0] :" << param[0] << "add = " << add << std::endl;
+    if (add == true) //mode +l
+    {
+        if ((int)param.size() < 1 || param[0].empty()) // if /mode +l but no number associated with the command
+            user->usr_send((ERR_NEEDMOREPARAMS(user->getNickname(), "MODE")));
+        else // if /mode +l and number associated to the command
+        {
+            std::cout << "\nAVANT limit =" << channel->getLimit() << std::endl;
+            int limit = atoi((param[0]).c_str());
+            if (limit > 0 && limit >= (int)(channel->getChannelUsers().size()))
+            {
+                std::cout << "\nINSIDE_IF" << std::endl;
+                channel->setLimit(limit);
+                for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
+                    (*itUser)->usr_send(RPL_REPLACECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+l", param[0]));
+            }
+            std::cout << "\nAPRES limit =" << channel->getLimit() << std::endl;
+        }
+
+    }
+    else // if /mode -l
     {
         channel->setLimit(-1);
         for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
-            (*itUser)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+t"));
+            (*itUser)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-l"));
+        std::cout << "\nAPRES limit =" << channel->getLimit() << std::endl;
         // for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
         //     (*itOp)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+t"));
-    }
-    else
-    {
-        int limit = atoi((param[pos]).c_str());
-        if (limit > 0 && limit >= (int)(channel->getChannelUsers().size() + channel->getChannelOperators().size()))    
-            channel->setLimit(limit);
-        for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
-			(*itUser)->usr_send(RPL_REPLACECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+l", param[pos]));
-        // for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
-        //     (*itOp)->usr_send(RPL_REPLACECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+l", param[pos]));
     }
 }
 
@@ -163,17 +174,21 @@ void    mode(User &user, SocketServer &server, std::vector<std::string> &params)
                     for (int j = 1; j < (int)current.length(); j++)
                     {
                         char mode_char = current[j];
-                        if (mode.find(mode_char) != mode.end() || prev.find(mode_char) == std::string::npos)
+                        std::cout << "\nCurrent[j] :" << current[j] << std::endl;
+                        if (mode.find(mode_char) != mode.end() && prev.find(mode_char) == std::string::npos)
                         {
                             std::vector<std::string> mode_args;
                             while (i + 1 < (int)params.size() && params[i + 1][0] != '+' && params[i + 1][0] != '-')
                                 mode_args.push_back(params[++i]);
+                            std::cout << "\nJ = " << j << std::endl;
+                            for (std::vector<std::string>::iterator it = mode_args.begin(); it != mode_args.end(); ++it)
+                                std::cout << (*it) << std::endl;
                             mode[mode_char](&user, channel, j, mode_args, add);
                             if (mode_char != 'o')
                             {
                                 prev += mode_char;
                                 channel->setMode(mode_char, add);
-                                std::cout << "Channel modes" << "add = " << add << ":" << channel->getModes() << std::endl;
+                                std::cout << "Channel modes" << " add = " << add << " :" << channel->getModes() << std::endl;
                             }
                         }
                     }

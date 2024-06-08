@@ -44,7 +44,7 @@ bool    SocketServer::findChannel(std::string title)
 
 Channel *SocketServer::getChannel(std::string title)
 {
-    std::vector<Channel*>::iterator it = this->_allChannels.begin();
+    std::vector<Channel *>::iterator it = this->_allChannels.begin();
     while (it != this->_allChannels.end())
     {
         if ((*it)->getTitle() == title)
