@@ -3,11 +3,13 @@
 std::string Channel::removeMode(std::string &str, char mode)
 {
     std::string result;
+    std::cout << "\nMODE TO REMOVE :" << mode << std::endl;
     for (std::string::size_type i = 0; i < str.size(); ++i)
     {
         if (str[i] != mode)
             result += str[i];
     }
+    std::cout << "remove result :" << result << std::endl;
     return (result);
 }
 

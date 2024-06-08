@@ -23,53 +23,77 @@ void    join(User &user, SocketServer &server, std::vector<std::string> &params)
         if (!it->empty() && (*it)[0] != '#')
             it->insert(0, 1, '#'); // adds # as first character of the nickname
     }
-    int i = -1;
+    int i = 0;
     int j = 0;
-    while (++i < (int)channels.size())
+    while (i < (int)channels.size())
     {
-        // if channel doesn't exists yet //
+        // if channel doesn't exist yet
         if (!server.findChannel(channels[i]))
         {
             // if there are still passwords for channels
             if (j < (int)passwords.size())
             {
-                if (!passwords[j].empty())
+                if (!passwords[j].empty() && !channels[i].empty())
                 {
+                    std::cout << "\nNEW CHANNEL password :" << passwords[j] << std::endl;
                     server.addChannel(channels[i], passwords[j]);
                     server.getChannel(channels[i])->addUser(user);
+                    ++j;  // Increment j only when a password is used
                 }
                 else
                 {
-                    server.addChannel(channels[i]);
-                    server.getChannel(channels[i])->addUser(user);
+                    if (!channels[i].empty())
+                    {
+                        std::cout << "\nNEW CHANNEL NO password" << std::endl;
+                        server.addChannel(channels[i]);
+                        server.getChannel(channels[i])->addUser(user);
+                    }
                 }
-                ++j;
             }
             else
             {
                 // if less passwords than channel names
-                server.addChannel(channels[i]); 
-                //std::cout << server.getChannel(channels[i]) << std::endl;
-                server.getChannel(channels[i])->addUser(user);
+                if (!channels[i].empty())
+                {
+                    server.addChannel(channels[i]);
+                    server.getChannel(channels[i])->addUser(user);
+                }
             }
         }
-        // if channel already exists //
+        // if channel already exists
         else
         {
             Channel *channel = server.getChannel(channels[i]);
             if (!channel->getPassword().empty())
             {
-               if (channel->getPassword() == passwords[j])
-                   channel->addUser(user);
-               else
-                   user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), channel->getTitle())));
+                if (channel->getModes().find('i') != std::string::npos && channel->userIsInvited(user.getNickname()))
+                {
+                    channel->addUser(user);
+                    ++j;
+                }
+                else if (j < (int)passwords.size() && !passwords[j].empty() && channel->getPassword() == passwords[j])
+                {
+                    std::cout << "\nCHANNEL password :" << channel->getPassword() << "|| CMD password :" << passwords[j] << std::endl;
+                    channel->addUser(user);
+                    ++j;  // Increment j only when a password is used
+                }
+                else
+                {
+                    if (channel->getModes().find('i') != std::string::npos && !channel->userIsInvited(user.getNickname()))
+                        user.usr_send((ERR_INVITEONLYCHAN(user.getNickname(), channel->getTitle())));
+                    else
+                        user.usr_send(ERR_BADCHANNELKEY(user.getNickname(), channel->getTitle()));
+                }
             }
-            if (channel->getPassword().empty())
+            else
                 channel->addUser(user);
-                //std::cout << "adding current user to existing channel : " << user.getNickname() << server.getChannel(channels[i])->getTitle() << std::endl;
-            else if (channel->getPassword().empty() && !passwords[j].empty())
-                user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), channel->getTitle())));
-            ++j;
+            // Uncomment and handle the case if required
+            // else if (channel->getPassword().empty() && !passwords[j].empty())
+            //     user.usr_send((ERR_BADCHANNELKEY(user.getNickname(), channel->getTitle())));
         }
+        ++i;
     }
 }
+
+//NEED TO make the tests for JOIN multiple channels with/without passwords etc...
+
