@@ -148,8 +148,12 @@ void    Channel::addUser(User &user)
     {
         // if there's no users yet
         if ((int)(this->_channelUsers.size() + this->_channelOperators.size()) == 0)
+        {
         // first user becomes operator //
+            this->_channelUsers.push_back(&user);
             this->addOperator(user);
+            this->channelWelcome(user);
+        }
         else
         {
             if (!userIsMember(user.getNickname()) && !userIsOperator(user.getNickname()) && !userIsBanned(user.getNickname()))
