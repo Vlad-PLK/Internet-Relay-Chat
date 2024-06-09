@@ -73,6 +73,7 @@ void modeKey(SocketServer *server, User *user, Channel *channel, int pos, std::v
 
 void modeOp(SocketServer *server, User *user, Channel *channel, int pos, std::vector<std::string> &param, bool add)
 {
+    (void)pos;
     if (!param.size())
         user->usr_send(ERR_NEEDMOREPARAMS(user->getNickname(), "MODE"));
     else
