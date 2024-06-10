@@ -1,3 +1,28 @@
+std::string modes;
+            std::vector<std::string> modes_arg;
+            for (size_t i = 1; i < params.size(); i++)
+            {
+                if (params[i][0] == '+' || params[i][0] == '-')
+                {   
+                    for (size_t k = 1; k < params[i].size(); k++)
+                    {
+                        std::string md;
+                        md = params[i][k];
+                        modes.append(md);
+                        md.clear();
+                    }
+                }
+                else
+                {
+                    modes_arg.push_back(params[i]);
+                }
+            }
+            std::cout << "modes : " << modes << std::endl;
+            for (size_t k = 0; k < modes_arg.size(); k++)
+            {
+                std::cout << "modes arg : " << modes_arg[k] << std::endl;
+            }
+
 << CAP LS
 << NICK vladplk
 << USER vpolojie vpolojie irc.libera.chat :Vladimir Polojienko
