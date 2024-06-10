@@ -158,7 +158,44 @@ void    mode(User &user, SocketServer &server, std::vector<std::string> &params)
                 std::cout << "\nPARAM < 2" << std::endl;
                 return ;
             }
-            else if (channel->userIsOperator(user.getNickname()))
+            std::string modes;
+            std::vector<std::string> modes_arg;
+            std::map<char, void(*)(SocketServer *server, User *user, Channel *channel, std::string arg, bool add)> mode;
+            mode['i'] = modeInvite;
+            mode['t'] = modeTopic;
+            mode['k'] = modeKey;
+            mode['o'] = modeOp;
+            mode['l'] = modeLimit;
+            
+            bool add = true;
+            for (size_t i = 1; i < params.size(); i++)
+            {
+                if (params[i][0] == '+' || params[i][0] == '-')
+                {   
+                    for (size_t k = 1; k < params[i].size(); k++)
+                    {
+                        std::string md;
+                        md = params[i][k];
+                        modes.append(md);
+                        md.clear();
+                    }
+                }
+                else if (params[i].size() != 0)
+                {
+                    modes_arg.push_back(params[i]);
+                }
+            }
+            std::cout << "modes : " << modes << std::endl;
+            for (size_t k = 0; k < modes_arg.size(); k++)
+            {
+                std::cout << "modes arg : " << modes_arg[k] << std::endl;
+            }
+            for (size_t index = 0; index < modes.size(); index++)
+            {
+                if (mode.find(modes[index]) != mode.end())
+                    mode[modes[index]](&server, &user, channel, modes_arg[index], add);
+            }
+            /*else if (channel->userIsOperator(user.getNickname()))
             {
                 std::map<char, void(*)(SocketServer *server, User *user, Channel *channel, std::string arg, bool add)> mode;
                 mode['i'] = modeInvite;
@@ -206,7 +243,7 @@ void    mode(User &user, SocketServer &server, std::vector<std::string> &params)
                 }
             }
             else
-                user.usr_send((ERR_CHANOPRIVSNEEDED(user.getNickname(), channel->getTitle())));
+                user.usr_send((ERR_CHANOPRIVSNEEDED(user.getNickname(), channel->getTitle())));*/
         }
     }
 }
