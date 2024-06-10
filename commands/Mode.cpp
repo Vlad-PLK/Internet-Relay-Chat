@@ -146,65 +146,95 @@ void    mode(User &user, SocketServer &server, std::vector<std::string> &params)
         return ;
     }
     std::string target = params[0];
-    if (target[0] == '#')
+    if (!server.findChannel(target))
     {
-        if (!server.findChannel(target))
+        user.usr_send((ERR_NOSUCHCHANNEL(user.getNickname(), target)));
+        return;
+    }
+    else
+    {
+        Channel *channel = server.getChannel(target);
+        if (params.size() < 2 || params[1].empty())
+            return ;
+        else if (channel->userIsOperator(user.getNickname()))
         {
-            user.usr_send((ERR_NOSUCHCHANNEL(user.getNickname(), target)));
-            return;
-        }
-        else
-        {
-            Channel *channel = server.getChannel(target);
-            if (params.size() < 2 || params[1].empty())
-                return ;
-            else if (channel->userIsOperator(user.getNickname()))
+            std::map<char, void(*)(SocketServer *server, User *user, Channel *channel, int pos, std::vector<std::string> &param, bool add)> mode;
+            std::string modes;
+            std::vector<std::string> modes_arg;
+            mode['i'] = modeInvite;
+            mode['t'] = modeTopic;
+            mode['k'] = modeKey;
+            mode['o'] = modeOp;
+            mode['l'] = modeLimit;
+            
+            for (size_t i = 1; i < params.size(); i++)
             {
-                std::map<char, void(*)(SocketServer *server, User *user, Channel *channel, int pos, std::vector<std::string> &param, bool add)> mode;
-                mode['i'] = modeInvite;
-                mode['t'] = modeTopic;
-                mode['k'] = modeKey;
-                mode['o'] = modeOp;
-                mode['l'] = modeLimit;
-                
-                bool add;
-                for (int i = 1; i < (int)params.size(); i++)
-                {
-                    std::string prev;
-                    std::string current = params[i];
-                    if (current[0] == '+')
+                if (params[i][0] == '+' || params[i][0] == '-')
+                {   
+                    for (size_t k = 1; k < params[i].size(); k++)
                     {
-                        add = true;
-                    }
-                    else if (current[0] == '-')
-                    {
-                        add = false;
-                    }
-                    for (int j = 1; j < (int)current.length(); j++)
-                    {
-                        char mode_char = current[j];
-                        std::cout << "\nCurrent[j] :" << current[j] << std::endl;
-                        if (mode.find(mode_char) != mode.end() && prev.find(mode_char) == std::string::npos)
-                        {
-                            std::vector<std::string> mode_args;
-                            while (i + 1 < (int)params.size() && params[i + 1][0] != '+' && params[i + 1][0] != '-')
-                                mode_args.push_back(params[++i]);
-                            std::cout << "\nJ = " << j << std::endl;
-                            for (std::vector<std::string>::iterator it = mode_args.begin(); it != mode_args.end(); ++it)
-                                std::cout << (*it) << std::endl;
-                            mode[mode_char](&server, &user, channel, j, mode_args, add);
-                            if (mode_char != 'o')
-                            {
-                                prev += mode_char;
-                                channel->setMode(mode_char, add);
-                                std::cout << "Channel modes" << " add = " << add << " :" << channel->getModes() << std::endl;
-                            }
-                        }
+                        std::string md;
+                        md = params[i][k];
+                        modes.append(md);
+                        md.clear();
                     }
                 }
+                else
+                {
+                    modes_arg.push_back(params[i]);
+                }
             }
-            else
-                user.usr_send((ERR_CHANOPRIVSNEEDED(user.getNickname(), channel->getTitle())));
+            std::cout << "modes : " << modes << std::endl;
+            for (size_t k = 0; k < modes_arg.size(); k++)
+            {
+                std::cout << "modes arg : " << modes_arg[k] << std::endl;
+            }
+
+            //for (size_t index = 0; index < modes.size(); index++)
+            //{
+            //    if (mode.find(modes[index]) != mode.end())
+            //    {
+            //        mode[modes[index]](&server, &user, channel, 0, )
+            //    }
+            //}
+            //bool add;
+            //for (size_t i = 1; i < params.size(); i++)
+            //{
+            //    std::string prev;
+            //    std::string current = params[i];
+            //    prev.assign("w");
+            //    if (current[0] == '+')
+            //    {
+            //        add = true;
+            //    }
+            //    else if (current[0] == '-')
+            //    {
+            //        add = false;
+            //    }
+            //    for (int j = 1; j < (int)current.length(); j++)
+            //    {
+            //        char mode_char = current[j];
+            //        std::cout << "\nCurrent[j] :" << current[j] << std::endl;
+            //        if (mode.find(mode_char) != mode.end() && prev.find(mode_char) == std::string::npos)
+            //        {
+            //            std::vector<std::string> mode_args;
+            //            while (i + 1 < (int)params.size() && params[i + 1][0] != '+' && params[i + 1][0] != '-')
+            //                mode_args.push_back(params[++i]);
+            //            std::cout << "\nJ = " << j << std::endl;
+            //            for (std::vector<std::string>::iterator it = mode_args.begin(); it != mode_args.end(); ++it)
+            //                std::cout << (*it) << std::endl;
+            //            mode[mode_char](&server, &user, channel, j, mode_args, add);
+            //            if (mode_char != 'o')
+            //            {
+            //                prev += mode_char;
+            //                channel->setMode(mode_char, add);
+            //                std::cout << "Channel modes" << " add = " << add << " :" << channel->getModes() << std::endl;
+            //            }
+            //        }
+            //    }
+            //}
         }
+        else
+            user.usr_send((ERR_CHANOPRIVSNEEDED(user.getNickname(), channel->getTitle())));
     }
 }
