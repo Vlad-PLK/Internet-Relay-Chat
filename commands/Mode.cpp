@@ -8,19 +8,19 @@ void modeInvite(SocketServer *server, User *user, Channel *channel, std::string 
     // channel->setMode('i', 1);
     // std::cout << "Channel modes :" << channel->getModes() << std::endl;
     for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
-	{
-		if (add)
-			(*itUser)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+i"));
-		else
-		    (*itUser)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-i"));
-	}
+    {
+        if (add)
+            (*itUser)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+i"));
+        else
+            (*itUser)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-i"));
+    }
     // for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
-	// {
-	// 	if (add)
-	// 		(*itOp)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+i"));
-	// 	else
-	// 		(*itOp)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-i"));
-	// }
+    // {
+    // 	if (add)
+    // 		(*itOp)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+i"));
+    // 	else
+    // 		(*itOp)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-i"));
+    // }
 }
 
 void modeTopic(SocketServer *server, User *user, Channel *channel, std::string arg, bool add)
@@ -29,19 +29,19 @@ void modeTopic(SocketServer *server, User *user, Channel *channel, std::string a
     (void)server;
 
     for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
-	{
-		if (add)
-			(*itUser)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+t"));
-		else
-			(*itUser)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-t"));
-	}
+    {
+        if (add)
+            (*itUser)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+t"));
+        else
+            (*itUser)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-t"));
+    }
     // for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
-	// {
-	// 	if (add)
-	// 		(*itOp)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+t"));
-	// 	else
-	// 		(*itOp)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-t"));
-	// }
+    // {
+    // 	if (add)
+    // 		(*itOp)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+t"));
+    // 	else
+    // 		(*itOp)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-t"));
+    // }
 }
 
 void modeKey(SocketServer *server, User *user, Channel *channel, std::string arg, bool add)
@@ -52,7 +52,7 @@ void modeKey(SocketServer *server, User *user, Channel *channel, std::string arg
     {
         channel->setPassword(arg);
         for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
-			(*itUser)->usr_send(RPL_REPLACECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+k", arg));
+            (*itUser)->usr_send(RPL_REPLACECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+k", arg));
         // for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
         //     (*itOp)->usr_send(RPL_REPLACECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+k", param[pos]));
     }
@@ -62,7 +62,7 @@ void modeKey(SocketServer *server, User *user, Channel *channel, std::string arg
     {
         channel->setPassword("");
         for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
-			(*itUser)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-k"));
+            (*itUser)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-k"));
         // for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
         //     (*itOp)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-k"));
     }
@@ -97,13 +97,12 @@ void modeOp(SocketServer *server, User *user, Channel *channel, std::string arg,
     }
 }
 
-
 void modeLimit(SocketServer *server, User *user, Channel *channel, std::string arg, bool add)
 {
     (void)server;
 
     // std::cout << "position = " << pos << "|| arg :" << arg << "add = " << add << std::endl;
-    if (add == true) //mode +l
+    if (add == true) // mode +l
     {
         if ((int)arg.size() < 1 || arg.empty()) // if /mode +l but no number associated with the command
             user->usr_send((ERR_NEEDMOREPARAMS(user->getNickname(), "MODE")));
@@ -120,7 +119,6 @@ void modeLimit(SocketServer *server, User *user, Channel *channel, std::string a
             }
             std::cout << "\nAPRES limit =" << channel->getLimit() << std::endl;
         }
-
     }
     else // if /mode -l
     {
@@ -133,12 +131,12 @@ void modeLimit(SocketServer *server, User *user, Channel *channel, std::string a
     }
 }
 
-void    mode(User &user, SocketServer &server, std::vector<std::string> &params)
+void mode(User &user, SocketServer &server, std::vector<std::string> &params)
 {
     if (!params.size())
     {
         user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "MODE")));
-        return ;
+        return;
     }
     std::string target = params[0];
     std::cout << "\narg :" << params[0] << std::endl;
@@ -156,46 +154,71 @@ void    mode(User &user, SocketServer &server, std::vector<std::string> &params)
             if (params.size() < 2 || params[1].empty())
             {
                 std::cout << "\nPARAM < 2" << std::endl;
-                return ;
+                return;
             }
-            std::string modes;
-            std::vector<std::string> modes_arg;
-            std::map<char, void(*)(SocketServer *server, User *user, Channel *channel, std::string arg, bool add)> mode;
-            mode['i'] = modeInvite;
-            mode['t'] = modeTopic;
-            mode['k'] = modeKey;
-            mode['o'] = modeOp;
-            mode['l'] = modeLimit;
-            
-            bool add = true;
-            for (size_t i = 1; i < params.size(); i++)
+            if (channel->userIsOperator(user.getNickname()))
             {
-                if (params[i][0] == '+' || params[i][0] == '-')
-                {   
-                    for (size_t k = 1; k < params[i].size(); k++)
+                std::string modesPlus;
+                std::string modesMinus;
+                std::vector<std::string> modesPlus_arg;
+                std::vector<std::string> modesMinus_arg;
+                bool add = true;
+                std::string prev;
+
+                std::map<char, void (*)(SocketServer *server, User *user, Channel *channel, std::string arg, bool add)> mode;
+                mode['i'] = modeInvite;
+                mode['t'] = modeTopic;
+                mode['k'] = modeKey;
+                mode['o'] = modeOp;
+                mode['l'] = modeLimit;
+
+                for (size_t i = 1; i < params.size(); i++)
+                {
+                    std::string current = params[i];
+                    if (current[0] == '+' || current[0] == '-')
                     {
-                        std::string md;
-                        md = params[i][k];
-                        modes.append(md);
-                        md.clear();
+                        add = (current[0] == '+');
+                        for (size_t k = 1; k < current.size(); k++)
+                        {
+                            std::string md;
+                            md = current[k];
+                            if (prev.find(md) == std::string::npos)
+                            {
+                                if (add)
+                                    modesPlus.append(md);
+                                else
+                                    modesMinus.append(md);
+                                prev.append(md);
+                            }
+                            md.clear();
+                        }
+                    }
+                    else if (current.size() != 0)
+                    {
+                        modesPlus_arg.push_back(current);
+                        // besoin de savoir comment push_back ICI sur le modesMinus_arg
+    
+                        // ou alors avoir un seul vecteur pour les + et -, et savoir comment index le bon arg au bon mode
                     }
                 }
-                else if (params[i].size() != 0)
+                std::cout << "modesPlus : " << modesPlus << std::endl;
+                for (size_t k = 0; k < modesPlus_arg.size(); k++)
                 {
-                    modes_arg.push_back(params[i]);
+                    std::cout << "modes arg : " << modesPlus_arg[k] << std::endl;
+                }
+                for (size_t index = 0; index < modesPlus.size(); index++)
+                {
+                    if (mode.find(modesPlus[index]) != mode.end())
+                        mode[modesPlus[index]](&server, &user, channel, modesPlus_arg[index], add);
                 }
             }
-            std::cout << "modes : " << modes << std::endl;
-            for (size_t k = 0; k < modes_arg.size(); k++)
-            {
-                std::cout << "modes arg : " << modes_arg[k] << std::endl;
-            }
-            for (size_t index = 0; index < modes.size(); index++)
-            {
-                if (mode.find(modes[index]) != mode.end())
-                    mode[modes[index]](&server, &user, channel, modes_arg[index], add);
-            }
-            /*else if (channel->userIsOperator(user.getNickname()))
+            else
+                user.usr_send((ERR_CHANOPRIVSNEEDED(user.getNickname(), channel->getTitle())));
+        }
+    }
+}
+
+/*else if (channel->userIsOperator(user.getNickname()))
             {
                 std::map<char, void(*)(SocketServer *server, User *user, Channel *channel, std::string arg, bool add)> mode;
                 mode['i'] = modeInvite;
@@ -203,7 +226,7 @@ void    mode(User &user, SocketServer &server, std::vector<std::string> &params)
                 mode['k'] = modeKey;
                 mode['o'] = modeOp;
                 mode['l'] = modeLimit;
-                
+
                 bool add = true;
                 for (int i = 1; i < (int)params.size(); i++)
                 {
@@ -244,6 +267,3 @@ void    mode(User &user, SocketServer &server, std::vector<std::string> &params)
             }
             else
                 user.usr_send((ERR_CHANOPRIVSNEEDED(user.getNickname(), channel->getTitle())));*/
-        }
-    }
-}
