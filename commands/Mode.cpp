@@ -221,9 +221,6 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
                         channel->setMode(modes[index], false);
                 }
             }
-            std::cout << "modes of the channel : " << channel->getModes() << std::endl;
         }
-        else
-            user.usr_send((ERR_CHANOPRIVSNEEDED(user.getNickname(), channel->getTitle())));
     }
 }
