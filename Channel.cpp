@@ -86,13 +86,6 @@ void    Channel::setLimit(int limit)
 
 void    Channel::channelWelcome(User &user)
 {
-    //std::string allOp;
-    //for (int i = 0; i < (int)this->_channelOperators.size(); i++)
-    //    allOp += this->_channelOperators[i]->getNickname() + ' ';
-    //std::string allUsers;
-    //for (int i = 0; i < (int)this->_channelUsers.size(); i++)
-    //    allUsers += this->_channelUsers[i]->getNickname() + ' ';
-
     std::string users;
     for (size_t i = 0; i != this->_channelUsers.size(); i++)
     {
@@ -114,23 +107,6 @@ void    Channel::channelWelcome(User &user)
             (*it)->usr_send(RPL_ENDOFNAMES(user.getNickname(), this->_title));
         }
     }
-    /*for (std::vector<User *>::iterator itOp = this->getChannelOperators().begin(); itOp != this->getChannelOperators().end(); ++itOp)
-    {
-        (*itOp)->usr_send((RPL_JOIN(user.getNickname() + "!~" + user.getUsername() + "@" + user.getIp(), this->_title)));
-        if (this->_topic != "")
-            (*itOp)->usr_send((RPL_TOPIC((user.getNickname() + "!" + user.getUsername() + "@localhost"), this->_title, this->_topic)));
-        (*itOp)->usr_send((RPL_NAMREPLY((*itOp)->getNickname(), "=", this->_title, allOp)));
-        (*itOp)->usr_send((RPL_ENDOFNAMES((*itOp)->getNickname(), this->_title)));
-    }
-    
-    for (std::vector<User *>::iterator itUser = this->_channelUsers.begin(); itUser != this->_channelUsers.end(); ++itUser)
-    {
-        (*itUser)->usr_send((RPL_JOIN(user.getNickname() + "!~" + user.getUsername() + "@" + user.getIp(), this->_title)));
-        if (this->_topic != "")
-            (*itUser)->usr_send((RPL_TOPIC((user.getNickname() + "!" + user.getUsername() + "@localhost"), this->_title, this->_topic)));
-        (*itUser)->usr_send((RPL_NAMREPLY((*itUser)->getNickname(), "=", this->_title, allUsers)));
-        (*itUser)->usr_send((RPL_ENDOFNAMES((*itUser)->getNickname(), this->_title)));
-    }*/
 }
 
 void    Channel::addInvited(User &user)
