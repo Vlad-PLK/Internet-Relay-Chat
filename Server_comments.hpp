@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:13:00 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/06 11:23:03 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/11 10:09:41 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,8 @@
 # define ERR_NONICKNAMEGIVEN() "431 client :No nickname given\r\n"
 
 # define RPL_PRIVMSG(nick, username, ip, target, msg) ":" + nick + "!~" + username + "@" + ip + " PRIVMSG " + target + " :" + msg + "\r\n"
+# define ERR_NORECIPIENT(nick) "411 " + nick + " :No recipient given\r\n"
+# define ERR_NOTEXTTOSEND(nick) "412 " + nick + " :No text to send\r\n"
+
 
 #endif

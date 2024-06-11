@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 10:58:42 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/11 09:56:21 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/11 10:16:20 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,28 +41,29 @@ void                    privmsg(User &user, SocketServer &server, std::vector<st
     std::string                         target;
     std::string                         msg_content;
 
-    if (params[0].size() > 0 && params[1].size() > 0)
+    if (params.size() == 0)
     {
-        target = params[0];
-        msg_content = params[1];
+        user.usr_send(ERR_NORECIPIENT(user.getNickname()));
+        return ;
     }
-    else
-        user.usr_send(ERR_NEEDMOREPARAMS(user.getNickname(), "PRIVMSG"));
+    else if (params[0].size() > 0 && params.size() == 1)
+    {
+        user.usr_send(ERR_NOTEXTTOSEND(user.getNickname()));
+        return ;
+    }
 
+    target = params[0];
+    msg_content = params[1];
     if (target[0] == '#')
     {
         if (find_channel(server, target) == 0)
         {
-            for (it = server.getAllChannels().begin(); it != server.getAllChannels().end(); it++)
+            if (server.getChannel(target)->userIsBanned(target) == true)
+                return ;
+            for (itUs = server.getChannel(target)->getChannelUsers().begin(); itUs != server.getChannel(target)->getChannelUsers().end(); itUs++)
             {
-                if ((*it)->getTitle() == target)
-                {
-                    for (itUs = server.getChannel(target)->getChannelUsers().begin(); itUs != server.getChannel(target)->getChannelUsers().end(); itUs++)
-                    {
-                        if ((*itUs)->getNickname() != user.getNickname())
-                            (*itUs)->usr_send(RPL_PRIVMSG(user.getNickname(), user.getUsername(), user.getIp(), target, msg_content));
-                    }
-                }
+                if ((*itUs)->getNickname() != user.getNickname())
+                    (*itUs)->usr_send(RPL_PRIVMSG(user.getNickname(), user.getUsername(), user.getIp(), target, msg_content));
             }
         }
         else
@@ -81,12 +82,4 @@ void                    privmsg(User &user, SocketServer &server, std::vector<st
         else
             user.usr_send(ERR_NOSUCHNICK(user.getNickname(), target));
     }
-
-    // if <target> == user //
-        //send to user//
-        /// if user is away -> reply with RPL_AWAY(310)
-    // if <target> == channel //
-        //send to channel
-        // check banned users//
-        // ERR_CANNOTSENDTOCHAN //
 }
