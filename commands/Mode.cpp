@@ -201,11 +201,7 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
                 else
                     modes_arg.push_back("NULL");
             }
-            //modes_arg.push_back("NULL");
-            //modes_arg.push_back("NULL");
-            // ordre des push des args
             // quit
-            // part message sur le channel
             // leaks
             // kick
             std::cout << "modes : " << modes << std::endl;
