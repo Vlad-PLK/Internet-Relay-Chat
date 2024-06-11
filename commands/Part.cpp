@@ -33,6 +33,7 @@ void    part(User &user, SocketServer &server, std::vector<std::string> &params)
                 {
                     for (size_t i = 1; i < params.size(); i++)
                         reason += params[i] + ' ';
+                    reason.erase(reason.length() - 1, 1);
                 }
                 for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
                     (*itUser)->usr_send((RPL_PART(user.getNickname(), user.getUsername(), user.getIp(), channel->getTitle(), reason)));
