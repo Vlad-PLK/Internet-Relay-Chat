@@ -188,14 +188,21 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
                         tmp_sign.clear();
                     } 
                 }
-                else if (current.size() != 0)
-                    modes_arg.push_back(current);
-                    // besoin de savoir comment push_back ICI sur le modesMinus_arg
-                    // ou alors avoir un seul vecteur pour les + et -, et savoir comment index le bon arg au bon mode
             }
-            size_t i = modes.size() - modes_arg.size();
-            for (size_t count = 0; count != i; count++)
-                modes_arg.push_back("NULL"); 
+            size_t arg_index = 2;
+            for (size_t i = 0; i != modes.size(); i++)
+            {
+                if ((sign[i] == "+" && (modes[i] != 'i' && modes[i] != 't'))
+                    || (sign[i] == "-" && modes[i] == 'o'))
+                {
+                    modes_arg.push_back(params[arg_index]);
+                    arg_index++;
+                }
+                else
+                    modes_arg.push_back("NULL");
+            }
+            //modes_arg.push_back("NULL");
+            //modes_arg.push_back("NULL");
             // ordre des push des args
             // quit
             // part message sur le channel
