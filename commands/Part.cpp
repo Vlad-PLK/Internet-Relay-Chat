@@ -23,7 +23,7 @@ void    part(User &user, SocketServer &server, std::vector<std::string> &params)
             user.usr_send((ERR_NOSUCHCHANNEL(user.getNickname(), channels[i])));
         else
         {
-            Channel *channel = channel;
+            Channel *channel = server.getChannel(channels[i]);
             if (!channel->userIsMember(user.getNickname()))
                 user.usr_send((ERR_NOTONCHANNEL(user.getNickname(), channel->getTitle())));
             else
@@ -34,12 +34,17 @@ void    part(User &user, SocketServer &server, std::vector<std::string> &params)
                     for (size_t i = 1; i < params.size(); i++)
                         reason += params[i] + ' ';
                 }
-                channel->deleteUser(user.getNickname());
                 for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
                     (*itUser)->usr_send((RPL_PART(user.getNickname(), user.getUsername(), user.getIp(), channel->getTitle(), reason)));
+                channel->deleteUser(user.getNickname());
                 if (channel->userIsOperator(user.getNickname()) == true)
                     channel->deleteOperator(user.getNickname());
-                if (channel->getChannelUsers().size() == 0)
+                if (channel->getChannelUsers().size() == 1)
+                {
+                    User *only_user = channel->getChannelUsers().front();
+                    channel->setOperators(*only_user, true);
+                }
+                else if (channel->getChannelUsers().size() == 0)
                    server.deleteChannel(channels[i]);
             }
         }
