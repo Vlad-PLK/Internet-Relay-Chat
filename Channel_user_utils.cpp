@@ -2,10 +2,17 @@
 
 bool    Channel::userIsMember(const std::string name)
 {
-	for (std::vector<User *>::iterator it = this->_channelUsers.begin(); it != this->_channelUsers.end(); ++it)
+    if (this->_channelUsers.size() == 0)
     {
-        if ((*it)->getNickname() == name)
-            return (true);
+        return (false);
+    }
+    else
+    {
+	    for (std::vector<User *>::iterator it = this->_channelUsers.begin(); it != this->_channelUsers.end(); ++it)
+        {
+            if ((*it)->getNickname() == name)
+                return (true);
+        }
     }
 	return (false);
 }
