@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/12 10:59:04 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/12 11:01:12 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ private:
     int                         admin_state;
     int                         current_state;
     std::string                 buffer;
-    std::map<std::string, std::string>    _channelRights;
 
 public:
     User(/* args */);

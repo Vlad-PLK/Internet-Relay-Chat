@@ -36,7 +36,6 @@ void    Channel::deleteUser(const std::string name)
     {
         if ((*it)->getNickname() == name)
         {
-            (*it)->deleteChannelRights(this->getTitle());
             this->_channelUsers.erase(it);
             break;
         }

@@ -43,7 +43,6 @@ void    Channel::deleteOperator(std::string name)
     {
         if ((*it)->getNickname() == name)
         {
-            (*it)->deleteChannelRights(this->getTitle());
             this->_channelOperators.erase(it);
             break;
         }

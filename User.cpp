@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/12 10:54:49 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/12 11:01:01 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,6 @@ int	User::getFD(void) const
 int User::getCurrentState(void) const
 {
 	return (this->current_state);
-}
-
-std::map<std::string, std::string>  User::getChannelRights(void) const
-{
-	return (this->_channelRights);
 }
 
 void	User::setNickname(const std::string &nname)

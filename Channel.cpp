@@ -131,7 +131,6 @@ void    Channel::addUser(User &user)
                 {
                     this->_channelUsers.push_back(&user);
                     this->channelWelcome(user);
-                    user.getChannelRights().insert(std::make_pair(this->_title, this->getModes())); // Insert user's channel rights
                 }
                 else
                 {
@@ -139,7 +138,6 @@ void    Channel::addUser(User &user)
                     {
                         this->_channelUsers.push_back(&user);
                         this->channelWelcome(user);
-                        user.getChannelRights().insert(std::make_pair(this->_title, this->getModes()));// (?) what are the basic rights for a normal user
                         this->removeUserVector(this->getChannelInvited(), user.getNickname());
                     }
                     else
