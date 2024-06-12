@@ -138,15 +138,25 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
         user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "MODE")));
         return;
     }
-    std::string target = params[0];
-    if (!server.findChannel(target))
+    if (params[0][0] != '#')
     {
-        user.usr_send((ERR_NOSUCHCHANNEL(user.getNickname(), target)));
+        if (!server.findUser(params[0]))
+            user.usr_send(ERR_NOSUCHNICK(user.getNickname(), params[0]));
+        else if (user.getNickname() != params[0])
+            user.usr_send(ERR_USERDONTMATCH(user.getNickname()));
+        else if (params.size() == 1)
+            user.usr_send(RPL_UMODEIS(user.getNickname(), "+i"));
+        else
+            user.usr_send(":" + user.getNickname() + " MODE " + user.getNickname() + " " + params[1] + "\r\n");
+    }
+    else if (!server.findChannel(params[0]))
+    {
+        user.usr_send((ERR_NOSUCHCHANNEL(user.getNickname(), params[0])));
         return;
     }
     else
     {
-        Channel *channel = server.getChannel(target);
+        Channel *channel = server.getChannel(params[0]);
         //std::cout << "\nParams SIZE = " << (int)params.size() << std::endl;
         if (params.size() < 2 || params[1].empty())
             return;
