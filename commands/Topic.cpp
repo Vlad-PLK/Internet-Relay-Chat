@@ -9,8 +9,6 @@ void    topic(User &user, SocketServer &server, std::vector<std::string> &params
     }
 
     std::string channel_title = params[0];
-    // if (channel_title[0] != '#')
-    //         channel_title.insert(0, 1, '#');
     if (!server.findChannel(channel_title))
         user.usr_send((ERR_NOSUCHCHANNEL(user.getNickname(), channel_title)));
     else if (!server.getChannel(channel_title)->userIsMember(user.getNickname()) && !server.getChannel(channel_title)->userIsOperator(user.getNickname()))
@@ -37,8 +35,6 @@ void    topic(User &user, SocketServer &server, std::vector<std::string> &params
                     channel->setTopic(topic);
                 for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
                     (*itUser)->usr_send((RPL_TOPIC((*itUser)->getNickname(), channel->getTitle(), channel->getTopic())));
-                // for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
-                //     (*itOp)->usr_send((RPL_TOPIC((*itOp)->getNickname(), channel->getTitle(), channel->getTopic())));
             }
             else
                 user.usr_send((ERR_CHANOPRIVSNEEDED(user.getNickname(), channel->getTitle())));

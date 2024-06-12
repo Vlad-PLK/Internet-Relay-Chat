@@ -32,8 +32,6 @@ bool    Channel::userIsInvited(const std::string name)
 
 void    Channel::deleteUser(const std::string name)
 {
-    //need to know if the user has the rights to delete user
-
     for (std::vector<User *>::iterator it = this->_channelUsers.begin(); it != this->_channelUsers.end(); ++it)
     {
         if ((*it)->getNickname() == name)

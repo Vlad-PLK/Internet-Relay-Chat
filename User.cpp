@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/12 08:32:30 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/12 10:54:49 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,53 +107,9 @@ void	User::setFD(int fd)
 	this->userfd = fd;
 }
 
-bool	User::parseRights(std::string userRights, std::string channelRights)
-{
-	int count = 0;
-	int i = -1;
-	while (++i < (int)channelRights.length())
-	{
-		int j = -1;
-		while (userRights[++j])
-		{
-			if (userRights[j] == channelRights[i])
-			{
-				count++;
-				break;
-			}
-		}
-	}
-	if (count == (int)channelRights.length())
-		return true;
-	return false;
-}
-
-bool	User::checkRights(const std::string channelTitle, const std::string channelRights)
-{
-	for (std::map<std::string, std::string>::iterator it = this->_channelRights.begin(); it != this->_channelRights.end(); ++it)
-	{
-		if (it->first == channelTitle)
-			return (parseRights(it->second, channelRights));
-	}
-	return false; //ERROR MSG ?(what to do if title not found?)
-}
-
-void	User::deleteChannelRights(std::string title)
-{
-	for (std::map<std::string, std::string>::iterator it = this->_channelRights.begin(); it != this->_channelRights.end(); ++it)
-	{
-		if (it->first == title)
-		{
-			this->_channelRights.erase(it);
-			break;
-		}
-	}
-}
-
 void User::usr_send(const std::string &reply)
 {
     send(this->userfd, reply.c_str(), reply.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
-    std::cout << "--> Message sent to client " << this->userfd - 3 << " = " << reply << std::endl;
 }
 
 void User::usr_clean(void)
@@ -163,29 +119,6 @@ void User::usr_clean(void)
 	close(this->userfd);
 }
 
-// void User::parsing_and_handle(std::string &buf, SocketServer &server)
-// {
-// 	std::string tmp;
-// 	Command		tmpcmd;
-// 	size_t		pos = 0;
-
-// 	buffer.append(buf);
-// 	for (size_t i=0; i != buffer.size(); i++)
-// 	{
-// 		if (buffer[i] == '\r' && buffer[i + 1] == '\n')
-// 		{
-// 			tmp = buffer.substr(pos, i - pos);
-// 			tmpcmd.setRawCommand(tmp);
-// 			tmpcmd.setCmdParams();
-// 			HandleCommand(tmpcmd, *this, server);
-// 			pos = i + 2;
-// 			tmp.clear();
-// 			tmpcmd.clearCmd();
-// 		}
-// 	}
-// 	buffer.erase(0, pos);
-// }
-
 void User::parsing_and_handle(std::string &buf, SocketServer &server)
 {
     std::string tmp;
@@ -193,9 +126,9 @@ void User::parsing_and_handle(std::string &buf, SocketServer &server)
     size_t pos = 0;
 
     buffer.append(buf);
-    for (size_t i = 0; i < buffer.size(); i++)  // Use < instead of != for clarity
+    for (size_t i = 0; i < buffer.size(); i++)
     {
-        if (i + 1 < buffer.size() && buffer[i] == '\r' && buffer[i + 1] == '\n')  // Add boundary check
+        if (i + 1 < buffer.size() && buffer[i] == '\r' && buffer[i + 1] == '\n')
         {
             tmp = buffer.substr(pos, i - pos);
             tmpcmd.setRawCommand(tmp);

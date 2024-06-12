@@ -54,8 +54,6 @@ class Channel
         std::string _topic;
         std::string _modes;
         int         _limit;
-
-        // std::vector<std::string>    _channelTopic; in case we do RPL_TOPICWHOTIME (333) : "<client> <channel> <nick> <setat>"
         std::vector<User *>           _channelUsers;
         std::vector<User *>           _channelOperators;
         std::vector<User *>           _channelBanned;

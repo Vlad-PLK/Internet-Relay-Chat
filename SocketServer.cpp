@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:58:44 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/12 08:19:48 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/12 10:50:28 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ User *SocketServer::getUser(std::string name)
     for (std::vector<User *>::iterator it = this->_allUsers.begin(); it != this->_allUsers.end(); ++it)
     {
         if ((*it)->getNickname() == name)
-            return (*it); // return pointer to the User
+            return (*it);
     }
     return NULL;
 }
@@ -83,7 +83,7 @@ void    SocketServer::addChannel(std::string title, std::string password)
         new_channel->setTitle(title);
     else
         new_channel->setTitle('#' + title);
-    if (!password.empty()) // Check if the password is not empty
+    if (!password.empty())
         new_channel->setPassword(password);
     new_channel->setTopic("");
     new_channel->setLimit(-1);
@@ -102,7 +102,6 @@ void	SocketServer::deleteChannel(std::string title)
             break;
         }
     }
-    // need to free the channel //
 }
 
 void    SocketServer::addUser(User *user)

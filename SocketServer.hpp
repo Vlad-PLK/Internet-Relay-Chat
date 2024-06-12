@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:59:54 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/06 11:08:43 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/12 10:49:54 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ public:
 	const std::string 	&getPassword(void) const;
 	void				createSocket(void);
 
-	User					*getUser(std::string name); //const?
+	User					*getUser(std::string name);
 	void 					addUser(User *user);
 	std::vector<User *>	&getAllUsers();
 	std::vector<Channel *>	&getAllChannels();
@@ -77,13 +77,6 @@ public:
 	int						is_in_range(int port);
 	typedef void        (SocketServer::*cmdPtr)(std::vector<std::string> cmd);
     void                cmds_center(std::vector<std::string> cmd);
-};
-
-class Message  {
-private:
-	std::string buffer;
-public:
-	int is_command_buffer(); // si \r\n dans buffer
 };
 
 void    ft_init_server_socket(int port, std::string password);

@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 08:39:14 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/05/27 10:18:29 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/12 10:49:05 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ int main(int argc, char **argv)
         std::cout << "Error : incorrect number of arguments" << std::endl;
     else
     {
-        // need to add port errors check -> invalid ports, forbidden etc //
         try
         {
             ft_init_server_socket(atoi(argv[1]), argv[2]);

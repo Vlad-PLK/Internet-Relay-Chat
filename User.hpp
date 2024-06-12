@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/12 08:27:25 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/12 10:59:04 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ public:
     const std::string   &getIp(void) const;
     int                 getFD(void) const;
     int                 getCurrentState(void) const;
-    std::map<std::string, std::string>  getChannelRights(void) const;
-
     void                setFD(int fd);
     void                setUsername(const std::string &uname);
     void                setNickname(const std::string &nname);
@@ -66,13 +64,7 @@ public:
     void                usr_clean(void);
     typedef void        (User::*cmdPtr)(std::vector<std::string> cmd);
     void                quit(std::vector<std::string> cmd);
-    // int                process_cmd(std::string buffer);
-    // void               parse_cmd(std::string &buffer);
-    // int                connexion_try(void);
 
-    bool                checkRights(std::string channelTitle, std::string channelRights); //string if multiple rihts to check at once
-    bool                parseRights(std::string userRights, std::string channelRights);
-    void                deleteChannelRights(std::string title);
 
     int                process_cmd(std::string buffer, SocketServer &server);
     void               parsing_and_handle(std::string &buffer, SocketServer &server);

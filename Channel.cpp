@@ -57,20 +57,16 @@ std::vector<User*> &Channel::getChannelInvited()
 
 void Channel::setTitle(std::string title)
 {
-    // if (this->userIsOperator(user.getNickname()))
-        this->_title = title;
-    //ERROR MSG (user does not have the rights)
+    this->_title = title;
 }
 
 void Channel::setPassword(std::string pass)
 {
-    // if (this->userIsOperator(user.getNickname()))
-        this->_password = pass;
+    this->_password = pass;
 }
 
 void Channel::setTopic(std::string topic)
 {
-    // if (this->userIsOperator(user.getNickname()) || user.checkRights(this->_title, "t"))
     this->_topic = topic;
 }
 
@@ -113,9 +109,6 @@ void    Channel::addInvited(User &user)
 {
     if (!this->userIsInvited(user.getNickname()))
         this->_channelInvited.push_back(&user);
-    std::cout << "INVITED :" << std::endl;
-    for (std::vector<User *>::iterator it = this->_channelInvited.begin(); it != this->_channelInvited.end(); ++it)
-        std::cout << (*it)->getNickname() << std::endl;
 }
 
 void    Channel::addUser(User &user)

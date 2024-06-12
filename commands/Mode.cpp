@@ -5,8 +5,6 @@ void modeInvite(SocketServer *server, User *user, Channel *channel, std::string 
     (void)arg;
     (void)server;
 
-    // channel->setMode('i', 1);
-    // std::cout << "Channel modes :" << channel->getModes() << std::endl;
     for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
     {
         if (add == "+")
@@ -14,13 +12,6 @@ void modeInvite(SocketServer *server, User *user, Channel *channel, std::string 
         else
             (*itUser)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-i"));
     }
-    // for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
-    // {
-    // 	if (add)
-    // 		(*itOp)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+i"));
-    // 	else
-    // 		(*itOp)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-i"));
-    // }
 }
 
 void modeTopic(SocketServer *server, User *user, Channel *channel, std::string arg, std::string add)
@@ -35,13 +26,6 @@ void modeTopic(SocketServer *server, User *user, Channel *channel, std::string a
         else
             (*itUser)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-t"));
     }
-    // for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
-    // {
-    // 	if (add)
-    // 		(*itOp)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+t"));
-    // 	else
-    // 		(*itOp)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-t"));
-    // }
 }
 
 void modeKey(SocketServer *server, User *user, Channel *channel, std::string arg, std::string add)
@@ -53,8 +37,6 @@ void modeKey(SocketServer *server, User *user, Channel *channel, std::string arg
         channel->setPassword(arg);
         for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
             (*itUser)->usr_send(RPL_REPLACECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+k", arg));
-        // for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
-        //     (*itOp)->usr_send(RPL_REPLACECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+k", param[pos]));
     }
     else if (add == "+")
         user->usr_send((ERR_NEEDMOREPARAMS(user->getNickname(), "MODE")));
@@ -63,8 +45,6 @@ void modeKey(SocketServer *server, User *user, Channel *channel, std::string arg
         channel->setPassword("");
         for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
             (*itUser)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-k"));
-        // for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
-        //     (*itOp)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-k"));
     }
 }
 
@@ -83,15 +63,11 @@ void modeOp(SocketServer *server, User *user, Channel *channel, std::string arg,
             {
                 for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
                     (*itUser)->usr_send(RPL_REPLACECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+o", arg));
-                // for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
-                //     (*itOp)->usr_send(RPL_REPLACECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+o", param[pos]));
             }
             else if (add == "-" && channel->setOperators(*user_target, false))
             {
                 for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
                     (*itUser)->usr_send(RPL_REPLACECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-o", arg));
-                // for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
-                //     (*itOp)->usr_send(RPL_REPLACECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-o", param[pos]));
             }
         }
     }
@@ -101,33 +77,26 @@ void modeLimit(SocketServer *server, User *user, Channel *channel, std::string a
 {
     (void)server;
 
-    // std::cout << "position = " << pos << "|| arg :" << arg << "add = " << add << std::endl;
-    if (add == "+") // mode +l
+    if (add == "+")
     {
-        if ((int)arg.size() < 1 || arg.empty()) // if /mode +l but no number associated with the command
+        if ((int)arg.size() < 1 || arg.empty())
             user->usr_send((ERR_NEEDMOREPARAMS(user->getNickname(), "MODE")));
-        else // if /mode +l and number associated to the command
+        else
         {
-            std::cout << "\nAVANT limit =" << channel->getLimit() << std::endl;
             int limit = atoi((arg).c_str());
             if (limit > 0 && limit >= (int)(channel->getChannelUsers().size()))
             {
-                std::cout << "\nINSIDE_IF" << std::endl;
                 channel->setLimit(limit);
                 for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
                     (*itUser)->usr_send(RPL_REPLACECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+l", arg));
             }
-            std::cout << "\nAPRES limit =" << channel->getLimit() << std::endl;
         }
     }
-    else // if /mode -l
+    else
     {
         channel->setLimit(-1);
         for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
             (*itUser)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "-l"));
-        std::cout << "\nAPRES limit =" << channel->getLimit() << std::endl;
-        // for (std::vector<User *>::iterator itOp = channel->getChannelOperators().begin(); itOp != channel->getChannelOperators().end(); ++itOp)
-        //     (*itOp)->usr_send(RPL_CHANGECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+t"));
     }
 }
 
@@ -157,7 +126,6 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
     else
     {
         Channel *channel = server.getChannel(params[0]);
-        //std::cout << "\nParams SIZE = " << (int)params.size() << std::endl;
         if (params.size() < 2 || params[1].empty())
             return;
         if (channel->userIsOperator(user.getNickname()))
@@ -211,15 +179,6 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
                 else
                     modes_arg.push_back("NULL");
             }
-            // quit
-            // leaks
-            // kick
-            std::cout << "modes : " << modes << std::endl;
-            for (size_t k = 0; k < modes_arg.size(); k++)
-            {
-                std::cout << "modes sign : " << sign[k] << std::endl;
-                std::cout << "modes arg : " << modes_arg[k] << std::endl;
-            }
             for (size_t index = 0; index < modes.size(); index++)
             {
                 if (mode.find(modes[index]) != mode.end())
@@ -232,5 +191,7 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
                 }
             }
         }
+        else
+            user.usr_send((ERR_CHANOPRIVSNEEDED(user.getNickname(), channel->getTitle())));
     }
 }
