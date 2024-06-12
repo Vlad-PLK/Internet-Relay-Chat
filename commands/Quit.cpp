@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 12:22:59 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/12 11:24:47 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/12 12:03:45 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,19 @@ void quit(User &user, SocketServer &server, std::vector<std::string> &params)
 	(void)params;
 	std::vector<Channel *>::iterator chanIt;
 	std::vector<User *>::iterator userIt;
+	std::string tmp_nickname = user.getNickname();
 	for (chanIt = server.getAllChannels().begin(); chanIt != server.getAllChannels().end(); chanIt++)
 	{
-		if ((*chanIt)->userIsMember(user.getNickname()) == true)
+		if ((*chanIt)->userIsMember(tmp_nickname) == true)
 		{
-			for (userIt = (*chanIt)->getChannelUsers().begin(); userIt != (*chanIt)->getChannelUsers().end(); userIt++)
-			{
-				(*userIt)->usr_send(RPL_QUIT(user.getNickname(), user.getUsername(), user.getIp(), "has quit"));
-			}
+			//if ((*chanIt)->getChannelUsers().size() > 0)
+			//{
+			//	for (userIt = (*chanIt)->getChannelUsers().begin(); userIt != (*chanIt)->getChannelUsers().end(); userIt++)
+			//	{
+			//		if ((*userIt)->getNickname() != tmp_nickname)
+			//			(*userIt)->usr_send(RPL_QUIT(user.getNickname(), user.getUsername(), user.getIp(), "has quit"));
+			//	}
+			//}
 			(*chanIt)->deleteUser(user.getNickname());
 			if ((*chanIt)->userIsOperator(user.getNickname()) == true)
 			{
@@ -36,8 +41,6 @@ void quit(User &user, SocketServer &server, std::vector<std::string> &params)
 				server.deleteChannel((*chanIt)->getTitle());
 			else if ((*chanIt)->getChannelUsers().size() == 1 && (*chanIt)->getChannelOperators().size() == 0)
                 (*chanIt)->setOperators(*(*chanIt)->getChannelUsers().front(), true);
-			
-			
 		}
 	}
 	close(user.getFD());
