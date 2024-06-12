@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/12 11:01:01 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/12 11:03:15 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ User::User() : userfd(0), admin_state(0), current_state(0)
 
 User::User(int fd, int _admin_state, int _current_state) : userfd(fd), admin_state(_admin_state), current_state(_current_state)
 {
-	std::cout << "New User trying to join server" << std::endl;
 }
 
 User::~User()
