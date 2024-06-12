@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:13:00 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/12 08:12:37 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/12 08:56:28 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,6 @@
 # define ERR_NORECIPIENT(nick) "411 " + nick + " :No recipient given\r\n"
 # define ERR_NOTEXTTOSEND(nick) "412 " + nick + " :No text to send\r\n"
 
+# define RPL_QUIT(nick, user, ip, reason) ":" + nick + "!~" + user + "@" + ip + " QUIT :" + reason + "\r\n"
 
 #endif

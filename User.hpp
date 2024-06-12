@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/04 09:58:26 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/12 08:27:25 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # define IS_ADMIN 3
 # define NOT_ADMIN 4
 # define ALREADY_REGISTRED 5
+# define QUIT 6
 
 class Command;
 

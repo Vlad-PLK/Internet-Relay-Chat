@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 12:22:59 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/05 09:11:19 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/12 09:43:51 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,38 @@
 
 void quit(User &user, SocketServer &server, std::vector<std::string> &params)
 {
-	(void)server;
-	(void)params;
-    user.usr_send("ERROR: connexion lost");
-	//exit all channels//
-	user.usr_clean();
-	//if QUIT + reasom from clients, then send quit + reason to other clients //
-	//if QUIT withouth beeing issued by the client, send quit + reason to other clients //
+	std::vector<Channel *>::iterator chanIt;
+	std::vector<User *>::iterator userIt;
+	for (chanIt = server.getAllChannels().begin(); chanIt != server.getAllChannels().end(); chanIt++)
+	{
+		if ((*chanIt)->userIsMember(user.getNickname()) == true)
+		{
+			for (userIt = (*chanIt)->getChannelUsers().begin(); userIt != (*chanIt)->getChannelUsers().end(); userIt++)
+			{
+				if (user.getNickname() != (*userIt)->getNickname())
+				{
+					if (params.size() > 0)
+						(*userIt)->usr_send(RPL_QUIT(user.getNickname(), user.getUsername(), user.getIp(), params[0]));
+					else
+						(*userIt)->usr_send(RPL_QUIT(user.getNickname(), user.getUsername(), user.getIp(), "has quit"));
+				}
+			}
+			(*chanIt)->deleteUser(user.getNickname());
+			if ((*chanIt)->userIsOperator(user.getNickname()) == true)
+			{
+				(*chanIt)->deleteOperator(user.getNickname());
+				if ((*chanIt)->getChannelOperators().size() == 0)
+                	(*chanIt)->setOperators(*(*chanIt)->getChannelUsers().front(), true);
+			}
+			if ((*chanIt)->getChannelUsers().empty() == true)
+				server.deleteChannel((*chanIt)->getTitle());
+			else if ((*chanIt)->getChannelUsers().size() == 1 && (*chanIt)->getChannelOperators().size() == 0)
+                (*chanIt)->setOperators(*(*chanIt)->getChannelUsers().front(), true);
+			
+			
+		}
+	}
+	user.usr_send(RPL_QUIT(user.getNickname(), user.getUsername(), user.getIp(), "has quit"));
 	close(user.getFD());
+	delete server.getUser(user.getNickname());
 }

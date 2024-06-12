@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/05 10:56:48 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/12 09:13:14 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,6 @@ void    main_loop(SocketServer &main_socket)
 					   
 						/* parse the command, process and send the answer*/
 						main_socket.getAllUsers()[it->fd - 4]->process_cmd(str, main_socket);
-						//main_socket.printAllChannels();
-						//users[it->fd - 4].process_cmd(str, main_socket);
-						
-						/* shows info about current user in the loop (optionnal, for debugging )*/
-						//std::cout << users[it->fd - 4];
-
 						/* clear all buffers and strings from previous message */
 						str.clear();
 					}

@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/05 09:07:36 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/12 08:32:30 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,7 @@ void User::usr_clean(void)
 {
 	this->nickname.clear();
 	this->username.clear();
+	close(this->userfd);
 }
 
 // void User::parsing_and_handle(std::string &buf, SocketServer &server)

@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:45:37 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/06 11:01:35 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/12 08:39:40 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ static const Command_Dictionnary cmds[] =
     {"PART", part},
     {"TOPIC", topic},
     {"KICK", kick},
-    {"PRIVMSG", privmsg}
+    {"PRIVMSG", privmsg},
+    {"QUIT", quit}
 };
 
 void HandleCommand(Command &cmd, User &usr, SocketServer &server)
@@ -37,7 +38,6 @@ void HandleCommand(Command &cmd, User &usr, SocketServer &server)
     {
         if (cmd.getCmdName() == cmds[i].name)
             cmds[i].fct(usr, server, cmd.getParams());
-        // handle unknown commands ? //
     }
 }
 

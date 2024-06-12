@@ -39,8 +39,12 @@ void    part(User &user, SocketServer &server, std::vector<std::string> &params)
                     (*itUser)->usr_send((RPL_PART(user.getNickname(), user.getUsername(), user.getIp(), channel->getTitle(), reason)));
                 channel->deleteUser(user.getNickname());
                 if (channel->userIsOperator(user.getNickname()) == true)
+                {
                     channel->deleteOperator(user.getNickname());
-                if (channel->getChannelUsers().size() == 1)
+                    if (channel->getChannelOperators().size() == 0)
+                	    channel->setOperators(*channel->getChannelUsers().front(), true);
+                }
+                if (channel->getChannelUsers().size() == 1 && channel->getChannelOperators().empty() == true)
                 {
                     User *only_user = channel->getChannelUsers().front();
                     channel->setOperators(*only_user, true);
