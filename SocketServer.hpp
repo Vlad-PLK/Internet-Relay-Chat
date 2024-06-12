@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:59:54 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/12 10:49:54 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/12 19:34:15 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ public:
 
 	bool					findChannel(std::string channel_title);
 	bool					findUser(std::string user_nickname);
+	void    				deleteUser(const std::string name);
 
 	int						is_in_range(int port);
 	typedef void        (SocketServer::*cmdPtr)(std::vector<std::string> cmd);

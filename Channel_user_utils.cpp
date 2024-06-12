@@ -47,5 +47,4 @@ void    Channel::deleteUser(const std::string name)
             break;
         }
     }
-
 }

@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:58:44 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/12 10:50:28 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/12 19:49:00 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,20 @@ void    SocketServer::printAllChannels()
             << "\nCHANNEL USERS : " << (*it)->getChannelUsers().size() << std::endl;
     }
 }
+
+void    SocketServer::deleteUser(const std::string name)
+{
+    for (std::vector<User *>::iterator it = this->_allUsers.begin(); it != this->_allUsers.end(); ++it)
+    {
+        if ((*it)->getNickname() == name)
+        {
+            this->_allUsers.erase(it);
+            delete (*it);
+            break;
+        }
+    }
+}
+
 
 bool    SocketServer::findChannel(std::string title)
 {
