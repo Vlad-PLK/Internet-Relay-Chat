@@ -130,7 +130,7 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
             return;
         if (channel->userIsOperator(user.getNickname()))
         {
-            std::string modes;
+            std::string              modes;
             std::vector<std::string> modes_arg;
             std::vector<std::string> sign;
             bool add = true;
@@ -152,6 +152,8 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
                         std::string md;
                         std::string tmp_sign;
                         md = current[k];
+                        // if ((add == true && (md == "l" || md == "k" || md == "o")) || (add == false && md == "o"))
+                        //     ++modes_arg_index;
                         if (add)
                             tmp_sign = '+';
                         else
@@ -160,34 +162,48 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
                         {
                             sign.push_back(tmp_sign);
                             modes.append(md);
-                            prev.append(md);
+                            if (md != "o")
+                                prev.append(md);
+                            if ((tmp_sign == "+" && (md == "i" || md == "t"))
+                                || (tmp_sign == "-" && md == "o"))
+                                modes_arg.push_back("NULL");
+                            else
+                                modes_arg.push_back("");
                         }
                         md.clear();
                         tmp_sign.clear();
-                    } 
-                }
-            }
-            size_t arg_index = 2;
-            for (size_t i = 0; i != modes.size(); i++)
-            {
-                if ((sign[i] == "+" && (modes[i] != 'i' && modes[i] != 't'))
-                    || (sign[i] == "-" && modes[i] == 'o'))
-                {
-                    modes_arg.push_back(params[arg_index]);
-                    arg_index++;
+                    }
                 }
                 else
-                    modes_arg.push_back("NULL");
+                {
+                    if (modes_arg.back().empty())
+                        modes_arg.back() = current;
+                }
             }
+            // size_t arg_index = 2;
+            // for (size_t i = 0; i != modes.size(); i++)
+            // {
+            //     if ((sign[i] == "+" && (modes[i] != 'i' && modes[i] != 't'))
+            //         || (sign[i] == "-" && modes[i] == 'o'))
+            //     {
+            //         modes_arg.push_back(params[arg_index]);
+            //         arg_index++;
+            //     }
+            //     else
+            //         modes_arg.push_back("NULL");
+            // }
             for (size_t index = 0; index < modes.size(); index++)
             {
                 if (mode.find(modes[index]) != mode.end())
                 {
                     mode[modes[index]](&server, &user, channel, modes_arg[index], sign[index]);
-                    if (sign[index] == "+")
-                        channel->setMode(modes[index], true);
-                    else
-                        channel->setMode(modes[index], false);
+                    if (modes[index] != 'o')
+                    {
+                        if (sign[index] == "+")
+                            channel->setMode(modes[index], true);
+                        else
+                            channel->setMode(modes[index], false);
+                    }
                 }
             }
         }
@@ -195,3 +211,4 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
             user.usr_send((ERR_CHANOPRIVSNEEDED(user.getNickname(), channel->getTitle())));
     }
 }
+
