@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:15:07 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/05 09:17:38 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/13 11:17:18 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void					user(User &user, SocketServer &server, std::vector<std::string> &params)
 {
     (void)server;
-    if (user.getCurrentState() == ACCEPTED)
+    if (user.getCurrentState() == ACCEPTED && params.size() == 4)
     {
         if (params.size() == 0)
             user.usr_send(ERR_NEEDMOREPARAMS(user.getNickname(), "USER"));

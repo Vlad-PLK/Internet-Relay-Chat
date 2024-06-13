@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/13 10:58:39 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/13 11:26:27 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void    main_loop(SocketServer &main_socket)
 			/* for loop to check for all events in the fd arrays so for all existing users */
 			for (it = tab_fd.begin() + 1; it != tab_fd.end(); it++)
 			{
-				if (it->revents == POLLIN)
+				if (it->revents & POLLIN)
 				{
 					memset(buffer, 0, sizeof(buffer));
 					/* if there is a new message */
@@ -76,6 +76,9 @@ void    main_loop(SocketServer &main_socket)
 						str.clear();
 					}
 				}
+				//else if (it->revents & POLLHUP)
+					//quit//
+				
 			}
 			for (std::vector<User *>::iterator itU = main_socket.getAllUsers().begin(); itU != main_socket.getAllUsers().end(); itU++)
 			{

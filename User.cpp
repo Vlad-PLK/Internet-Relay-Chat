@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/12 11:03:15 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/13 11:16:14 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,22 +59,22 @@ int User::getCurrentState(void) const
 
 void	User::setNickname(const std::string &nname)
 {
-	this->nickname.assign(nname);
+	this->nickname = nname;
 }
 
 void	User::setUsername(const std::string &uname)
 {
-	this->username.assign(uname);
+	this->username = uname;
 }
 
 void	User::setRealname(const std::string &uname)
 {
-	this->realname.assign(uname);
+	this->realname = uname;
 }
 
 void	User::setIp(const std::string &uname)
 {
-	this->ip.assign(uname);
+	this->ip = uname;
 }
 
 
