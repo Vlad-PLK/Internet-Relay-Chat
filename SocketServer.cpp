@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:58:44 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/12 19:49:00 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/13 11:06:26 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ void    SocketServer::deleteUser(const std::string name)
     {
         if ((*it)->getNickname() == name)
         {
-            this->_allUsers.erase(it);
             delete (*it);
+            this->_allUsers.erase(it);
             break;
         }
     }
@@ -111,8 +111,8 @@ void	SocketServer::deleteChannel(std::string title)
     {
         if ((*it)->getTitle() == title)
         {
-            this->_allChannels.erase(it);
             delete (*it);
+            it = this->_allChannels.erase(it);
             break;
         }
     }

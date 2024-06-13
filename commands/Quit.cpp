@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 12:22:59 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/12 19:44:36 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/13 10:48:50 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,6 @@
 
     // Close the user's connection and delete the user from the server
     close(user.getFD());
-    server.deleteUser(user.getNickname());
+    user.setCurrentState(QUIT);
+    //server.deleteUser(user.getNickname());
 }
