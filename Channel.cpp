@@ -113,6 +113,8 @@ void    Channel::addInvited(User &user)
 
 void    Channel::addUser(User &user)
 {
+    std::cout << "channelLimit = " << this->getLimit() << std::endl;
+    std::cout << "nb_USER = " << (int)((this->_channelUsers.size() + this->_channelOperators.size())) << std::endl;
     if ((int)((this->_channelUsers.size() + this->_channelOperators.size())) < this->getLimit() || this->getLimit() == -1)
     {
         // if there's no users yet
