@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/14 21:39:37 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/14 22:18:51 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void    main_loop(SocketServer &main_socket)
 			fd_tmp.fd = accept(tab_fd[0].fd, NULL, NULL);
 			fd_tmp.events = POLLIN;
 			tab_fd.push_back(fd_tmp);
-			tmp_user = new User(fd_tmp.fd, NOT_ADMIN, WAITING_FOR_APPROVAL);
+			tmp_user = new User(fd_tmp.fd, NOT_ADMIN, REJECTED);
 			main_socket.addUser(tmp_user);
 			//users.push_back(*tmp_user);
 		}

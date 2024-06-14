@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:45:37 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/14 00:46:38 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/14 22:19:37 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 static const Command_Dictionnary cmds[] =
 {
-    {"CAP LS", cap},
+    {"CAP", cap},
     {"PASS", pass},
     {"NICK", nick},
     {"USER", user},

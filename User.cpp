@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/14 08:39:25 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/14 22:07:42 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ void User::parsing_and_handle(SocketServer &server)
 
 	memset(buf, 0, sizeof(buf));
 	read_value = recv(this->userfd, buf, 512, MSG_DONTWAIT | MSG_NOSIGNAL);
-	if (read_value <= 0)
+	if (read_value > 0)
 		buf[read_value] = 0;
 	this->buffer += buf;
 	//std::cout << "buffer " << this->buffer << std::endl;
