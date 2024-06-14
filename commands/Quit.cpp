@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 12:22:59 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/14 07:13:00 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/14 21:08:03 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,5 @@
     // Delete empty channels
     for (size_t i = 0; i < channelsToDelete.size(); i++)
         server.deleteChannel(channelsToDelete[i]->getTitle());
-
-    // Close the user's connection and delete the user from the server
-    //close(user.getFD());
     user.setCurrentState(QUIT);
-    //server.deleteUser(user.getNickname());
 }
