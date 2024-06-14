@@ -1,0 +1,4 @@
+./ircserv 8080 pass
+/connect localhost 8080 pass
+/join a
+/quit

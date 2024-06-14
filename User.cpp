@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/13 11:16:14 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/14 01:25:37 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,10 @@ void	User::setCurrentState(int state)
 		this->current_state = ACCEPTED;
 	else if (state == WAITING_FOR_APPROVAL)
 		this->current_state = WAITING_FOR_APPROVAL;
+	else if (state == QUIT)
+		this->current_state = QUIT;
+	else if (state == ALREADY_REGISTRED)
+		this->current_state = ALREADY_REGISTRED;
 	else
 		this->current_state = REJECTED;
 }
@@ -101,6 +105,11 @@ void	User::setFD(int fd)
 	this->userfd = fd;
 }
 
+void 	User::setBuffer(char *str)
+{
+	this->buffer += str;
+}
+
 void User::usr_send(const std::string &reply)
 {
     send(this->userfd, reply.c_str(), reply.size(), MSG_DONTWAIT | MSG_NOSIGNAL);
@@ -113,18 +122,26 @@ void User::usr_clean(void)
 	close(this->userfd);
 }
 
-void User::parsing_and_handle(std::string &buf, SocketServer &server)
+void User::parsing_and_handle(SocketServer &server)
 {
     std::string tmp;
-    Command tmpcmd;
-    size_t pos = 0;
+	char 		buf[513];
+    Command 	tmpcmd;
+    size_t 		pos = 0;
+	ssize_t		read_value = 0;
+	int			fd = this->userfd;
 
-    buffer.append(buf);
+	memset(buf, 0, sizeof(buf));
+	read_value = recv(fd, buf, 512, MSG_DONTWAIT | MSG_NOSIGNAL);
+	if (read_value <= 0)
+		buf[read_value] = 0;
+	this->buffer += buf;
+	std::cout << "buffer " << this->buffer << std::endl;
     for (size_t i = 0; i < buffer.size(); i++)
     {
-        if (i + 1 < buffer.size() && buffer[i] == '\r' && buffer[i + 1] == '\n')
+        if (i + 1 < this->buffer.size() && this->buffer[i] == '\r' && this->buffer[i + 1] == '\n')
         {
-            tmp = buffer.substr(pos, i - pos);
+            tmp = this->buffer.substr(pos, i - pos);
             tmpcmd.setRawCommand(tmp);
             tmpcmd.setCmdParams();
             HandleCommand(tmpcmd, *this, server);
@@ -133,13 +150,8 @@ void User::parsing_and_handle(std::string &buf, SocketServer &server)
             tmpcmd.clearCmd();
         }
     }
-    buffer.erase(0, pos);
-}
-
-int	User::process_cmd(std::string buf, SocketServer &server)
-{
-	parsing_and_handle(buf, server);
-	return (ACCEPTED);
+    this->buffer.erase(0, pos);
+	std::cout << "buffer after flush : " << this->buffer << "buffer size : " << this->buffer.size() << "user fd " << this->getFD() << std::endl;
 }
 
 std::ostream &operator<<(std::ostream &output, const User &user)

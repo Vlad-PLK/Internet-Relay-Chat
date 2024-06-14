@@ -1,0 +1,17 @@
+<< CAP LS
+<< PASS pass
+<< NICK codespace
+<< USER codespace codespace localhost :Unknown
+>> 001 codespace :Welcome to 42's Network codespace
+<< MODE codespace +i
+>> 002 codespace :Your host is VPTV, running version lol.dev.c3plus
+>> 003 codespace :This server was created 2024-05-28 10:11 CEST:+0200
+>> 004 codespace VPTV version lol.dev.c3plus MODE : +/- itkol
+>> :codespace MODE codespace +i
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< QUIT :Lost terminal

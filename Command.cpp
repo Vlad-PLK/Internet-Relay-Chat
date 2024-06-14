@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:45:37 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/12 08:39:40 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/14 00:46:38 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ Command::~Command(){}
 
 void Command::setRawCommand(std::string &cmd)
 {
-    this->raw_command.assign(cmd);
+    this->raw_command = cmd;
 }
 
 void Command::setCmdName()

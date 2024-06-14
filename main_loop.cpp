@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/13 11:26:27 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/14 01:38:40 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,6 @@ void    main_loop(SocketServer &main_socket)
 	///////////array of fds part///////////
 
 	///////////buffer for read///////////
-	char                					buffer[513];
-	ssize_t             					read_value;
-	std::string 							str;
 	///////////buffer for read///////////
 
 	///////////users///////////
@@ -47,6 +44,7 @@ void    main_loop(SocketServer &main_socket)
 		/* event if there is a new connexion on the main socket */
 		if (tab_fd[0].revents == POLLIN)
 		{
+			memset(&fd_tmp, 0, sizeof(fd_tmp));
 			fd_tmp.fd = accept(tab_fd[0].fd, NULL, NULL);
 			fd_tmp.events = POLLIN;
 			tab_fd.push_back(fd_tmp);
@@ -61,27 +59,15 @@ void    main_loop(SocketServer &main_socket)
 			for (it = tab_fd.begin() + 1; it != tab_fd.end(); it++)
 			{
 				if (it->revents & POLLIN)
-				{
-					memset(buffer, 0, sizeof(buffer));
-					/* if there is a new message */
-					read_value = recv(it->fd, buffer, 512, MSG_DONTWAIT);
-					if (read_value != -1)
-					{
-						buffer[read_value] = 0;
-						str.append(buffer);
-					   
-						/* parse the command, process and send the answer*/
-						main_socket.getAllUsers()[it->fd - 4]->process_cmd(str, main_socket);
-						/* clear all buffers and strings from previous message */
-						str.clear();
-					}
-				}
+					main_socket.getAllUsers()[it->fd - 4]->parsing_and_handle(main_socket);
+				// this is case if nc quit with ctrl-c or with an unknown method //
 				//else if (it->revents & POLLHUP)
 					//quit//
 				
 			}
 			for (std::vector<User *>::iterator itU = main_socket.getAllUsers().begin(); itU != main_socket.getAllUsers().end(); itU++)
 			{
+				//std::cout << "user vector size before delete : " << main_socket.getAllUsers().size() << std::endl;
 				if ((*itU)->getCurrentState() == QUIT)
 				{
 					close((*itU)->getFD());
@@ -93,6 +79,7 @@ void    main_loop(SocketServer &main_socket)
 					delete ((*itU));
 					itU = main_socket.getAllUsers().erase(itU);
 				}
+				//std::cout << "user vector size after delete : " << main_socket.getAllUsers().size() << std::endl;
 			}
 		}
 	}
