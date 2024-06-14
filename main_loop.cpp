@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/14 02:01:14 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/14 08:56:13 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,23 +67,49 @@ void    main_loop(SocketServer &main_socket)
 					//quit//
 				
 			}
-			for (std::vector<User *>::iterator itU = main_socket.getAllUsers().begin(); itU != main_socket.getAllUsers().end(); itU++)
+		}
+		for (std::vector<User *>::iterator itU = main_socket.getAllUsers().begin(); itU != main_socket.getAllUsers().end(); itU++)
+		{
+			if (itU == main_socket.getAllUsers().end())
+				break ;
+			if ((*itU)->getCurrentState() == QUIT)
 			{
-				//std::cout << "user vector size before delete : " << main_socket.getAllUsers().size() << std::endl;
-				if ((*itU)->getCurrentState() == QUIT)
+				std::cout << "user vector size before delete : " << main_socket.getAllUsers().size() << std::endl;
+				tab_fd.erase(tab_fd.begin() + (std::distance(main_socket.getAllUsers().begin(), itU) + 1));
+				if (itU + 1 ==  main_socket.getAllUsers().end())
 				{
 					close((*itU)->getFD());
-					for (it = tab_fd.begin(); it != tab_fd.end(); it++)
-					{
-						if (it->fd == (*itU)->getFD())
-							it = tab_fd.erase(it);
-					}
 					delete ((*itU));
 					itU = main_socket.getAllUsers().erase(itU);
+					std::cout << "user vector size after delete : " << main_socket.getAllUsers().size() << std::endl;
+					break ;
 				}
-				//std::cout << "user vector size after delete : " << main_socket.getAllUsers().size() << std::endl;
+				else
+				{
+					close((*itU)->getFD());
+					delete ((*itU));
+					itU = main_socket.getAllUsers().erase(itU);
+					std::cout << "user vector size after delete : " << main_socket.getAllUsers().size() << std::endl;
+				}
 			}
 		}
+		//std::vector<User *>::iterator itU = main_socket.getAllUsers().begin();
+		//while (1)
+		//{
+		//	if (itU == main_socket.getAllUsers().end())
+		//		break ;
+		//	if ((*itU)->getCurrentState() == QUIT)
+		//	{
+		//		std::cout << "user vector size before delete : " << main_socket.getAllUsers().size() << std::endl;
+		//		tab_fd.erase(tab_fd.begin() + (std::distance(main_socket.getAllUsers().begin(), itU) + 1));
+		//		close((*itU)->getFD());
+		//		delete ((*itU));
+		//		itU = main_socket.getAllUsers().erase(itU);
+		//		std::cout << "user vector size after delete : " << main_socket.getAllUsers().size() << std::endl;
+		//		continue ;
+		//	}
+		//	itU++;
+		//}
 	}
 	//////////main loop//////////
 }
