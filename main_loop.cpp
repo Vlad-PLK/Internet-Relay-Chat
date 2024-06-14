@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/14 01:38:40 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/14 02:01:14 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,12 @@ void    main_loop(SocketServer &main_socket)
 		else
 		{
 			/* for loop to check for all events in the fd arrays so for all existing users */
+			int i = 0;
 			for (it = tab_fd.begin() + 1; it != tab_fd.end(); it++)
 			{
 				if (it->revents & POLLIN)
-					main_socket.getAllUsers()[it->fd - 4]->parsing_and_handle(main_socket);
+					main_socket.getAllUsers()[i]->parsing_and_handle(main_socket);
+				i++;
 				// this is case if nc quit with ctrl-c or with an unknown method //
 				//else if (it->revents & POLLHUP)
 					//quit//
