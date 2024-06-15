@@ -124,13 +124,16 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
     }
     else if (!server.findChannel(params[0]))
     {
-        user.usr_send((ERR_NOSUCHCHANNEL(user.getNickname(), params[0])));
+        user.usr_send(ERR_NOSUCHCHANNEL(user.getNickname(), params[0]));
         return;
     }
     else
     {
         Channel *channel = server.getChannel(params[0]);
-        if (params.size() < 2 || params[1].empty())
+        if (params.size() == 1)
+        {
+            user.usr_send(RPL_CHANNELMODEIS(user.getNickname(), channel->getTitle(), channel->getModes()));
+        }
             return;
         if (channel->userIsOperator(user.getNickname()))
         {
