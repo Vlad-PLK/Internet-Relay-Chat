@@ -1,0 +1,39 @@
+<< CAP LS
+<< PASS pass
+<< NICK codespace
+<< USER codespace codespace localhost :Unknown
+>> 001 codespace :Welcome to 42's Network codespace
+<< MODE codespace +i
+>> 002 codespace :Your host is VPTV, running version lol.dev.c3plus
+>> 003 codespace :This server was created 2024-05-28 10:11 CEST:+0200
+>> 004 codespace VPTV version lol.dev.c3plus MODE : +/- itkol
+>> :codespace MODE codespace +i
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< JOIN #q
+>> :codespace!~codespace@localhost JOIN #q
+>> :server.VPTV 353 codespace = #q :@codespace 
+>> :server.VPTV 366 codespace #q :End of NAMES list.
+<< MODE #q
+>> :localhost 324 codespace #q 
+--> chanquery mode
+<< WHO #q
+<< MODE #q +t
+>> :codespace!codespace@localhost MODE #q +t
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> FAILED who: chanquery abort
+<< WHO #q
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> lag pong
+<< PING localhost
+>> PONG localhost
+--> FAILED who: chanquery abort
+<< MODE #q b
+--> lag pong
