@@ -32,13 +32,13 @@ void modeKey(SocketServer *server, User *user, Channel *channel, std::string arg
 {
     (void)server;
 
-    if (add == "+" && !arg.empty())
+    if (add == "+" && arg != "NULL")
     {
         channel->setPassword(arg);
         for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
             (*itUser)->usr_send(RPL_REPLACECHANNELMODE((user->getNickname() + "!" + user->getUsername() + "@localhost"), channel->getTitle(), "+k", arg));
     }
-    else if (add == "+")
+    else if (add == "+" && arg == "NULL")
         user->usr_send((ERR_NEEDMOREPARAMS(user->getNickname(), "MODE")));
     else
     {
@@ -50,7 +50,7 @@ void modeKey(SocketServer *server, User *user, Channel *channel, std::string arg
 
 void modeOp(SocketServer *server, User *user, Channel *channel, std::string arg, std::string add)
 {
-    if (!arg.size())
+    if (arg == "NULL")
         user->usr_send(ERR_NEEDMOREPARAMS(user->getNickname(), "MODE"));
     else
     {
@@ -79,7 +79,7 @@ void modeLimit(SocketServer *server, User *user, Channel *channel, std::string a
 
     if (add == "+")
     {
-        if ((int)arg.size() < 1 || arg.empty())
+        if (arg == "NULL")
             user->usr_send((ERR_NEEDMOREPARAMS(user->getNickname(), "MODE")));
         else
         {
@@ -102,7 +102,7 @@ void modeLimit(SocketServer *server, User *user, Channel *channel, std::string a
 
 void mode(User &user, SocketServer &server, std::vector<std::string> &params)
 {
-    if (!params.size())
+    if (params.size() == 0)
     {
         user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "MODE")));
         return;
@@ -121,13 +121,15 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
     else if (!server.findChannel(params[0]))
     {
         user.usr_send((ERR_NOSUCHCHANNEL(user.getNickname(), params[0])));
-        return;
     }
     else
     {
         Channel *channel = server.getChannel(params[0]);
         if (params.size() < 2 || params[1].empty())
-            return;
+        {
+            user.usr_send(RPL_CHANNELMODEIS(user.getNickname(), channel->getTitle(), channel->getModes()));
+            return ;
+        }
         if (channel->userIsOperator(user.getNickname()))
         {
             std::string modes;
@@ -141,6 +143,7 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
             mode['k'] = modeKey;
             mode['o'] = modeOp;
             mode['l'] = modeLimit;
+
             for (size_t i = 1; i < params.size(); i++)
             {
                 std::string current = params[i];
@@ -167,22 +170,26 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
                     } 
                 }
             }
+            for (size_t i = 0; i != modes.size(); i++)
+                modes_arg.push_back("NULL");
             size_t arg_index = 2;
             for (size_t i = 0; i != modes.size(); i++)
             {
                 if ((sign[i] == "+" && (modes[i] != 'i' && modes[i] != 't'))
                     || (sign[i] == "-" && modes[i] == 'o'))
                 {
-                    modes_arg.push_back(params[arg_index]);
+                    std::cout << params.size() << arg_index << std::endl;
+                    if (params.size() >= arg_index + 1)
+                        modes_arg[i] = params[arg_index];
                     arg_index++;
                 }
-                else
-                    modes_arg.push_back("NULL");
             }
             for (size_t index = 0; index < modes.size(); index++)
             {
                 if (mode.find(modes[index]) != mode.end())
                 {
+                    std::cout << "mode name : " << modes[index] << " mode sign : " << sign[index]
+                        << " mode arg : " << modes_arg[index] << std::endl;
                     mode[modes[index]](&server, &user, channel, modes_arg[index], sign[index]);
                     if (sign[index] == "+")
                         channel->setMode(modes[index], true);
