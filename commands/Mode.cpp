@@ -106,13 +106,16 @@ void modeLimit(SocketServer *server, User *user, Channel *channel, std::string a
 
 void mode(User &user, SocketServer &server, std::vector<std::string> &params)
 {
+    std::cout << "ICI" << std::endl;
     if (!params.size())
     {
+        std::cout << "ICI1" << std::endl;
         user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "MODE")));
         return;
     }
     if (params[0][0] != '#')
     {
+        std::cout << "ICI2" << std::endl;
         if (!server.findUser(params[0]))
             user.usr_send(ERR_NOSUCHNICK(user.getNickname(), params[0]));
         else if (user.getNickname() != params[0])
@@ -129,10 +132,13 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
     }
     else
     {
+        std::cout << "ICI" << std::endl;
         Channel *channel = server.getChannel(params[0]);
+        std::cout << "Size = " << params.size() << std::endl;
         if (params.size() == 1)
         {
             user.usr_send(RPL_CHANNELMODEIS(user.getNickname(), channel->getTitle(), channel->getModes()));
+            return ;
             return ;
         }
         if (channel->userIsOperator(user.getNickname()))
