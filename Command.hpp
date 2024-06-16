@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:10:43 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/06 10:59:41 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/16 03:56:25 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void                    topic(User &user, SocketServer &server, std::vector<std:
 void                    part(User &user, SocketServer &server, std::vector<std::string> &params);
 void                    mode(User &user, SocketServer &server, std::vector<std::string> &params);
 
+int                     isNotSpace(std::vector<std::string> &params, int index);
 
 
 #endif

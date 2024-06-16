@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/14 00:55:30 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/16 03:46:38 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,13 @@ public:
     typedef void        (User::*cmdPtr)(std::vector<std::string> cmd);
     void                quit(std::vector<std::string> cmd);
     void                parsing_and_handle(SocketServer &server);
+
+    class DisconnectException : public std::exception
+    {
+        public: virtual const char* what() const throw() { 
+            return ("Unexpected Deconnexion !"); 
+        }
+    };
 };
 
 std::ostream&   operator<<(std::ostream& outstream, const User &user);

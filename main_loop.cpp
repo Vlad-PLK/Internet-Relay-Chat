@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/14 22:18:51 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/16 03:45:28 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,16 @@ void    main_loop(SocketServer &main_socket)
 			int i = 0;
 			for (it = tab_fd.begin() + 1; it != tab_fd.end(); it++)
 			{
-				if (it->revents & POLLIN)
-					main_socket.getAllUsers()[i]->parsing_and_handle(main_socket);
+				try
+				{
+					if (it->revents & POLLIN)
+						main_socket.getAllUsers()[i]->parsing_and_handle(main_socket);
+				}
+				catch(const std::exception& e)
+				{
+					std::cerr << e.what() << '\n';
+					main_socket.getAllUsers()[i]->setCurrentState(QUIT);
+				}
 				// this is case if nc quit with ctrl-c or with an unknown method //
 				//else if (it->revents & POLLHUP)
 				//	std::cout << "netcat ctrl-c" << std::endl;

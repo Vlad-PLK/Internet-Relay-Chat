@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:45:37 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/14 22:19:37 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/16 04:27:58 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,4 +105,19 @@ void    Command::clearCmd(void)
     this->raw_command.clear();
     this->cmd_name.clear();
     this->params.clear();
+}
+
+int     isNotSpace(std::vector<std::string> &params, int index)
+{
+    if (index == (int)params.size())
+        return (0);
+    for (size_t i = index; i != params.size(); i++)
+    {
+        for (size_t j = 0; j != params[i].size(); j++)
+        {
+            if (params[i][j] != ' ')
+                return (1);
+        }
+    }
+    return (0);
 }

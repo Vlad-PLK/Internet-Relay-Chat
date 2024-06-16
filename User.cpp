@@ -6,13 +6,14 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:50:20 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/14 22:07:42 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/16 03:50:15 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "User.hpp"
 #include "SocketServer.hpp"
 #include "Command.hpp"
+#include <exception>
 
 User::User() : userfd(0), admin_state(0), current_state(0)
 {
@@ -134,8 +135,10 @@ void User::parsing_and_handle(SocketServer &server)
 	read_value = recv(this->userfd, buf, 512, MSG_DONTWAIT | MSG_NOSIGNAL);
 	if (read_value > 0)
 		buf[read_value] = 0;
+	else 
+		throw DisconnectException();
 	this->buffer += buf;
-	//std::cout << "buffer " << this->buffer << std::endl;
+	std::cout << "buffer " << this->buffer << std::endl;
     for (size_t i = 0; i < buffer.size(); i++)
     {
         if (i + 1 < this->buffer.size() && this->buffer[i] == '\r' && this->buffer[i + 1] == '\n')
@@ -150,7 +153,7 @@ void User::parsing_and_handle(SocketServer &server)
         }
     }
     this->buffer.erase(0, pos);
-	//std::cout << "buffer after flush : " << this->buffer << "buffer size : " << this->buffer.size() << "user fd " << this->getFD() << std::endl;
+	std::cout << "buffer after flush : " << this->buffer << " buffer size : " << this->buffer.size() << " user fd : " << this->getFD() << std::endl;
 }
 
 std::ostream &operator<<(std::ostream &output, const User &user)
