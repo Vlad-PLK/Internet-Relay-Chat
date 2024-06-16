@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:13:00 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/16 07:35:39 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/16 22:58:59 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@
 # define RPL_CHANGECHANNELMODE(user_nickname, channel_title, mode) ":" + user_nickname + " MODE " + channel_title + " " + mode + "\r\n"
 # define RPL_REPLACECHANNELMODE(user_nickname, channel_title, mode, param) ":" + user_nickname + " MODE " + channel_title + " " + mode + " " + param + "\r\n"
 # define RPL_UMODEIS(user_nickname, user_modes) "221 " + user_nickname + user_modes + "\r\n"
-# define RPL_CHANNELMODEIS(nick, channel, modestring) "324 " + nick + " " + channel + " " + modestring + "\r\n"
+# define RPL_CHANNELMODEIS(nick, channel, modestring) ":server.VPTV 324 " + nick + " " + channel + " " + modestring + "\r\n"
 
 # define ERR_ALREADYREGISTERED(username) "462 " + username + " :You may not reregister\r\n"
 # define ERR_PASSWDMISMATCH(username) "464 " + username + " :Password incorrect\r\n"

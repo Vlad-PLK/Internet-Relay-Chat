@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 22:26:06 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/16 22:48:02 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/16 23:05:24 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,7 @@ void mode_chan_set_modes(ModeTool &tool, std::vector<std::string> &params)
 	for (size_t i = 1; i < params.size(); i++)
 	{
 		tool.current = params[i];
+		//add multiple minus and pluq
 		if (tool.current[0] == '+' || tool.current[0] == '-')
 		{
 			tool.add = (tool.current[0] == '+');
