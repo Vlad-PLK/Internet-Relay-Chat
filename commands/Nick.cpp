@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:14:57 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/16 05:07:08 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/16 06:56:54 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,13 +96,19 @@ int check_nickname_validity(const std::string &nick)
 void					nick(User &user, SocketServer &server, std::vector<std::string> &params)
 {
 	std::string str;
-	if (user.getCurrentState() == ACCEPTED)
+	std::string oldnick;
+	if (user.getCurrentState() == ACCEPTED || user.getCurrentState() == ALREADY_REGISTRED)
 	{
+		if (user.getCurrentState() == ALREADY_REGISTRED)
+		{
+			oldnick = user.getNickname();
+			user.usr_send("You've already register, but here's your new request\r\n");
+		}
 		if (params.front().size() == 0)
     	    user.usr_send(ERR_NONICKNAMEGIVEN());
 		else if (params.size() > 1 && isNotSpace(params, 1) == 1)
 			user.usr_send("\nTOO MUCH PARAMS FOR NICK COMMAND\r\n");
-		else if (params.size() == 0 || (params.size() >= 1 && isNotSpace(params, 1) == 0))
+		else if (params.size() == 1 || (params.size() > 1 && isNotSpace(params, 1) == 0))
 		{
 			if (check_nickname_in_use(params[0], server.getAllUsers()) == 1)
     		{
@@ -115,27 +121,10 @@ void					nick(User &user, SocketServer &server, std::vector<std::string> &params
     		    user.usr_send(ERR_ERRONEUSNICKNAME(params.front()));
     		else
     		    user.setNickname(params.front());
+			if (user.getCurrentState() == ALREADY_REGISTRED)
+				user.usr_send(":" + oldnick + " NICK " + params[0] + "\r\n");
 		}
 	}
 	else if (user.getCurrentState() == WAITING_FOR_APPROVAL)
-		user.usr_send("\nWAITING FOR APPROVAL\r\n");
-	else if (user.getCurrentState() == ALREADY_REGISTRED)
-	{
-		user.usr_send("You've already register, but here's your new request");
-		if (params.size() == 0 || (params.size() >= 1 && isNotSpace(params, 1) == 0))
-		{
-			if (check_nickname_in_use(params[0], server.getAllUsers()) == 1)
-    		{
-				srand(time(0));
-				str = ft_itoa(rand() % 1000);
-				if (check_nickname_in_use(params[0].append(str), server.getAllUsers()) == 0)
-    		    	user.setNickname(params[0]);
-    		}
-    		else if (check_nickname_validity(params.front()) == 1)
-    		    user.usr_send(ERR_ERRONEUSNICKNAME(params.front()));
-    		else
-    		    user.setNickname(params.front());
-			user.usr_send(":" + user.getNickname() + "NICK " + params[0]);
-		}
-	}
+		user.usr_send("\nWAITING FOR OTHER COMMANDS FIRST\r\n");
 }
