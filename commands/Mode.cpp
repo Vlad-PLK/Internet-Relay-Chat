@@ -124,7 +124,7 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
     }
     else if (!server.findChannel(params[0]))
     {
-        user.usr_send(ERR_NOSUCHCHANNEL(user.getNickname(), params[0]));
+        user.usr_send((ERR_NOSUCHCHANNEL(user.getNickname(), params[0])));
         return;
     }
     else
@@ -133,14 +133,15 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
         if (params.size() == 1)
         {
             user.usr_send(RPL_CHANNELMODEIS(user.getNickname(), channel->getTitle(), channel->getModes()));
+            return ;
         }
-            return;
         if (channel->userIsOperator(user.getNickname()))
         {
             std::string              modes;
             std::vector<std::string> modes_arg;
             std::vector<std::string> sign;
             int count = 0;
+            bool flag = false;
             std::string prev;
             std::map<char, void (*)(SocketServer *server, User *user, Channel *channel, std::string arg, std::string add)> mode;
             mode['i'] = modeInvite;
@@ -148,12 +149,21 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
             mode['k'] = modeKey;
             mode['o'] = modeOp;
             mode['l'] = modeLimit;
+            // std::cout << "\nPARAM[0] :" << params[0] << std::endl;
             for (size_t i = 1; i < params.size(); i++)
             {
-                std::string current = params[i];
-                std::cout << "\nNEW CURRENT :" << current << std::endl;
+                std::string current;
+                if (flag == false)
+                    current = params[i];
+                else
+                {
+                    current = params[--i];
+                    flag = false;
+                }
+                // std::cout << "\nNEW CURRENT :" << current << std::endl;
                 if (current[0] == '+' || current[0] == '-')
                 {
+                    // std::cout << "\nCURRENT IF:" << current << std::endl;
                     bool add;
                     add = (current[0] == '+');
                     // std::cout << "\nCurrent[0]:" << current[0] << std::endl;
@@ -162,7 +172,7 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
                         std::string md;
                         std::string tmp_sign;
                         md = current[k];
-                        // std::cout << "\nMD :" << md << md[0] << "*" << std::endl;
+                        // std::cout << "\nMD :" << md << "*" << std::endl;
                         if ((add == true && md != "-") || (add == false && md == "+"))
                         {
                             tmp_sign = "+";
@@ -218,13 +228,14 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
                         }
                         ++i;
                     }
+                    flag = true;
                 }
             }
             for (size_t index = 0; index < modes.size(); index++)
             {
                 if (mode.find(modes[index]) != mode.end())
                 {
-                    std::cout << "mode :" << sign[index] << modes[index] << " " << modes_arg[index] << std::endl;
+                    // std::cout << "mode :" << sign[index] << modes[index] << " " << modes_arg[index] << std::endl;
                     mode[modes[index]](&server, &user, channel, modes_arg[index], sign[index]);
                     if (modes[index] != 'o')
                     {
@@ -234,9 +245,9 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
                             channel->setMode(modes[index], false);
                     }
                 }
-                std::cout << "\nModesChannel :" << channel->getModes() << std::endl;
+                // std::cout << "\nModesChannel :" << channel->getModes() << std::endl;
             }
-            std::cout << "\n------------------------------------------" << std::endl;
+            // std::cout << "\n------------------------------------------" << std::endl;
         }
         else
             user.usr_send((ERR_CHANOPRIVSNEEDED(user.getNickname(), channel->getTitle())));
