@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:15:07 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/14 22:28:36 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/16 07:03:53 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void					user(User &user, SocketServer &server, std::vector<std::string> &params
     {
         if (params.size() < 4)
             user.usr_send(ERR_NEEDMOREPARAMS(user.getNickname(), "USER"));
-        else if (params.size() > 4)
+        else if (params.size() > 4 && isNotSpace(params, 3) == 1)
             user.usr_send("\nTOO MUCH PARAMS FOR USER COMMAND\r\n");
         else
         {

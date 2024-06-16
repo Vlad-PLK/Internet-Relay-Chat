@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/16 03:45:28 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/16 07:07:38 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,6 @@ void    main_loop(SocketServer &main_socket)
 					std::cerr << e.what() << '\n';
 					main_socket.getAllUsers()[i]->setCurrentState(QUIT);
 				}
-				// this is case if nc quit with ctrl-c or with an unknown method //
-				//else if (it->revents & POLLHUP)
-				//	std::cout << "netcat ctrl-c" << std::endl;
-				//quit(*main_socket.getAllUsers()[i], main_socket, params);
 				i++;
 			}
 		}
