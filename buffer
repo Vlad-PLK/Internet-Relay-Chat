@@ -1,4 +1,0 @@
-<< CAP LS
-<< PASS pass
-<< NICK codespace
-<< USER codespace codespace localhost :Unknown
