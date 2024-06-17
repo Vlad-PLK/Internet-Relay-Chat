@@ -37,7 +37,19 @@ void HandleCommand(Command &cmd, User &usr, SocketServer &server)
     for (long unsigned int i = 0; i < sizeof(cmds) / sizeof(cmds[0]); i++)
     {
         if (cmd.getCmdName() == cmds[i].name)
+        {
+            std::cout << "LA" << "\n" << cmd.getCmdName() << std::endl;
             cmds[i].fct(usr, server, cmd.getParams());
+        }
+    }
+    if (cmd.getParams().size() > 0)
+    {
+        int i = 0;
+        while (cmd.getCmdName()[i])
+        {
+            std::cout << "command[" << i << "] " << cmd.getCmdName()[i] << std::endl;
+            i++;
+        }
     }
 }
 

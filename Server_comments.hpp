@@ -44,6 +44,7 @@
 # define RPL_CHANGECHANNELMODE(user_nickname, channel_title, mode) ":" + user_nickname + " MODE " + channel_title + " " + mode + "\r\n"
 # define RPL_REPLACECHANNELMODE(user_nickname, channel_title, mode, param) ":" + user_nickname + " MODE " + channel_title + " " + mode + " " + param + "\r\n"
 # define RPL_UMODEIS(user_nickname, user_modes) "221 " + user_nickname + user_modes + "\r\n"
+
 # define RPL_CHANNELMODEIS(nick, channel, modestring) ":server.VPTV 324 " + nick + " " + channel + " " + modestring + "\r\n"
 
 # define ERR_ALREADYREGISTERED(username) "462 " + username + " :You may not reregister\r\n"

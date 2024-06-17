@@ -34,7 +34,7 @@ int find_user(SocketServer &server, std::string target)
     return (1);
 }
 
-void                    privmsg(User &user, SocketServer &server, std::vector<std::string> &params)
+void    privmsg(User &user, SocketServer &server, std::vector<std::string> &params)
 {
     std::vector<Channel *>::iterator    it;
     std::vector<User *>::iterator       itUs;
@@ -58,7 +58,13 @@ void                    privmsg(User &user, SocketServer &server, std::vector<st
     }
 
     target = params[0];
-    msg_content = params[1];
+    if (params.size() > 1)
+    {
+        for (unsigned int i = 1; i < params.size(); i++)
+            msg_content += params[i] + ' ';
+        msg_content.erase(msg_content.length() - 1, 1);
+    }
+    
     if (target[0] == '#')
     {
         if (find_channel(server, target) == 0)

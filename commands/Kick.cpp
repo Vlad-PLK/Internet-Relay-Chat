@@ -31,17 +31,17 @@ void    kick(User &user, SocketServer &server, std::vector<std::string> &params)
                 else
                 {
                     std::string comment;
-                    if (!params[2].empty())
+                    if (params.size() > 2)
                     {
                         for (int i = 2; i < (int)params.size(); i++)
                             comment += params[i] + ' ';
                         comment.erase(comment.length() - 1, 1);
                     }
                     User *kicked_user = server.getUser((*it));
+                    channel->deleteUser(kicked_user->getNickname());
                     kicked_user->usr_send(RPL_KICK((user.getNickname() + "!" + user.getUsername() + "@localhost"), channel->getTitle(), kicked_user->getNickname(), comment));
                     for (std::vector<User *>::iterator itUser = channel->getChannelUsers().begin(); itUser != channel->getChannelUsers().end(); ++itUser)
                             (*itUser)->usr_send((RPL_KICK((user.getNickname() + "!" + user.getUsername() + "@localhost"), channel->getTitle(), *it, comment)));
-                    channel->deleteUser(kicked_user->getNickname());
                     if (channel->userIsOperator(kicked_user->getNickname()))
                         channel->deleteOperator(kicked_user->getNickname());
                 }
