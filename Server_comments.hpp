@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:13:00 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/16 22:58:59 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/17 09:03:38 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@
 # define RPL_CHANNELMODEIS(nick, channel, modestring) ":server.VPTV 324 " + nick + " " + channel + " " + modestring + "\r\n"
 
 # define ERR_ALREADYREGISTERED(username) "462 " + username + " :You may not reregister\r\n"
+# define ERR_NOTREGISTERED(username) "451 " + username + " :You have not registered\r\n"
 # define ERR_PASSWDMISMATCH(username) "464 " + username + " :Password incorrect\r\n"
 # define ERR_NICKNAMEINUSE(nickname) "433 * " + nickname + " :Nickname is already in use\r\n"
 # define ERR_ERRONEUSNICKNAME(nickname) "432 " + nickname + " " + nickname + " :Erroneus nickname\r\n"

@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:15:07 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/16 07:03:53 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/17 09:05:11 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,5 @@ void					user(User &user, SocketServer &server, std::vector<std::string> &params
     else if (user.getCurrentState() == ALREADY_REGISTRED)
         user.usr_send(ERR_ALREADYREGISTERED(user.getNickname()));
     else
-        user.usr_send("\nWAITING FOR OTHER COMMANDS BEFORE FINISHING REGISTRATION\r\n");
+        user.usr_send(ERR_NOTREGISTERED(user.getNickname()));
 }

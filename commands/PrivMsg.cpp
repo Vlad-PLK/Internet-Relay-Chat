@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 10:58:42 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/11 10:16:20 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/17 09:16:11 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,11 @@ void                    privmsg(User &user, SocketServer &server, std::vector<st
     std::string                         target;
     std::string                         msg_content;
 
+    if (user.getNickname().empty() == true)
+    {
+        user.usr_send(ERR_NOTREGISTERED(std::string("*")));
+        return ;
+    }
     if (params.size() == 0)
     {
         user.usr_send(ERR_NORECIPIENT(user.getNickname()));

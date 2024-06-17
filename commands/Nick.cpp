@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:14:57 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/16 06:56:54 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/17 09:07:27 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,10 +100,7 @@ void					nick(User &user, SocketServer &server, std::vector<std::string> &params
 	if (user.getCurrentState() == ACCEPTED || user.getCurrentState() == ALREADY_REGISTRED)
 	{
 		if (user.getCurrentState() == ALREADY_REGISTRED)
-		{
 			oldnick = user.getNickname();
-			user.usr_send("You've already register, but here's your new request\r\n");
-		}
 		if (params.front().size() == 0)
     	    user.usr_send(ERR_NONICKNAMEGIVEN());
 		else if (params.size() > 1 && isNotSpace(params, 1) == 1)
@@ -126,5 +123,5 @@ void					nick(User &user, SocketServer &server, std::vector<std::string> &params
 		}
 	}
 	else if (user.getCurrentState() == WAITING_FOR_APPROVAL)
-		user.usr_send("\nWAITING FOR OTHER COMMANDS FIRST\r\n");
+		user.usr_send(ERR_NOTREGISTERED(std::string("*")));
 }

@@ -2,6 +2,11 @@
 
 void    invite(User &user, SocketServer &server, std::vector<std::string> &params)
 {
+    if (user.getNickname().empty() == true)
+    {
+        user.usr_send(ERR_NOTREGISTERED(std::string("*")));
+        return ;
+    }
     if (params.size() < 2)
     {
         user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "INVITE")));
