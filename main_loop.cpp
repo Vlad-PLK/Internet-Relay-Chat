@@ -6,12 +6,13 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 08:46:58 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/13 11:26:27 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/16 07:07:38 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "SocketServer.hpp"
 #include "User.hpp"
+#include "Command.hpp"
 
 void    main_loop(SocketServer &main_socket)
 {
@@ -21,13 +22,8 @@ void    main_loop(SocketServer &main_socket)
 	struct pollfd       					fd_tmp;
 	///////////array of fds part///////////
 
-	///////////buffer for read///////////
-	char                					buffer[513];
-	ssize_t             					read_value;
-	std::string 							str;
-	///////////buffer for read///////////
-
 	///////////users///////////
+	std::vector<std::string>				params;
 	std::vector<User> 						users;
 	std::vector<User *>::iterator 			user_it;
 	User              						*tmp_user;
@@ -47,10 +43,11 @@ void    main_loop(SocketServer &main_socket)
 		/* event if there is a new connexion on the main socket */
 		if (tab_fd[0].revents == POLLIN)
 		{
+			memset(&fd_tmp, 0, sizeof(fd_tmp));
 			fd_tmp.fd = accept(tab_fd[0].fd, NULL, NULL);
 			fd_tmp.events = POLLIN;
 			tab_fd.push_back(fd_tmp);
-			tmp_user = new User(fd_tmp.fd, NOT_ADMIN, WAITING_FOR_APPROVAL);
+			tmp_user = new User(fd_tmp.fd, NOT_ADMIN, REJECTED);
 			main_socket.addUser(tmp_user);
 			//users.push_back(*tmp_user);
 		}
@@ -58,41 +55,36 @@ void    main_loop(SocketServer &main_socket)
 		else
 		{
 			/* for loop to check for all events in the fd arrays so for all existing users */
+			int i = 0;
 			for (it = tab_fd.begin() + 1; it != tab_fd.end(); it++)
 			{
-				if (it->revents & POLLIN)
+				try
 				{
-					memset(buffer, 0, sizeof(buffer));
-					/* if there is a new message */
-					read_value = recv(it->fd, buffer, 512, MSG_DONTWAIT);
-					if (read_value != -1)
-					{
-						buffer[read_value] = 0;
-						str.append(buffer);
-					   
-						/* parse the command, process and send the answer*/
-						main_socket.getAllUsers()[it->fd - 4]->process_cmd(str, main_socket);
-						/* clear all buffers and strings from previous message */
-						str.clear();
-					}
+					if (it->revents & POLLIN)
+						main_socket.getAllUsers()[i]->parsing_and_handle(main_socket);
 				}
-				//else if (it->revents & POLLHUP)
-					//quit//
-				
+				catch(const std::exception& e)
+				{
+					std::cerr << e.what() << '\n';
+					main_socket.getAllUsers()[i]->setCurrentState(QUIT);
+				}
+				i++;
 			}
-			for (std::vector<User *>::iterator itU = main_socket.getAllUsers().begin(); itU != main_socket.getAllUsers().end(); itU++)
+		}
+		int state;
+		for (std::vector<User *>::iterator itU = main_socket.getAllUsers().begin(); itU != main_socket.getAllUsers().end(); itU++)
+		{
+			if ((*itU)->getCurrentState() == QUIT)
 			{
-				if ((*itU)->getCurrentState() == QUIT)
-				{
-					close((*itU)->getFD());
-					for (it = tab_fd.begin(); it != tab_fd.end(); it++)
-					{
-						if (it->fd == (*itU)->getFD())
-							it = tab_fd.erase(it);
-					}
-					delete ((*itU));
-					itU = main_socket.getAllUsers().erase(itU);
-				}
+				state = ACCEPTED;
+				tab_fd.erase(tab_fd.begin() + (std::distance(main_socket.getAllUsers().begin(), itU) + 1));
+				if (itU + 1 ==  main_socket.getAllUsers().end())
+					state = REJECTED;
+				close((*itU)->getFD());
+				delete ((*itU));
+				itU = main_socket.getAllUsers().erase(itU);
+				if (state == REJECTED)
+					break ;
 			}
 		}
 	}

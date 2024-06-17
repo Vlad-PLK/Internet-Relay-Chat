@@ -8,7 +8,11 @@ void    join(User &user, SocketServer &server, std::vector<std::string> &params)
         user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "JOIN")));
         return ;
     }
-
+    if (user.getNickname().empty() == true)
+    {
+        user.usr_send(ERR_NOTREGISTERED(std::string("*")));
+        return ;
+    }
     // Setting up the channel_titles vector to store all the names given in the command
     std::vector<std::string> channels = splitSetter(params[0]);
     // Setting up the channel_passwords vector 

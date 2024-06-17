@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 10:42:46 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/12 11:01:12 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/16 03:46:38 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ public:
     const std::string   &getIp(void) const;
     int                 getFD(void) const;
     int                 getCurrentState(void) const;
+    void                setBuffer(char *str);
     void                setFD(int fd);
     void                setUsername(const std::string &uname);
     void                setNickname(const std::string &nname);
@@ -63,10 +64,14 @@ public:
     void                usr_clean(void);
     typedef void        (User::*cmdPtr)(std::vector<std::string> cmd);
     void                quit(std::vector<std::string> cmd);
+    void                parsing_and_handle(SocketServer &server);
 
-
-    int                process_cmd(std::string buffer, SocketServer &server);
-    void               parsing_and_handle(std::string &buffer, SocketServer &server);
+    class DisconnectException : public std::exception
+    {
+        public: virtual const char* what() const throw() { 
+            return ("Unexpected Deconnexion !"); 
+        }
+    };
 };
 
 std::ostream&   operator<<(std::ostream& outstream, const User &user);

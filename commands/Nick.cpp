@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:14:57 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/05 10:05:17 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/17 09:07:27 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,17 +96,32 @@ int check_nickname_validity(const std::string &nick)
 void					nick(User &user, SocketServer &server, std::vector<std::string> &params)
 {
 	std::string str;
-    if (check_nickname_in_use(params[0], server.getAllUsers()) == 1)
-    {
-		srand(time(0));
-		str = ft_itoa(rand() % 1000);
-		if (check_nickname_in_use(params[0].append(str), server.getAllUsers()) == 0)
-        	user.setNickname(params[0]);
-    }
-    else if (check_nickname_validity(params.front()) == 1)
-        user.usr_send(ERR_ERRONEUSNICKNAME(params.front()));
-    else if (params.front().size() == 0)
-        user.usr_send(ERR_NONICKNAMEGIVEN());
-    else
-        user.setNickname(params.front());
+	std::string oldnick;
+	if (user.getCurrentState() == ACCEPTED || user.getCurrentState() == ALREADY_REGISTRED)
+	{
+		if (user.getCurrentState() == ALREADY_REGISTRED)
+			oldnick = user.getNickname();
+		if (params.front().size() == 0)
+    	    user.usr_send(ERR_NONICKNAMEGIVEN());
+		else if (params.size() > 1 && isNotSpace(params, 1) == 1)
+			user.usr_send("\nTOO MUCH PARAMS FOR NICK COMMAND\r\n");
+		else if (params.size() == 1 || (params.size() > 1 && isNotSpace(params, 1) == 0))
+		{
+			if (check_nickname_in_use(params[0], server.getAllUsers()) == 1)
+    		{
+				srand(time(0));
+				str = ft_itoa(rand() % 1000);
+				if (check_nickname_in_use(params[0].append(str), server.getAllUsers()) == 0)
+    		    	user.setNickname(params[0]);
+    		}
+    		else if (check_nickname_validity(params.front()) == 1)
+    		    user.usr_send(ERR_ERRONEUSNICKNAME(params.front()));
+    		else
+    		    user.setNickname(params.front());
+			if (user.getCurrentState() == ALREADY_REGISTRED)
+				user.usr_send(":" + oldnick + " NICK " + params[0] + "\r\n");
+		}
+	}
+	else if (user.getCurrentState() == WAITING_FOR_APPROVAL)
+		user.usr_send(ERR_NOTREGISTERED(std::string("*")));
 }

@@ -1,0 +1,27 @@
+FOR NETCAT :
+when running nc localhost 8080
+: A LA FIN DE CHAQUE MESSAGE AJOUTER CTRL+V et CTRL+M end ENTER
+when running nc -C localhost 8080
+: JUSTE MESSAGE ET ENTER
+
+Toutes les commandes dans netcat sont a renter comme si c'était un message irssi
+exemple : /JOIN a devient JOIN #a 
+		  /msg hello (dans channel) devient PRIVMSG #channel :hello
+		  /part devient PART #channel :reason
+		  ...
+
+TEST A FAIRE :
+TOUS LES TESTS DANS NETCAT SONT A FAIRE AVEC TOUTES LES ERREURS POSSIBLES PARCE QUE NC NE FORMATENT PAS LES MESSAGES COMME IRSSI
+
+Tous les tests sont deja fait pour ces 4 commandes avec nc mais tu peux t'amuser a en refaire avec des combinaisons differentes
+CAP LS
+PASS
+NICK
+USER
+
+JOIN
+PRIVMSG
+INVITE
+PART
+TOPIC
+KICK
