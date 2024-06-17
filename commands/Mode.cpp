@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 22:26:06 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/17 11:29:29 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/17 12:34:13 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void modeTopic(SocketServer *server, User *user, Channel *channel, std::string a
 void modeKey(SocketServer *server, User *user, Channel *channel, std::string arg, std::string add)
 {
     (void)server;
-    std::cout << "\nKEY ARG :" << add << arg << std::endl;
 
     if (add == "+" && !arg.empty())
     {
@@ -74,7 +73,6 @@ void modeKey(SocketServer *server, User *user, Channel *channel, std::string arg
 
 void modeOp(SocketServer *server, User *user, Channel *channel, std::string arg, std::string add)
 {
-    std::cout << "\nOP ARG :" << add <<  arg << std::endl;
     if (!arg.size())
         user->usr_send(ERR_NEEDMOREPARAMS(user->getNickname(), "MODE"));
     else
@@ -169,25 +167,20 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
             mode['k'] = modeKey;
             mode['o'] = modeOp;
             mode['l'] = modeLimit;
-            // std::cout << "\nPARAM[0] :" << params[0] << std::endl;
             size_t i = 1;
             while (i < params.size())
             {
                 std::string current;
                 current = params[i];
-                std::cout << "\nNEW CURRENT :" << current << std::endl;
                 if (current[0] == '+' || current[0] == '-')
                 {
-                    // std::cout << "\nCURRENT IF:" << current << std::endl;
                     bool add;
                     add = (current[0] == '+');
-                    // std::cout << "\nCurrent[0]:" << current[0] << std::endl;
                     for (size_t k = 0; k < current.size(); k++)
                     {
                         std::string md;
                         std::string tmp_sign;
                         md = current[k];
-                        // std::cout << "\nMD :" << md << "*" << std::endl;
                         if ((add == true && md != "-") || (add == false && md == "+"))
                         {
                             tmp_sign = "+";
@@ -200,7 +193,6 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
                         }
                         if (prev.find(md) == std::string::npos && mode.find(md[0]) != mode.end())
                         {
-                            // std::cout << "\nTMP_SIGN :" << tmp_sign << std::endl;
                             sign.push_back(tmp_sign);
                             modes.append(md);
                             if (md != "o")
@@ -210,7 +202,6 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
                                 modes_arg.push_back("NULL");
                             else
                             {
-                                // std::cout << "\nCOUNT = " << count << std::endl;
                                 if (i + 1 < params.size() && params[i + 1][0] != '+' && params[i + 1][0] != '-')
                                 {
                                     modes_arg.push_back("val");
@@ -230,13 +221,10 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
                     while (i < params.size() && params[i][0] != '+' && params[i][0] != '-')
                     {
                         current = params[i];
-                        // std::cout << "\nCurrent ELSE :" << current << std::endl;
                         for (std::vector<std::string>::iterator it_arg = modes_arg.begin(); it_arg != modes_arg.end(); ++it_arg)
                         {
-                            // std::cout << "\nFOR it_arg :" << (*it_arg) << "    count = " << count << std::endl;
                             if (count > 0 && (*it_arg) == "val")
                             {
-                                // std::cout << "\nIF\nCOUNT = " << count - 1 << std::endl;
                                 (*it_arg) = current;
                                 --count;
                                 break;
@@ -250,7 +238,6 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
             {
                 if (mode.find(modes[index]) != mode.end())
                 {
-                    std::cout << "mode :" << sign[index] << modes[index] << " " << modes_arg[index] << std::endl;
                     mode[modes[index]](&server, &user, channel, modes_arg[index], sign[index]);
                     if (modes[index] != 'o')
                     {
@@ -260,9 +247,7 @@ void mode(User &user, SocketServer &server, std::vector<std::string> &params)
                             channel->setMode(modes[index], false);
                     }
                 }
-                std::cout << "\nModesChannel :" << channel->getModes() << std::endl;
             }
-            std::cout << "\n------------------------------------------" << std::endl;
         }
         else
             user.usr_send((ERR_CHANOPRIVSNEEDED(user.getNickname(), channel->getTitle())));

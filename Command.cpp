@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 10:45:37 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/16 04:27:58 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/17 12:12:15 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,7 @@ void HandleCommand(Command &cmd, User &usr, SocketServer &server)
     {
         if (cmd.getCmdName() == cmds[i].name)
         {
-            std::cout << "LA" << "\n" << cmd.getCmdName() << std::endl;
             cmds[i].fct(usr, server, cmd.getParams());
-        }
-    }
-    if (cmd.getParams().size() > 0)
-    {
-        int i = 0;
-        while (cmd.getCmdName()[i])
-        {
-            std::cout << "command[" << i << "] " << cmd.getCmdName()[i] << std::endl;
-            i++;
         }
     }
 }

@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 10:58:42 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/17 09:16:11 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/17 12:29:42 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,11 @@ void    privmsg(User &user, SocketServer &server, std::vector<std::string> &para
     {
         if (find_channel(server, target) == 0)
         {
-            if (server.getChannel(target)->userIsBanned(target) == true)
+            if (server.getChannel(target)->userIsMember(user.getNickname()) == false)
+            {
+                user.usr_send(ERR_USERNOTINCHANNEL(user.getNickname(), target));
                 return ;
+            }
             for (itUs = server.getChannel(target)->getChannelUsers().begin(); itUs != server.getChannel(target)->getChannelUsers().end(); itUs++)
             {
                 if ((*itUs)->getNickname() != user.getNickname())

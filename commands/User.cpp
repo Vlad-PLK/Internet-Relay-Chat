@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:15:07 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/17 09:05:11 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/17 12:10:33 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,6 @@ void					user(User &user, SocketServer &server, std::vector<std::string> &params
     }
     else if (user.getCurrentState() == ALREADY_REGISTRED)
         user.usr_send(ERR_ALREADYREGISTERED(user.getNickname()));
-    else
+    else if (user.getCurrentState() != WAITING_FOR_APPROVAL)
         user.usr_send(ERR_NOTREGISTERED(user.getNickname()));
 }
