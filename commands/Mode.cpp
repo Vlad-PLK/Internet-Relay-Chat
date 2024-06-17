@@ -6,7 +6,7 @@
 /*   By: vpolojie <vpolojie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 22:26:06 by vpolojie          #+#    #+#             */
-/*   Updated: 2024/06/16 23:05:24 by vpolojie         ###   ########.fr       */
+/*   Updated: 2024/06/17 11:29:29 by vpolojie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,6 +221,8 @@ void mode_channel(User &user, SocketServer &server, std::vector<std::string> &pa
 
 void mode(User &user, SocketServer &server, std::vector<std::string> &params)
 {
+	if (user.getNickname().empty() == true)
+		user.usr_send(ERR_NOTREGISTERED(std::string("*")));
 	if (params.size() == 0)
 		user.usr_send((ERR_NEEDMOREPARAMS(user.getNickname(), "MODE")));
 	else if (params.size() >= 1 && params[0][0] != '#')
